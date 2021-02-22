@@ -33,7 +33,7 @@ jobs:
       - name: Add Problem Matcher for dotnet-format
         uses: xt0rted/dotnet-format-problem-matcher@v1
       - name: Lint
-        run: dotnet format --check --dry-run
+        run: dotnet format --check
 
   test:
     name: Debug Build & Test
@@ -47,7 +47,7 @@ jobs:
             { sdk: "2.1", framework: "netcoreapp2.1" },
             { sdk: "3.1", framework: "netcoreapp3.1" },
             { sdk: "5.0", framework: "net5.0" },
-            { sdk: "6.0.0-preview.1", framework: "net6.0" },
+            { sdk: "6.0.100-preview.1.21103.13", framework: "net6.0" },
           ]
     steps:
       - uses: actions/checkout@v2
