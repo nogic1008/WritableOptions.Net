@@ -38,38 +38,27 @@ jobs:
   test:
     name: Debug Build & Test
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        # see also https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json
-        dotnet:
-          [
-            { sdk: "2.1", framework: "netcoreapp2.1" },
-            { sdk: "3.1", framework: "netcoreapp3.1" },
-            { sdk: "5.0", framework: "net5.0" },
-            { sdk: "6.0.100-preview.1.21103.13", framework: "net6.0" },
-          ]
-      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2.1.4
         with:
           path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ matrix.dotnet.sdk }}-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-${{ matrix.dotnet.sdk }}-
             ${{ runner.os }}-nuget-
-      - name: Setup .NET Core ${{ matrix.dotnet.sdk }} SDK
+      - name: Setup .NET Core 3.1 SDK
         uses: actions/setup-dotnet@v1.7.2
         with:
-          dotnet-version: ${{ matrix.dotnet.sdk }}
+          dotnet-version: 3.1
 
+      - name: Restore
+        run: dotnet restore --locked-mode
       - name: Build
-        run: dotnet build ./test/Nogic.WritableOptions.Tests/Nogic.WritableOptions.Tests.csproj -f ${{ matrix.dotnet.framework }}
+        run: dotnet build --no-restore
       - name: Test
-        run: dotnet test ./test/Nogic.WritableOptions.Tests/Nogic.WritableOptions.Tests.csproj --no-build -f ${{ matrix.dotnet.framework }} --settings coverlet.runsettings
+        run: dotnet test --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           file: "!**/.nuget/packages/**/*.*"
-          flags: ${{ runner.os }},${{ matrix.dotnet.framework }}
