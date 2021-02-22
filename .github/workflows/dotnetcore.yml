@@ -63,10 +63,8 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet.sdk }}
 
-      - name: Restore
-        run: dotnet restore --ignore-failed-sources
       - name: Build
-        run: dotnet build ./test/Nogic.WritableOptions.Tests/Nogic.WritableOptions.Tests.csproj --no-restore -f ${{ matrix.dotnet.framework }}
+        run: dotnet build ./test/Nogic.WritableOptions.Tests/Nogic.WritableOptions.Tests.csproj -f ${{ matrix.dotnet.framework }}
       - name: Test
         run: dotnet test ./test/Nogic.WritableOptions.Tests/Nogic.WritableOptions.Tests.csproj --no-build -f ${{ matrix.dotnet.framework }} --settings coverlet.runsettings
 
