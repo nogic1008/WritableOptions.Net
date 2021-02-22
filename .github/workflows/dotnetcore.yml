@@ -3,16 +3,14 @@ name: .NET Core CI/CD
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - v*
-    paths:
-      - "**"
-      - "!**.md"
+    paths-ignore:
+      - "**.md"
   pull_request:
-    paths:
-      - "**"
-      - "!**.md"
+    paths-ignore:
+      - "**.md"
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -44,10 +42,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         # see also https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json
-        dotnet: [ { sdk: "3.1", framework: "netcoreapp3.1" }, { sdk: "5.0", framework: "net5.0" } ]
-        exclude:
-          - os: windows-latest
-            dotnet: { sdk: "3.1", framework: "netcoreapp3.1" }
+        dotnet:
+          [
+            { sdk: "2.1", framework: "netcoreapp2.1" },
+            { sdk: "3.1", framework: "netcoreapp3.1" },
+            { sdk: "5.0", framework: "net5.0" },
+            { sdk: "6.0.0-preview.1", framework: "net6.0" },
+          ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2.1.4
@@ -74,79 +75,3 @@ jobs:
         with:
           file: "!**/.nuget/packages/**/*.*"
           flags: ${{ runner.os }},${{ matrix.dotnet.framework }}
-
-  release:
-    name: Create Github Release
-    if: contains(github.ref, 'tags/v')
-    needs: [lint, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Output Release URL File
-        run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
-      - name: Save Release URL File for publish
-        uses: actions/upload-artifact@v2.2.2
-        with:
-          name: release_url
-          path: release_url.txt
-
-  publish:
-    if: contains(github.ref, 'tags/v')
-    needs: [release]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rid: [win-x64, linux-x64, osx-x64]
-        # see also https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json
-        dotnet: [ { sdk: "3.1", framework: "netcoreapp3.1" }, { sdk: "5.0", framework: "net5.0" } ]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2.1.4
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ matrix.dotnet.sdk }}-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-${{ matrix.dotnet.sdk }}-
-            ${{ runner.os }}-nuget-
-      - name: Restore File from release job
-        uses: actions/download-artifact@v2.0.8
-        with:
-          name: release_url
-      - name: Get Release File Name & Upload URL
-        id: release_info
-        run: |
-          echo ::set-output name=file_name::${REPOSITORY_NAME##*/}-${TAG_REF_NAME##*/v}
-          value=`cat release_url/release_url.txt`
-          echo ::set-output name=upload_url::$value
-          echo ::set-output name=version::${TAG_REF_NAME##*/v}
-        env:
-          TAG_REF_NAME: ${{ github.ref }}
-          REPOSITORY_NAME: ${{ github.repository }}
-      - name: Setup .NET Core ${{ matrix.dotnet.sdk }} SDK
-        uses: actions/setup-dotnet@v1.7.2
-        with:
-          dotnet-version: ${{ matrix.dotnet.sdk }}
-      - name: Build
-        run: |
-          dotnet restore --locked-mode
-          dotnet publish --no-restore -c Release -f ${{ matrix.dotnet.framework }} -r ${{ matrix.rid }} /p\:Version=${{ steps.release_info.outputs.version }} -o ./${{ matrix.rid }}
-          zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./${{ matrix.rid }}.zip
-          asset_name: ${{ steps.release_info.outputs.file_name }}-${{ matrix.rid }}-${{ matrix.dotnet.framework }}.zip
-          asset_content_type: application/zip
