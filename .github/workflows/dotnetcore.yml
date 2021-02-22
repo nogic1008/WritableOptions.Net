@@ -64,7 +64,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet.sdk }}
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore --ignore-failed-sources
       - name: Build
         run: dotnet build ./test/Nogic.WritableOptions.Tests/Nogic.WritableOptions.Tests.csproj --no-restore -f ${{ matrix.dotnet.framework }}
       - name: Test
