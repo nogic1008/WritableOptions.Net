@@ -10,7 +10,7 @@ namespace Nogic.WritableOptions.Tests
 {
     public sealed class JsonWritableOptionsTest
     {
-        public class TestOption
+        public class SampleOption
         {
             public DateTime LastLaunchedAt { get; set; }
             public int Interval { get; set; }
@@ -18,7 +18,7 @@ namespace Nogic.WritableOptions.Tests
         }
 
         private static readonly Random _random = new();
-        private static TestOption GenerateOption() => new()
+        private static SampleOption GenerateOption() => new()
         {
             LastLaunchedAt = DateTime.Now,
             Interval = _random.Next(),
@@ -29,35 +29,40 @@ namespace Nogic.WritableOptions.Tests
         public void Value_Returns_T()
         {
             // Arrange
-            var testOption = GenerateOption();
-            var optionsMock = new Mock<IOptionsMonitor<TestOption>>();
-            optionsMock.SetupGet(m => m.CurrentValue).Returns(testOption);
+            var sampleOption = GenerateOption();
+            var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
+            optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
 
-            var options = new JsonWritableOptions<TestOption>(null!, optionsMock.Object, null!, null!);
+            var sut = new JsonWritableOptions<SampleOption>(null!, optionsMock.Object, null!, null!);
 
             // Act - Assert
-            options.Value.Should().Be(testOption);
+            sut.Value.Should().Be(sampleOption);
+            optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
         }
 
         [Fact]
         public void Get_Returns_T()
         {
             // Arrange
-            var testOption = GenerateOption();
-            var optionsMock = new Mock<IOptionsMonitor<TestOption>>();
-            optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(testOption);
+            var sampleOption = GenerateOption();
+            var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
+            optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(sampleOption);
 
-            var options = new JsonWritableOptions<TestOption>(null!, optionsMock.Object, nameof(TestOption), null!);
+            var sut = new JsonWritableOptions<SampleOption>(null!, optionsMock.Object, null!, null!);
 
             // Act - Assert
-            options.Get("Foo").Should().Be(testOption);
-            options.Get("Bar").Should().Be(testOption);
+            sut.Get("Foo").Should().Be(sampleOption);
+            sut.Get("Bar").Should().Be(sampleOption);
+
+            optionsMock.Verify(m => m.Get(It.IsAny<string>()), Times.Exactly(2));
+            optionsMock.Verify(m => m.Get("Foo"), Times.Once());
+            optionsMock.Verify(m => m.Get("Bar"), Times.Once());
         }
 
         [Theory]
         [InlineData("{}")]
-        [InlineData("{\"" + nameof(TestOption) + "\":{}}")]
-        [InlineData("{\"" + nameof(TestOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
+        [InlineData("{\"" + nameof(SampleOption) + "\":{}}")]
+        [InlineData("{\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
         public void Update_Writes_Json(string fileText)
         {
             // Setup
@@ -68,11 +73,11 @@ namespace Nogic.WritableOptions.Tests
             try
             {
                 // Arrange
-                var environmentMock = new Mock<IHostEnvironment>();
-                environmentMock.SetupGet(m => m.ContentRootFileProvider.GetFileInfo(tempFileName).PhysicalPath).Returns(tempFilePath);
-                var optionsMock = new Mock<IOptionsMonitor<TestOption>>();
+                var environmentStub = new Mock<IHostEnvironment>();
+                environmentStub.SetupGet(m => m.ContentRootFileProvider.GetFileInfo(tempFileName).PhysicalPath).Returns(tempFilePath);
+                var optionsStub = new Mock<IOptionsMonitor<SampleOption>>();
 
-                var options = new JsonWritableOptions<TestOption>(environmentMock.Object, optionsMock.Object, nameof(TestOption), tempFileName);
+                var options = new JsonWritableOptions<SampleOption>(environmentStub.Object, optionsStub.Object, nameof(SampleOption), tempFileName);
 
                 // Act
                 options.Update(new()
@@ -86,7 +91,7 @@ namespace Nogic.WritableOptions.Tests
                 string newLine = Environment.NewLine;
                 string jsonString = File.ReadAllText(tempFilePath);
                 jsonString.Should().Be("{" + newLine
-                    + "  \"TestOption\": {" + newLine
+                    + "  \"" + nameof(SampleOption) + "\": {" + newLine
                     + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
                     + "    \"Interval\": 5000," + newLine
                     + "    \"ConnectionString\": \"foo\"" + newLine

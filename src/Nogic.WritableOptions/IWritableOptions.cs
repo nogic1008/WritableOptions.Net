@@ -7,4 +7,3 @@ namespace Nogic.WritableOptions
         void Update(TOptions changedValue);
     }
 }
-
