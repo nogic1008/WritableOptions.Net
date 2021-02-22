@@ -44,7 +44,6 @@ jobs:
         # see also https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json
         dotnet:
           [
-            { sdk: "2.1", framework: "netcoreapp2.1" },
             { sdk: "3.1", framework: "netcoreapp3.1" },
             { sdk: "5.0", framework: "net5.0" },
             { sdk: "6.0.100-preview.1.21103.13", framework: "net6.0" },
