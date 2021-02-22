@@ -1,7 +1,17 @@
 <Project>
   <PropertyGroup>
+    <!-- Meta Options -->
+    <Authors>Nogic</Authors>
+    <Copyright>© Nogic</Copyright>
+    <PackageProjectUrl>https://github.com/nogic1008/WritableOptions</PackageProjectUrl>
+    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Build Options -->
     <LangVersion>9.0</LangVersion>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <Nullable>enable</Nullable>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RepoRoot>
+    <PathMap>$(RepoRoot)=.</PathMap>
   </PropertyGroup>
 </Project>
