@@ -53,12 +53,7 @@ jobs:
 
       - name: Restore
         run: dotnet restore --locked-mode
-      - name: Build
+      - name: Debug Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test --no-build --settings coverlet.runsettings
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          file: "!**/.nuget/packages/**/*.*"
+        run: dotnet test --no-build
