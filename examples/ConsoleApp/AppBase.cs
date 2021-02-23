@@ -17,7 +17,7 @@ namespace ConsoleApp
 
             Context.Logger.LogInformation("Current Settings: {0}", _writableOptions.Value);
 
-            var newOption = new AppOption{ LastLaunchedAt = Context.Timestamp, ApiKey = Guid.NewGuid().ToString() };
+            var newOption = new AppOption { LastLaunchedAt = Context.Timestamp, ApiKey = Guid.NewGuid().ToString() };
             Context.Logger.LogInformation("New Settings: {0}", newOption);
 
             Context.Logger.LogInformation("Try to write new settings.");

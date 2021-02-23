@@ -1,7 +1,7 @@
-﻿using ConsoleAppFramework;
+using System.Threading.Tasks;
+using ConsoleAppFramework;
 using Microsoft.Extensions.Hosting;
 using Nogic.WritableOptions;
-using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
