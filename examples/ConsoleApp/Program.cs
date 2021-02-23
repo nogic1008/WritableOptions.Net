@@ -1,12 +1,22 @@
-﻿using System;
+﻿using ConsoleAppFramework;
+using Microsoft.Extensions.Hosting;
+using Nogic.WritableOptions;
+using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
+        private static async Task Main(string[] args)
+            => await Host.CreateDefaultBuilder()
+                .ConfigureLogging(logging => logging.ReplaceToSimpleConsole())
+                .ConfigureServices((context, services) =>
+                {
+                    // Load app settings
+                    var config = context.Configuration;
+                    services.ConfigureWritable<AppOption>(config.GetSection(context.HostingEnvironment.ApplicationName));
+                })
+                .RunConsoleAppFrameworkAsync<AppBase>(args)
+                .ConfigureAwait(false);
     }
 }
