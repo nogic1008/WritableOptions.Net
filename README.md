@@ -8,3 +8,40 @@
 This is a fork of [Awesome.Net.WritableOptions](https://github.com/Nongzhsh/Awesome.Net.WritableOptions), but written for .NET Core 3.1 or greater.
 
 See also: [How to update values into appsetting.json?](https://stackoverflow.com/questions/40970944/how-to-update-values-into-appsetting-json)
+
+## Usage
+
+See also [ConsoleApp Sample](./examples/ConsoleApp/)
+
+```csharp
+using Nogic.WritableOptions;
+
+// ...
+// in IHostBuilder.ConfigureServices((context, services) => {...})
+
+// Save & Load from appsettings.json
+services.ConfigureWritable<MyOptions>(context.Configration.GetSection("MySection"));
+// Or use custom JSON file
+services.ConfigureWritable<MyOptions>(context.Configration.GetSection("MySection"), "Resources/mysettings.json");
+```
+
+```csharp
+public class AppBase
+{
+    private readonly IWritableOptions<MyOptions> _writableOptions;
+    public AppBase(IWritableOptions<MyOptions> writableOptions) => _writableOptions = writableOptions;
+
+    public void Run()
+    {
+        // IOptions<T>
+        var option = _writableOptions.Value;
+
+        // IOptionsMonitor<T>
+        var fooOption = _writableOptions.Get("Foo");
+
+        // IWritableOptions<T>
+        var newOption = new MyOptions();
+        _writableOptions.Update(newOption);
+    }
+}
+```
