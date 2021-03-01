@@ -1,17 +1,21 @@
 # WritableOptions.Net
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/nogic1008/WritableOptions.Net)](https://github.com/nogic1008/WritableOptions.Net/releases)
+[![NuGet](https://img.shields.io/nuget/v/Nogic.WritableOptions?label=NuGet&logo=nuget&logoColor=blue)](https://www.nuget.org/packages/Nogic.WritableOptions/)
+[![GitHub release](https://img.shields.io/github/v/release/nogic1008/WritableOptions.Net?include_prereleases&logo=github&sort=semver)](https://github.com/nogic1008/WritableOptions.Net/releases)
 [![.NET Core CI](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/nogic1008/WritableOptions.Net/badge)](https://www.codefactor.io/repository/github/nogic1008/WritableOptions.Net)
 [![License](https://img.shields.io/github/license/nogic1008/WritableOptions.Net)](LICENSE)
 
-This is a fork of [Awesome.Net.WritableOptions](https://github.com/Nongzhsh/Awesome.Net.WritableOptions), but written for .NET Core 3.1 or greater.
+This is a fork of [Awesome.Net.WritableOptions](https://github.com/Nongzhsh/Awesome.Net.WritableOptions), but:
+
+- Fixes [the issue](https://github.com/Nongzhsh/Awesome.Net.WritableOptions/issues/1) with `Microsoft.Extensions.Configuration.Json` >= 3.0.0
+- improves performance by using `System.Text.Json`
 
 See also: [How to update values into appsetting.json?](https://stackoverflow.com/questions/40970944/how-to-update-values-into-appsetting-json)
 
 ## Usage
 
-See also [ConsoleApp Example](./sandbox/ConsoleAppExample/)
+See [ConsoleApp Example](./sandbox/ConsoleAppExample/).
 
 ```csharp
 using Nogic.WritableOptions;
