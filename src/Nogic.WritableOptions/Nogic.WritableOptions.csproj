@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Provides Options&lt;T&gt; that can update values to source JSON file</Description>
   </PropertyGroup>
 
   <ItemGroup>
