@@ -11,7 +11,7 @@ namespace Benchmark
         {
             AddExporter(MarkdownExporter.GitHub);
             AddDiagnoser(MemoryDiagnoser.Default);
-            AddJob(Job.ShortRun)
+            AddJob(Job.Default)
                 .WithOptions(ConfigOptions.DisableOptimizationsValidator);
         }
     }

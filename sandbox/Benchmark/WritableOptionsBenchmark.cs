@@ -22,18 +22,23 @@ namespace Benchmark
         private string _jsonFilePath;
 
         [GlobalSetup]
-        public void Setup()
+        public void GlobalSetup()
         {
-            _jsonFilePath = Path.GetTempFileName();
-            File.AppendAllText(_jsonFilePath, "{}");
-            _awesomeWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
-            _myWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
             _option = new()
             {
                 LastLaunchedAt = DateTime.Now,
                 StringSettings = Enumerable.Range(1, 100).Select((_) => Guid.NewGuid().ToString()).ToArray(),
                 IntSettings = Enumerable.Range(1, 100).ToArray()
             };
+        }
+
+        [IterationSetup]
+        public void ItarationSetup()
+        {
+            _jsonFilePath = Path.GetTempFileName();
+            File.AppendAllText(_jsonFilePath, "{}");
+            _awesomeWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
+            _myWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
         }
 
         [Benchmark(Baseline = true)]
@@ -49,7 +54,7 @@ namespace Benchmark
         public void MyWritableOptions_Update()
             => _myWritableOptions.Update(_option);
 
-        [GlobalCleanup]
+        [IterationCleanup]
         public void Teardown()
         {
             if (File.Exists(_jsonFilePath))
