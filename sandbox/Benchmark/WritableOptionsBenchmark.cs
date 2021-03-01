@@ -6,16 +6,16 @@ using BenchmarkDotNet.Attributes;
 
 namespace Benchmark
 {
-    public class SampleOption
-    {
-        public DateTime LastLaunchedAt { get; set; }
-        public string[] StringSettings { get; set; }
-        public int[] IntSettings { get; set; }
-    }
-
     [Config(typeof(BenchmarkConfig))]
     public class WritableOptionsBenchmark
     {
+        public class SampleOption
+        {
+            public DateTime LastLaunchedAt { get; set; }
+            public string[] StringSettings { get; set; }
+            public int[] IntSettings { get; set; }
+        }
+
         private Awesome.Net.WritableOptions.WritableOptions<SampleOption> _awesomeWritableOptions;
         private Nogic.WritableOptions.JsonWritableOptions<SampleOption> _myWritableOptions;
         private SampleOption _option;
