@@ -32,7 +32,7 @@ jobs:
       - name: Restore
         run: dotnet restore
       - name: Release Build & Pack
-        run: dotnet pack --configration Release --no-restore --output nupkgs -p:Version=${TAG_VERSION:1}
+        run: dotnet pack --configuration Release --no-restore --output nupkgs -p:Version=${TAG_VERSION:1}
         env:
           TAG_VERSION: ${{ github.event.release.tag_name }} # v0.0.0-abc
 
