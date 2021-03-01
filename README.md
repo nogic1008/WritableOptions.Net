@@ -11,7 +11,7 @@ See also: [How to update values into appsetting.json?](https://stackoverflow.com
 
 ## Usage
 
-See also [ConsoleApp Sample](./examples/ConsoleApp/)
+See also [ConsoleApp Example](./sandbox/ConsoleAppExample/)
 
 ```csharp
 using Nogic.WritableOptions;
