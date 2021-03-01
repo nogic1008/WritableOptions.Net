@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Diagnosers;
-using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
 
 namespace Benchmark
@@ -9,9 +8,9 @@ namespace Benchmark
     {
         public BenchmarkConfig()
         {
-            AddExporter(MarkdownExporter.GitHub);
-            AddDiagnoser(MemoryDiagnoser.Default);
-            AddJob(Job.Default)
+            AddJob(Job.Default.WithRuntime(CoreRuntime.Core31))
+                .WithOptions(ConfigOptions.DisableOptimizationsValidator);
+            AddJob(Job.Default.WithRuntime(CoreRuntime.Core50))
                 .WithOptions(ConfigOptions.DisableOptimizationsValidator);
         }
     }
