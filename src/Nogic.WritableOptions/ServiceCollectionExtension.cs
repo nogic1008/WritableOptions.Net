@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,9 +17,23 @@ namespace Nogic.WritableOptions
             services.Configure<T>(section);
             services.AddTransient<IWritableOptions<T>>(provider =>
             {
-                var environment = provider.GetRequiredService<IHostEnvironment>();
+                string jsonFilePath;
+
+                var environment = provider.GetService<IHostEnvironment>();
+                if (environment is not null)
+                {
+                    var fileProvider = environment.ContentRootFileProvider;
+                    var fileInfo = fileProvider.GetFileInfo(file);
+                    jsonFilePath = fileInfo.PhysicalPath;
+                }
+                else
+                {
+                    jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+                }
+
+                var configuration = provider.GetService<IConfigurationRoot>();
                 var options = provider.GetRequiredService<IOptionsMonitor<T>>();
-                return new JsonWritableOptions<T>(environment, options, section.Key, file);
+                return new JsonWritableOptions<T>(jsonFilePath, section.Key, options, configuration);
             });
         }
     }
