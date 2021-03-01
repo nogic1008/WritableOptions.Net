@@ -1,12 +1,6 @@
-﻿using System;
+using Benchmark;
+using BenchmarkDotNet.Running;
 
-namespace Benchmark
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
-    }
-}
+BenchmarkSwitcher
+    .FromAssemblies(new[] { typeof(WritableOptionsBenchmark).Assembly })
+    .Run(args);
