@@ -22,15 +22,12 @@ namespace Benchmark
         private string _jsonFilePath;
 
         [GlobalSetup]
-        public void GlobalSetup()
+        public void GlobalSetup() => _option = new()
         {
-            _option = new()
-            {
-                LastLaunchedAt = DateTime.Now,
-                StringSettings = Enumerable.Range(1, 100).Select((_) => Guid.NewGuid().ToString()).ToArray(),
-                IntSettings = Enumerable.Range(1, 100).ToArray()
-            };
-        }
+            LastLaunchedAt = DateTime.Now,
+            StringSettings = Enumerable.Range(1, 100).Select((_) => Guid.NewGuid().ToString()).ToArray(),
+            IntSettings = Enumerable.Range(1, 100).ToArray()
+        };
 
         [IterationSetup]
         public void ItarationSetup()
@@ -43,16 +40,26 @@ namespace Benchmark
 
         [Benchmark(Baseline = true)]
         public void AwesomeWritableOptions_Update()
-            => _awesomeWritableOptions.Update(o =>
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                _awesomeWritableOptions.Update(o =>
                 {
                     o.LastLaunchedAt = _option.LastLaunchedAt;
                     o.StringSettings = _option.StringSettings;
                     o.IntSettings = _option.IntSettings;
                 });
+            }
+        }
 
         [Benchmark]
         public void MyWritableOptions_Update()
-            => _myWritableOptions.Update(_option);
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                _myWritableOptions.Update(_option);
+            }
+        }
 
         [IterationCleanup]
         public void Teardown()
