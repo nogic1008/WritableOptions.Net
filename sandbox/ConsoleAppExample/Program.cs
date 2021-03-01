@@ -3,7 +3,7 @@ using ConsoleAppFramework;
 using Microsoft.Extensions.Hosting;
 using Nogic.WritableOptions;
 
-namespace ConsoleApp
+namespace ConsoleAppExample
 {
     internal static class Program
     {

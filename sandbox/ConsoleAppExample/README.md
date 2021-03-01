@@ -1,4 +1,4 @@
-# ConsoleApp Sample
+# ConsoleAppExample
 
 Example of use `WritableOptions` with [ConsoleAppFramework](https://github.com/Cysharp/ConsoleAppFramework).
 

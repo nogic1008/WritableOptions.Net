@@ -3,7 +3,7 @@ using ConsoleAppFramework;
 using Microsoft.Extensions.Logging;
 using Nogic.WritableOptions;
 
-namespace ConsoleApp
+namespace ConsoleAppExample
 {
     public class AppBase : ConsoleAppBase
     {
