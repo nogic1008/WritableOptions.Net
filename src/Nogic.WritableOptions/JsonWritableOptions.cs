@@ -1,34 +1,30 @@
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Nogic.WritableOptions
 {
     public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TOptions : class, new()
     {
-        private readonly IHostEnvironment _environment;
         private readonly IOptionsMonitor<TOptions> _options;
+        private readonly string _jsonFilePath;
         private readonly string _section;
-        private readonly string _file;
+        private readonly IConfigurationRoot? _configuration;
 
-        public JsonWritableOptions(IHostEnvironment environment, IOptionsMonitor<TOptions> options, string section, string file)
-            => (_environment, _options, _section, _file) = (environment, options, section, file);
+        public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfigurationRoot? configuration)
+            => (_jsonFilePath, _options, _section, _configuration) = (jsonFilePath, options, section, configuration);
 
         public TOptions Value => _options.CurrentValue;
 
         public TOptions Get(string name) => _options.Get(name);
 
-        public void Update(TOptions changedValue)
+        public void Update(TOptions changedValue, bool reload = false)
         {
-            var fileProvider = _environment.ContentRootFileProvider;
-            var fileInfo = fileProvider.GetFileInfo(_file);
-            string physicalPath = fileInfo.PhysicalPath;
+            using var jsonDocument = JsonDocument.Parse(File.ReadAllBytes(_jsonFilePath));
 
-            using var jsonDocument = JsonDocument.Parse(File.ReadAllBytes(physicalPath));
-
-            using var stream = File.OpenWrite(physicalPath);
+            using var stream = File.OpenWrite(_jsonFilePath);
             var writer = new Utf8JsonWriter(stream, new()
             {
                 Indented = true,
@@ -57,6 +53,9 @@ namespace Nogic.WritableOptions
             writer.WriteEndObject();
             writer.Flush();
             stream.SetLength(stream.Position);
+
+            if (reload)
+                _configuration?.Reload();
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using FluentAssertions;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
@@ -33,7 +33,7 @@ namespace Nogic.WritableOptions.Tests
             var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
             optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
 
-            var sut = new JsonWritableOptions<SampleOption>(null!, optionsMock.Object, null!, null!);
+            var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
 
             // Act - Assert
             sut.Value.Should().Be(sampleOption);
@@ -48,7 +48,7 @@ namespace Nogic.WritableOptions.Tests
             var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
             optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(sampleOption);
 
-            var sut = new JsonWritableOptions<SampleOption>(null!, optionsMock.Object, null!, null!);
+            var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
 
             // Act - Assert
             sut.Get("Foo").Should().Be(sampleOption);
@@ -73,19 +73,17 @@ namespace Nogic.WritableOptions.Tests
             try
             {
                 // Arrange
-                var environmentStub = new Mock<IHostEnvironment>();
-                environmentStub.SetupGet(m => m.ContentRootFileProvider.GetFileInfo(tempFileName).PhysicalPath).Returns(tempFilePath);
-                var optionsStub = new Mock<IOptionsMonitor<SampleOption>>();
+                var configStub = new Mock<IConfigurationRoot>();
 
-                var options = new JsonWritableOptions<SampleOption>(environmentStub.Object, optionsStub.Object, nameof(SampleOption), tempFileName);
+                var sut = new JsonWritableOptions<SampleOption>(tempFilePath, nameof(SampleOption), null!, configStub.Object);
 
                 // Act
-                options.Update(new()
+                sut.Update(new()
                 {
                     LastLaunchedAt = new(2020, 12, 1),
                     Interval = 5000,
                     ConnectionString = "foo",
-                });
+                }, true);
 
                 // Assert
                 string newLine = Environment.NewLine;
@@ -98,6 +96,7 @@ namespace Nogic.WritableOptions.Tests
                     + "  }" + newLine
                     + "}"
                 );
+                configStub.Verify(m => m.Reload(), Times.Once());
             }
             finally
             {
