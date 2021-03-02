@@ -3,7 +3,7 @@
     <!-- Meta Options -->
     <Authors>Nogic</Authors>
     <Copyright>© Nogic</Copyright>
-    <PackageProjectUrl>https://github.com/nogic1008/WritableOptions</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/nogic1008/WritableOptions.Net</PackageProjectUrl>
     <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
