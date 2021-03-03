@@ -6,6 +6,10 @@ using Microsoft.Extensions.Options;
 
 namespace Nogic.WritableOptions
 {
+    /// <summary>
+    /// Read and write <typeparamref name="TOptions"/> in JSON file.
+    /// </summary>
+    /// <typeparam name="TOptions">Options type.</typeparam>
     public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TOptions : class, new()
     {
         private readonly IOptionsMonitor<TOptions> _options;
@@ -13,13 +17,23 @@ namespace Nogic.WritableOptions
         private readonly string _section;
         private readonly IConfigurationRoot? _configuration;
 
-        public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfigurationRoot? configuration)
-            => (_jsonFilePath, _options, _section, _configuration) = (jsonFilePath, options, section, configuration);
+        /// <summary>
+        /// Initializes a new instance of the JsonWritableOptions class.
+        /// </summary>
+        /// <param name="jsonFilePath">JSON file path to read/write settings.</param>
+        /// <param name="section">JSON property name to store settings.</param>
+        /// <param name="options">Instance to read <typeparamref name="TOptions"/>. Should be referenced <paramref name="jsonFilePath"/>.</param>
+        /// <param name="configuration">Configuration root for reload</param>
+        public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfigurationRoot? configuration = null)
+            => (_jsonFilePath, _section, _options, _configuration) = (jsonFilePath, section, options, configuration);
 
+        /// <inheritdoc/>
         public TOptions Value => _options.CurrentValue;
 
+        /// <inheritdoc/>
         public TOptions Get(string name) => _options.Get(name);
 
+        /// <inheritdoc/>
         public void Update(TOptions changedValue, bool reload = false)
         {
             using var jsonDocument = JsonDocument.Parse(File.ReadAllBytes(_jsonFilePath));
