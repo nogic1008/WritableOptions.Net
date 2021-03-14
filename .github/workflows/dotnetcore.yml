@@ -43,7 +43,7 @@ jobs:
           - sdk-name: ".NET Core 3.1 (LTS)"
             sdk-version: "3.1"
           - sdk-name: ".NET 5 (Current)"
-            sdk-version: "5"
+            sdk-version: "5.0"
           - sdk-name: ".NET 6 (Preview)"
             sdk-version: "6.0.100-preview.2.21155.3"
     name: Debug Build & Test
