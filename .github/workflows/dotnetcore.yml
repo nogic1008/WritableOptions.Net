@@ -56,6 +56,11 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+      - name: Setup .NET Core 3.1 SDK
+        if: ${{ matrix.sdk-version != "3.1" }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: 3.1
       - name: Setup ${{ matrix.sdk-name }} SDK
         uses: actions/setup-dotnet@v1.7.2
         with:
