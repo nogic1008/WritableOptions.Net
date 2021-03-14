@@ -34,6 +34,18 @@ jobs:
         run: dotnet format --check
 
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk-name:
+          [".NET Core 3.1 (LTS)", ".NET 5 (Current)", ".NET 6 (Preview)"]
+        include:
+          - sdk-name: ".NET Core 3.1 (LTS)"
+            sdk-version: "3.1"
+          - sdk-name: ".NET 5 (Current)"
+            sdk-version: "5.0"
+          - sdk-name: ".NET 6 (Preview)"
+            sdk-version: "6.0.100-preview.2.21155.3"
     name: Debug Build & Test
     runs-on: ubuntu-20.04
     steps:
@@ -48,6 +60,10 @@ jobs:
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 3.1
+      - name: Setup ${{ matrix.sdk-name }} SDK
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.sdk-version }}
 
       - name: Restore
         run: dotnet restore --locked-mode
