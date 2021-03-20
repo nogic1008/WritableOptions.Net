@@ -123,7 +123,7 @@ namespace Nogic.WritableOptions.Tests
         }
 
         /// <summary>
-        /// <see cref="JsonWritableOptions{TOptions}.Update(TOptions, bool)"/> writes expected JSON.
+        /// <see cref="JsonWritableOptions{TOptions}.Update(TOptions, bool)"/> does not changes other section.
         /// </summary>
         /// <param name="fileText">Current JSON text</param>
         [Theory(DisplayName = "JsonWritableOptions<TOptions>.Update(TOptions, bool) does not changes other section")]
