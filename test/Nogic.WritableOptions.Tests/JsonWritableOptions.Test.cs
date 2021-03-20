@@ -8,6 +8,9 @@ using Xunit;
 
 namespace Nogic.WritableOptions.Tests
 {
+    /// <summary>
+    /// Unit Test Class for <see cref="JsonWritableOptions{TOptions}"/>.
+    /// </summary>
     public sealed class JsonWritableOptionsTest
     {
         public class SampleOption
@@ -18,6 +21,9 @@ namespace Nogic.WritableOptions.Tests
         }
 
         private static readonly Random _random = new();
+        /// <summary>
+        /// Generates <see cref="SampleOption"/> randomly for test.
+        /// </summary>
         private static SampleOption GenerateOption() => new()
         {
             LastLaunchedAt = DateTime.Now,
@@ -25,7 +31,10 @@ namespace Nogic.WritableOptions.Tests
             ConnectionString = new Guid().ToString()
         };
 
-        [Fact]
+        /// <summary>
+        /// <see cref="JsonWritableOptions{TOptions}.Value"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
+        /// </summary>
+        [Fact(DisplayName = "JsonWritableOptions<TOptions>.Value returns TOptions")]
         public void Value_Returns_T()
         {
             // Arrange
@@ -40,7 +49,10 @@ namespace Nogic.WritableOptions.Tests
             optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
         }
 
-        [Fact]
+        /// <summary>
+        /// <see cref="JsonWritableOptions{TOptions}.Get(string)"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
+        /// </summary>
+        [Fact(DisplayName = "JsonWritableOptions<TOptions>.Get(string) returns TOptions")]
         public void Get_Returns_T()
         {
             // Arrange
@@ -59,7 +71,11 @@ namespace Nogic.WritableOptions.Tests
             optionsMock.Verify(m => m.Get("Bar"), Times.Once());
         }
 
-        [Theory]
+        /// <summary>
+        /// <see cref="JsonWritableOptions{TOptions}.Update(TOptions, bool)"/> writes expected JSON.
+        /// </summary>
+        /// <param name="fileText">Current JSON text</param>
+        [Theory(DisplayName = "JsonWritableOptions<TOptions>.Update(TOptions, bool) writes expected JSON")]
         [InlineData("{}")]
         [InlineData("{\"" + nameof(SampleOption) + "\":{}}")]
         [InlineData("{\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
