@@ -121,5 +121,49 @@ namespace Nogic.WritableOptions.Tests
                     File.Delete(tempFilePath);
             }
         }
+
+        /// <summary>
+        /// <see cref="JsonWritableOptions{TOptions}.Update(TOptions, bool)"/> writes expected JSON.
+        /// </summary>
+        /// <param name="fileText">Current JSON text</param>
+        [Theory(DisplayName = "JsonWritableOptions<TOptions>.Update(TOptions, bool) does not changes other section")]
+        [InlineData("{\"fooOption\":{}}")]
+        [InlineData("{\"fooOption\":{},\"" + nameof(SampleOption) + "\":{}}")]
+        [InlineData("{\"fooOption\":{},\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
+        public void Update_DoesNot_Changes_Other_Section(string fileText)
+        {
+            // Setup
+            string tempFilePath = Path.GetTempFileName();
+            File.AppendAllText(tempFilePath, fileText);
+            string tempFileName = Path.GetFileName(tempFilePath);
+
+            try
+            {
+                // Arrange
+                var configStub = new Mock<IConfigurationRoot>();
+
+                var sut = new JsonWritableOptions<SampleOption>(tempFilePath, nameof(SampleOption), null!, configStub.Object);
+
+                // Act
+                sut.Update(new()
+                {
+                    LastLaunchedAt = new(2020, 12, 1),
+                    Interval = 5000,
+                    ConnectionString = "foo",
+                });
+
+                // Assert
+                string newLine = Environment.NewLine;
+                string jsonString = File.ReadAllText(tempFilePath);
+                jsonString.Should().Contain("\"fooOption\": {},");
+                configStub.Verify(m => m.Reload(), Times.Never());
+            }
+            finally
+            {
+                // Teardown
+                if (File.Exists(tempFilePath))
+                    File.Delete(tempFilePath);
+            }
+        }
     }
 }
