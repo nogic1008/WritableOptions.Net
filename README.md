@@ -3,6 +3,7 @@
 [![NuGet](https://img.shields.io/nuget/v/Nogic.WritableOptions?label=NuGet&logo=nuget&logoColor=blue)](https://www.nuget.org/packages/Nogic.WritableOptions/)
 [![GitHub release](https://img.shields.io/github/v/release/nogic1008/WritableOptions.Net?include_prereleases&logo=github&sort=semver)](https://github.com/nogic1008/WritableOptions.Net/releases)
 [![.NET Core CI](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml)
+[![codecov](https://codecov.io/gh/nogic1008/WritableOptions.Net/branch/main/graph/badge.svg?token=SjTS03boND)](https://codecov.io/gh/nogic1008/WritableOptions.Net)
 [![CodeFactor](https://www.codefactor.io/repository/github/nogic1008/WritableOptions.Net/badge)](https://www.codefactor.io/repository/github/nogic1008/WritableOptions.Net)
 [![License](https://img.shields.io/github/license/nogic1008/WritableOptions.Net)](LICENSE)
 
