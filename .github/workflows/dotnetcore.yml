@@ -71,3 +71,8 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: "!**/.nuget/packages/**/*.*"
