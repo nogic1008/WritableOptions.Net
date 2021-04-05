@@ -12,7 +12,5 @@
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RepoRoot>
-    <PathMap>$(RepoRoot)=.</PathMap>
   </PropertyGroup>
 </Project>
