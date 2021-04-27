@@ -45,7 +45,7 @@ jobs:
           - sdk-name: ".NET 5 (Current)"
             sdk-version: "5.0"
           - sdk-name: ".NET 6 (Preview)"
-            sdk-version: "6.0.100-preview.2.21155.3"
+            sdk-version: "6.0.100-preview.3.21202.5"
     name: Debug Build & Test
     runs-on: ubuntu-20.04
     steps:
@@ -57,6 +57,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
       - name: Setup .NET Core 3.1 SDK
+        if: matrix.sdk-version != "3.1"
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 3.1
