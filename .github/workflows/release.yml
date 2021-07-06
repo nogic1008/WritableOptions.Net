@@ -25,7 +25,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Setup .NET Core 3.1 SDK
-        uses: actions/setup-dotnet@v1.7.2
+        uses: actions/setup-dotnet@v1.8.1
         with:
           dotnet-version: 3.1
 
