@@ -22,8 +22,10 @@ namespace Nogic.WritableOptions.Tests
 
             var provider = service.BuildServiceProvider();
             var option = provider.GetService<IWritableOptions<SampleOption>>();
+            var otherOption = provider.GetService<IWritableOptions<SampleOption>>();
 
-            option.Should().NotBeNull();
+            option.Should().NotBeNull()
+                .And.NotBe(otherOption);
         }
     }
 }
