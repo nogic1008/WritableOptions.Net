@@ -38,7 +38,7 @@ jobs:
 
       - name: Publish to NuGet
         run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
-      - uses: actions/upload-artifact@v2.2.2
+      - uses: actions/upload-artifact@v2.2.4
         with:
           name: packages
           path: nupkgs/
