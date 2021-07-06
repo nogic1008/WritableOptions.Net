@@ -15,17 +15,17 @@
       },
       "BenchmarkDotNet": {
         "type": "Direct",
-        "requested": "[0.12.1, )",
-        "resolved": "0.12.1",
-        "contentHash": "GkheW0g27fwDLyQOWjIHBhocLUnS5N8tJ2SmW4oHRymdBnBhFCeQyhOU1yzhBzoMUKC1lC2ydjFax9PXh+V9/w==",
+        "requested": "[0.13.0, )",
+        "resolved": "0.13.0",
+        "contentHash": "1G88rHFr/N+TUVuuEIIi7Y90uWuB48otquTiDW9VVOh7XlCcpXZYyoDh4XhE/MZ68eFifN3qwJK3zOJWaX+cPQ==",
         "dependencies": {
-          "BenchmarkDotNet.Annotations": "0.12.1",
+          "BenchmarkDotNet.Annotations": "0.13.0",
           "CommandLineParser": "2.4.3",
-          "Iced": "1.4.0",
+          "Iced": "1.8.0",
           "Microsoft.CodeAnalysis.CSharp": "2.10.0",
           "Microsoft.Diagnostics.NETCore.Client": "0.2.61701",
-          "Microsoft.Diagnostics.Runtime": "1.1.57604",
-          "Microsoft.Diagnostics.Tracing.TraceEvent": "2.0.49",
+          "Microsoft.Diagnostics.Runtime": "1.1.126102",
+          "Microsoft.Diagnostics.Tracing.TraceEvent": "2.0.61",
           "Microsoft.DotNet.PlatformAbstractions": "2.1.0",
           "Microsoft.Win32.Registry": "4.5.0",
           "Perfolizer": "0.2.1",
@@ -44,8 +44,8 @@
       },
       "BenchmarkDotNet.Annotations": {
         "type": "Transitive",
-        "resolved": "0.12.1",
-        "contentHash": "NIVt8wrouNburnDzHtUa7H1lp4p/J3cLNY1zJK92l4aK2lEW8BxQrCNB6ybRLLOgGbSJvmy3vPWoviudipnL5Q=="
+        "resolved": "0.13.0",
+        "contentHash": "YMy2Q696EzobnTqqLi/1kWFWdDX+zfIkgWp/mD6JFeF+PNV4Ah6Kv/1iVX260krDOofrZLtOqzOQUNk4C/j3fQ=="
       },
       "CommandLineParser": {
         "type": "Transitive",
@@ -54,8 +54,8 @@
       },
       "Iced": {
         "type": "Transitive",
-        "resolved": "1.4.0",
-        "contentHash": "ewkwHAqWpbsFp/rS9CDgr/5zEyNl47Vo2GBoJJcEMR5lNkjaCAMM/mMrVawJsSIEZtrL1AYm+YOm8OAKmhrDoA=="
+        "resolved": "1.8.0",
+        "contentHash": "KQqoTZg3wf+eqG8ztGqlz9TozC/Dw/jnN82JkIRGZXTg/by0aPiQIMGb+b7hvvkOLnmCuWr3Ghr0mA2I+ASX1A=="
       },
       "Microsoft.CodeAnalysis.Analyzers": {
         "type": "Transitive",
@@ -124,13 +124,16 @@
       },
       "Microsoft.Diagnostics.Runtime": {
         "type": "Transitive",
-        "resolved": "1.1.57604",
-        "contentHash": "JqKqbiPCNIgHqVnDv8FUQhWk6zsQK88cF6UGc2Fa2mO3e5XJGytVE8KPPXz8Z9JWUCh4k8X/cgFZKuD5BxCc9A=="
+        "resolved": "1.1.126102",
+        "contentHash": "2lyoyld8bd/zSq5HJPkyXVtsSdfS30qr75V96S4nEJ/nUiUp0WfGjxnTcZXBLCqzwE0DLUR0lUcNpMp0gEtuzA=="
       },
       "Microsoft.Diagnostics.Tracing.TraceEvent": {
         "type": "Transitive",
-        "resolved": "2.0.49",
-        "contentHash": "vZ4in6HWLP76oK9JiBiGV+UT5sRfIdrDjbceN++ztTmPCzEX453QPwPIJc7AeuxmEE8gVaUz5i2MCGDyQpfcvQ=="
+        "resolved": "2.0.61",
+        "contentHash": "czZJRJZEZbGyBauIXYfWIfVV6Nx88L55RARKmEb7ja+nmb1yI+LiROgnD1N0Fyh/RnzvUUD/J0YYMkAEBT1Z6w==",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        }
       },
       "Microsoft.DotNet.PlatformAbstractions": {
         "type": "Transitive",
@@ -895,6 +898,11 @@
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0"
         }
+      },
+      "System.Runtime.CompilerServices.Unsafe": {
+        "type": "Transitive",
+        "resolved": "4.5.2",
+        "contentHash": "wprSFgext8cwqymChhrBLu62LMg/1u92bU+VOwyfBimSPVFXtsNqEWC92Pf9ofzJFlk4IHmJA75EDJn1b2goAQ=="
       },
       "System.Runtime.Extensions": {
         "type": "Transitive",
