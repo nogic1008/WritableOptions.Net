@@ -13,13 +13,6 @@ namespace Nogic.WritableOptions.Tests
     /// </summary>
     public sealed class JsonWritableOptionsTest
     {
-        public class SampleOption
-        {
-            public DateTime LastLaunchedAt { get; set; }
-            public int Interval { get; set; }
-            public string? ConnectionString { get; set; }
-        }
-
         private static readonly Random _random = new();
         /// <summary>
         /// Generates <see cref="SampleOption"/> randomly for test.

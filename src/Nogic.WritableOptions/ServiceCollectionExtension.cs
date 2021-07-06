@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +19,6 @@ namespace Nogic.WritableOptions
         /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
         /// <param name="section">The configuration being bound.</param>
         /// <param name="file">Setting JSON file name. (should be placed in content-root folder or current folder)</param>
-        [ExcludeFromCodeCoverage]
         public static void ConfigureWritable<TOptions>(
             this IServiceCollection services,
             IConfigurationSection section,
