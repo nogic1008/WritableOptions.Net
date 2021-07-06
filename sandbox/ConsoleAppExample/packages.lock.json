@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v3.1": {
       "ConsoleAppFramework": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "aiEHo/H+x3u99xNGH8mufE4tKSKOIdxZEZnjG4O3migKhF0seboMEcz9F+QkxSn3/CValFX2tvyr7b1GB6RnqA==",
+        "requested": "[3.3.0, )",
+        "resolved": "3.3.0",
+        "contentHash": "kqrHkL0iMVWsgDyVnbALzdN42kzassdP4Oso0mgnF5jnwPZfG9MhrydSeC1m0ZDwbBFg/Qfg/svZ7WiSvyI1Tw==",
         "dependencies": {
           "Microsoft.Extensions.Hosting": "3.1.5",
           "System.Text.Json": "4.7.2",
