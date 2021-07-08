@@ -41,11 +41,11 @@ jobs:
           [".NET Core 3.1 (LTS)", ".NET 5 (Current)", ".NET 6 (Preview)"]
         include:
           - sdk-name: ".NET Core 3.1 (LTS)"
-            sdk-version: "3.1"
+            sdk-version: 3.1.x
           - sdk-name: ".NET 5 (Current)"
-            sdk-version: "5.0"
+            sdk-version: 5.0.x
           - sdk-name: ".NET 6 (Preview)"
-            sdk-version: "6.0.100-preview.3.21202.5"
+            sdk-version: 6.0.x
     name: Debug Build & Test
     runs-on: ubuntu-20.04
     steps:
@@ -65,6 +65,7 @@ jobs:
         uses: actions/setup-dotnet@v1.8.1
         with:
           dotnet-version: ${{ matrix.sdk-version }}
+          include-prerelease: true
 
       - name: Restore
         run: dotnet restore --locked-mode
