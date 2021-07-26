@@ -57,7 +57,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
       - name: Setup .NET Core 3.1 SDK
-        if: matrix.sdk-version != '3.1'
+        if: matrix.sdk-version != '3.1.x'
         uses: actions/setup-dotnet@v1.8.1
         with:
           dotnet-version: 3.1
@@ -75,6 +75,6 @@ jobs:
         run: dotnet test --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2.0.2
         with:
-          file: "!**/.nuget/packages/**/*.*"
+          flags: ${{ matrix.sdk-version }}
