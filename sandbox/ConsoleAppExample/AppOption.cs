@@ -1,7 +1,5 @@
 namespace ConsoleAppExample;
 
-using System;
-
 public class AppOption
 {
     public DateTime LastLaunchedAt { get; set; }

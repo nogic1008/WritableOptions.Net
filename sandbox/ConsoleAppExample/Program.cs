@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using ConsoleAppExample;
 using ConsoleAppFramework;
 using Microsoft.Extensions.Hosting;

@@ -1,6 +1,5 @@
 namespace ConsoleAppExample;
 
-using System;
 using ConsoleAppFramework;
 using Microsoft.Extensions.Logging;
 using Nogic.WritableOptions;

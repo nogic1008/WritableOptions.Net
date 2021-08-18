@@ -1,7 +1,5 @@
 namespace Nogic.WritableOptions.Tests;
 
-using System;
-
 public class SampleOption
 {
     public DateTime LastLaunchedAt { get; set; }

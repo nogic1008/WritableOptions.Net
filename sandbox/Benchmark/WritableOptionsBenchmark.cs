@@ -1,9 +1,7 @@
 #nullable disable
 namespace Benchmark;
 
-using System;
 using System.IO;
-using System.Linq;
 using BenchmarkDotNet.Attributes;
 
 [Config(typeof(BenchmarkConfig))]

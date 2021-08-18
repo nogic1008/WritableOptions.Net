@@ -1,9 +1,7 @@
 namespace Nogic.WritableOptions.Tests;
 
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 /// <summary>
 /// Unit Test Class for <see cref="ServiceCollectionExtension"/>.
@@ -25,6 +23,7 @@ public sealed class ServiceCollectionExtensionTest
         var otherOption = provider.GetService<IWritableOptions<SampleOption>>();
 
         option.Should().NotBeNull()
+            .And.BeOfType<JsonWritableOptions<SampleOption>>()
             .And.NotBe(otherOption);
     }
 }
