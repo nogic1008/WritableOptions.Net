@@ -10,7 +10,7 @@ namespace Benchmark
         {
             AddJob(Job.Default.WithRuntime(CoreRuntime.Core31))
                 .WithOptions(ConfigOptions.DisableOptimizationsValidator);
-            AddJob(Job.Default.WithRuntime(CoreRuntime.Core50))
+            AddJob(Job.Default.WithRuntime(CoreRuntime.Core60))
                 .WithOptions(ConfigOptions.DisableOptimizationsValidator);
         }
     }
