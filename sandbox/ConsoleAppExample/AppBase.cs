@@ -12,17 +12,19 @@ public class AppBase : ConsoleAppBase
 
     public void Run()
     {
-        Context.Logger.LogDebug($"{nameof(AppBase)}.{nameof(Run)}() Start.");
+        const string MethodName = $"{nameof(AppBase)}.{nameof(Run)}()";
+        Context.Logger.LogDebug("{MethodName} Start.", MethodName);
 
-        Context.Logger.LogInformation("Current Settings: {0}", _writableOptions.Value);
+        var currentOption = _writableOptions.Value;
+        Context.Logger.LogInformation("Current Settings: {currentOption}", currentOption);
 
         var newOption = new AppOption { LastLaunchedAt = Context.Timestamp, ApiKey = Guid.NewGuid().ToString() };
-        Context.Logger.LogInformation("New Settings: {0}", newOption);
+        Context.Logger.LogInformation("New Settings: {newOption}", newOption);
 
         Context.Logger.LogInformation("Try to write new settings.");
         _writableOptions.Update(newOption);
         Context.Logger.LogInformation("Success! Check your appsettings.json.");
 
-        Context.Logger.LogDebug($"{nameof(AppBase)}.{nameof(Run)}() End.");
+        Context.Logger.LogDebug("{MethodName} End.", MethodName);
     }
 }
