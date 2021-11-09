@@ -1,12 +1,9 @@
-using System;
+namespace ConsoleAppExample;
 
-namespace ConsoleAppExample
+public class AppOption
 {
-    public class AppOption
-    {
-        public DateTime LastLaunchedAt { get; set; }
-        public string? ApiKey { get; set; }
-        public override string ToString()
-            => $"{{ {nameof(LastLaunchedAt)}: {LastLaunchedAt}, {nameof(ApiKey)} : {ApiKey} }}";
-    }
+    public DateTime LastLaunchedAt { get; set; }
+    public string? ApiKey { get; set; }
+    public override string ToString()
+        => $"{{ {nameof(LastLaunchedAt)}: {LastLaunchedAt}, {nameof(ApiKey)} : {ApiKey} }}";
 }

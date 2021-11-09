@@ -1,22 +1,15 @@
-using System.Threading.Tasks;
+using ConsoleAppExample;
 using ConsoleAppFramework;
 using Microsoft.Extensions.Hosting;
 using Nogic.WritableOptions;
 
-namespace ConsoleAppExample
-{
-    internal static class Program
+await Host.CreateDefaultBuilder()
+    .ConfigureLogging(logging => logging.ReplaceToSimpleConsole())
+    .ConfigureServices((context, services) =>
     {
-        private static async Task Main(string[] args)
-            => await Host.CreateDefaultBuilder()
-                .ConfigureLogging(logging => logging.ReplaceToSimpleConsole())
-                .ConfigureServices((context, services) =>
-                {
-                    // Load app settings
-                    var config = context.Configuration;
-                    services.ConfigureWritable<AppOption>(config.GetSection(context.HostingEnvironment.ApplicationName));
-                })
-                .RunConsoleAppFrameworkAsync<AppBase>(args)
-                .ConfigureAwait(false);
-    }
-}
+        // Load app settings
+        var config = context.Configuration;
+        services.ConfigureWritable<AppOption>(config.GetSection(context.HostingEnvironment.ApplicationName));
+    })
+    .RunConsoleAppFrameworkAsync<AppBase>(args)
+    .ConfigureAwait(false);

@@ -1,4 +1,4 @@
-name: .NET Core CI
+name: .NET CI
 
 on:
   push:
@@ -22,50 +22,35 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK
+      - name: Setup .NET 6 SDK
         uses: actions/setup-dotnet@v1.8.2
-        with:
-          dotnet-version: 3.1
-      - name: Restore Tool
-        run: dotnet tool restore
       - name: Add Problem Matcher for dotnet-format
         uses: xt0rted/dotnet-format-problem-matcher@v1
       - name: Lint
-        run: dotnet format --check
+        run: dotnet format --verify-no-changes
 
   test:
     strategy:
       fail-fast: false
       matrix:
-        sdk-name:
-          [".NET Core 3.1 (LTS)", ".NET 5 (Current)", ".NET 6 (Preview)"]
-        include:
-          - sdk-name: ".NET Core 3.1 (LTS)"
-            sdk-version: 3.1.x
-          - sdk-name: ".NET 5 (Current)"
-            sdk-version: 5.0.x
-          - sdk-name: ".NET 6 (Preview)"
-            sdk-version: 6.0.x
+        os: [ubuntu-latest, windows-latest, macos-latest]
     name: Debug Build & Test
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
       - uses: actions/cache@v2.1.6
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
       - name: Setup .NET Core 3.1 SDK
-        if: matrix.sdk-version != '3.1.x'
         uses: actions/setup-dotnet@v1.8.2
         with:
-          dotnet-version: 3.1
-      - name: Setup ${{ matrix.sdk-name }} SDK
+          dotnet-version: 3.1.x
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1.8.2
-        with:
-          dotnet-version: ${{ matrix.sdk-version }}
-          include-prerelease: true
 
       - name: Restore
         run: dotnet restore --locked-mode
