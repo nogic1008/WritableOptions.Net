@@ -24,9 +24,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup .NET 6 SDK
         uses: actions/setup-dotnet@v1.8.2
-        with:
-          dotnet-version: 6.x
-          include-prerelease: true
       - name: Add Problem Matcher for dotnet-format
         uses: xt0rted/dotnet-format-problem-matcher@v1
       - name: Lint
@@ -52,11 +49,8 @@ jobs:
         uses: actions/setup-dotnet@v1.8.2
         with:
           dotnet-version: 3.1.x
-      - name: Setup .NET 6 SDK
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1.8.2
-        with:
-          dotnet-version: 6.x
-          include-prerelease: true
 
       - name: Restore
         run: dotnet restore --locked-mode
