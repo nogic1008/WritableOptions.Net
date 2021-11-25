@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET 6 SDK
-        uses: actions/setup-dotnet@v1.8.2
+        uses: actions/setup-dotnet@v1.9.0
       - name: Add Problem Matcher for dotnet-format
         uses: xt0rted/dotnet-format-problem-matcher@v1
       - name: Lint
@@ -46,11 +46,11 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Setup .NET Core 3.1 SDK
-        uses: actions/setup-dotnet@v1.8.2
+        uses: actions/setup-dotnet@v1.9.0
         with:
           dotnet-version: 3.1.x
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v1.8.2
+        uses: actions/setup-dotnet@v1.9.0
 
       - name: Restore
         run: dotnet restore --locked-mode
