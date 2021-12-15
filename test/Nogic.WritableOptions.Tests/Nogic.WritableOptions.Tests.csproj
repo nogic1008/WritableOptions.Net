@@ -21,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="FluentAssertions"/>
+    <Using Include="Xunit"/>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../../src/Nogic.WritableOptions/Nogic.WritableOptions.csproj" />
   </ItemGroup>
 
