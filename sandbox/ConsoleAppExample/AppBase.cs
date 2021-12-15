@@ -8,7 +8,10 @@ public class AppBase : ConsoleAppBase
 {
     private readonly IWritableOptions<AppOption> _writableOptions;
     public AppBase(IWritableOptions<AppOption> writableOptions)
-        => _writableOptions = writableOptions ?? throw new ArgumentNullException(nameof(writableOptions));
+    {
+        ArgumentNullException.ThrowIfNull(writableOptions);
+        _writableOptions = writableOptions;
+    }
 
     public void Run()
     {

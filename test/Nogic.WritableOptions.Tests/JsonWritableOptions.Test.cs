@@ -71,45 +71,33 @@ public sealed class JsonWritableOptionsTest
     [InlineData("{\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
     public void Update_Writes_Json(string fileText)
     {
-        // Setup
-        string tempFilePath = Path.GetTempFileName();
-        File.AppendAllText(tempFilePath, fileText);
-        string tempFileName = Path.GetFileName(tempFilePath);
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(fileText);
 
-        try
+        var configStub = new Mock<IConfigurationRoot>();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!, configStub.Object);
+
+        // Act
+        sut.Update(new()
         {
-            // Arrange
-            var configStub = new Mock<IConfigurationRoot>();
+            LastLaunchedAt = new(2020, 12, 1),
+            Interval = 5000,
+            ConnectionString = "foo",
+        });
 
-            var sut = new JsonWritableOptions<SampleOption>(tempFilePath, nameof(SampleOption), null!, configStub.Object);
-
-            // Act
-            sut.Update(new()
-            {
-                LastLaunchedAt = new(2020, 12, 1),
-                Interval = 5000,
-                ConnectionString = "foo",
-            });
-
-            // Assert
-            string newLine = Environment.NewLine;
-            string jsonString = File.ReadAllText(tempFilePath);
-            jsonString.Should().Be("{" + newLine
-                + "  \"" + nameof(SampleOption) + "\": {" + newLine
-                + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
-                + "    \"Interval\": 5000," + newLine
-                + "    \"ConnectionString\": \"foo\"" + newLine
-                + "  }" + newLine
-                + "}"
-            );
-            configStub.Verify(m => m.Reload(), Times.Never());
-        }
-        finally
-        {
-            // Teardown
-            if (File.Exists(tempFilePath))
-                File.Delete(tempFilePath);
-        }
+        // Assert
+        string newLine = Environment.NewLine;
+        tempFile.ReadAllText().Should().Be("{" + newLine
+            + "  \"" + nameof(SampleOption) + "\": {" + newLine
+            + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
+            + "    \"Interval\": 5000," + newLine
+            + "    \"ConnectionString\": \"foo\"" + newLine
+            + "  }" + newLine
+            + "}"
+        );
+        configStub.Verify(m => m.Reload(), Times.Never());
     }
 
     /// <summary>
@@ -122,35 +110,23 @@ public sealed class JsonWritableOptionsTest
     [InlineData("{\"fooOption\":{},\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
     public void Update_DoesNot_Changes_Other_Section(string fileText)
     {
-        // Setup
-        string tempFilePath = Path.GetTempFileName();
-        File.AppendAllText(tempFilePath, fileText);
-        string tempFileName = Path.GetFileName(tempFilePath);
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(fileText);
 
-        try
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!);
+
+        // Act
+        sut.Update(new()
         {
-            // Arrange
-            var sut = new JsonWritableOptions<SampleOption>(tempFilePath, nameof(SampleOption), null!);
+            LastLaunchedAt = new(2020, 12, 1),
+            Interval = 5000,
+            ConnectionString = "foo",
+        }, true);
 
-            // Act
-            sut.Update(new()
-            {
-                LastLaunchedAt = new(2020, 12, 1),
-                Interval = 5000,
-                ConnectionString = "foo",
-            }, true);
-
-            // Assert
-            string newLine = Environment.NewLine;
-            string jsonString = File.ReadAllText(tempFilePath);
-            jsonString.Should().Contain("\"fooOption\": {},");
-        }
-        finally
-        {
-            // Teardown
-            if (File.Exists(tempFilePath))
-                File.Delete(tempFilePath);
-        }
+        // Assert
+        string newLine = Environment.NewLine;
+        tempFile.ReadAllText().Should().Contain("\"fooOption\": {},");
     }
 
     /// <summary>
@@ -159,44 +135,58 @@ public sealed class JsonWritableOptionsTest
     [Fact(DisplayName = ".Update(TOptions, true) calls IConfigurationRoot.Reload()")]
     public void Update_Calls_Reload()
     {
-        // Setup
-        string tempFilePath = Path.GetTempFileName();
-        File.AppendAllText(tempFilePath, "{}");
-        string tempFileName = Path.GetFileName(tempFilePath);
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText("{}");
 
-        try
+        var configStub = new Mock<IConfigurationRoot>();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!, configStub.Object);
+
+        // Act
+        sut.Update(new()
         {
-            // Arrange
-            var configStub = new Mock<IConfigurationRoot>();
+            LastLaunchedAt = new(2020, 12, 1),
+            Interval = 5000,
+            ConnectionString = "foo",
+        }, true);
 
-            var sut = new JsonWritableOptions<SampleOption>(tempFilePath, nameof(SampleOption), null!, configStub.Object);
+        // Assert
+        string newLine = Environment.NewLine;
+        tempFile.ReadAllText().Should().Be("{" + newLine
+            + "  \"" + nameof(SampleOption) + "\": {" + newLine
+            + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
+            + "    \"Interval\": 5000," + newLine
+            + "    \"ConnectionString\": \"foo\"" + newLine
+            + "  }" + newLine
+            + "}"
+        );
+        configStub.Verify(m => m.Reload(), Times.Once());
+    }
 
-            // Act
-            sut.Update(new()
-            {
-                LastLaunchedAt = new(2020, 12, 1),
-                Interval = 5000,
-                ConnectionString = "foo",
-            }, true);
+    private class TempFileProvider : IDisposable
+    {
+        public string Path { get; } = System.IO.Path.GetTempFileName();
+        private bool _disposedValue;
 
-            // Assert
-            string newLine = Environment.NewLine;
-            string jsonString = File.ReadAllText(tempFilePath);
-            jsonString.Should().Be("{" + newLine
-                + "  \"" + nameof(SampleOption) + "\": {" + newLine
-                + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
-                + "    \"Interval\": 5000," + newLine
-                + "    \"ConnectionString\": \"foo\"" + newLine
-                + "  }" + newLine
-                + "}"
-            );
-            configStub.Verify(m => m.Reload(), Times.Once());
-        }
-        finally
+        protected virtual void Dispose(bool disposing)
         {
-            // Teardown
-            if (File.Exists(tempFilePath))
-                File.Delete(tempFilePath);
+            if (_disposedValue)
+                return;
+            if (File.Exists(Path))
+                File.Delete(Path);
+            _disposedValue = true;
         }
+
+        ~TempFileProvider() => Dispose(false);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public string ReadAllText() => File.ReadAllText(Path);
+        public void AppendAllText(string contents) => File.AppendAllText(Path, contents);
     }
 }
