@@ -34,6 +34,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        framework: [netcoreapp3.1, net6.0]
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}
     steps:
@@ -57,9 +58,9 @@ jobs:
       - name: Debug Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test --no-build --settings coverlet.runsettings
+        run: dotnet test -f ${{ matrix.framework }} --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
         with:
-          flags: ${{ matrix.sdk-version }}
+          flags: ${{ runner.os }},${{ matrix.framework }}
