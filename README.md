@@ -1,22 +1,24 @@
 # WritableOptions.Net
 
+Provides `Options<T>` that can update values to source JSON file
+
 [![NuGet](https://img.shields.io/nuget/v/Nogic.WritableOptions?label=NuGet&logo=nuget&logoColor=blue)](https://www.nuget.org/packages/Nogic.WritableOptions/)
 [![GitHub release](https://img.shields.io/github/v/release/nogic1008/WritableOptions.Net?include_prereleases&logo=github&sort=semver)](https://github.com/nogic1008/WritableOptions.Net/releases)
-[![.NET Core CI](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml)
+[![.NET CI](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/dotnetcore.yml)
 [![codecov](https://codecov.io/gh/nogic1008/WritableOptions.Net/branch/main/graph/badge.svg?token=SjTS03boND)](https://codecov.io/gh/nogic1008/WritableOptions.Net)
 [![CodeFactor](https://www.codefactor.io/repository/github/nogic1008/WritableOptions.Net/badge)](https://www.codefactor.io/repository/github/nogic1008/WritableOptions.Net)
 [![License](https://img.shields.io/github/license/nogic1008/WritableOptions.Net)](LICENSE)
 
-This is a fork of [Awesome.Net.WritableOptions](https://github.com/Nongzhsh/Awesome.Net.WritableOptions), but:
+This is a fork of [Awesome.Net.WritableOptions](https://www.nuget.org/packages/Awesome.Net.WritableOptions), but:
 
 - Fixes [the issue](https://github.com/Nongzhsh/Awesome.Net.WritableOptions/issues/1) with `Microsoft.Extensions.Configuration.Json` >= 3.0.0
-- improves performance by using `System.Text.Json` (see [benchmark](./sandbox/Benchmark))
+- improves performance by using `System.Text.Json` (see [benchmark](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/Benchmark))
 
 See also: [How to update values into appsetting.json?](https://stackoverflow.com/questions/40970944/how-to-update-values-into-appsetting-json)
 
 ## Usage
 
-See [ConsoleApp Example](./sandbox/ConsoleAppExample/).
+See [ConsoleApp Example](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/ConsoleAppExample/).
 
 ```csharp
 using Nogic.WritableOptions;
