@@ -1,6 +1,7 @@
 namespace Nogic.WritableOptions.Tests;
 
 using System.IO;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -101,6 +102,45 @@ public sealed class JsonWritableOptionsTest
     }
 
     /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON with BOM.
+    /// </summary>
+    /// <param name="fileText">Current JSON text</param>
+    [Theory(DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
+    [InlineData("{}")]
+    [InlineData("{\"" + nameof(SampleOption) + "\":{}}")]
+    [InlineData("{\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
+    public void Update_Writes_Json_WithBOM(string fileText)
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(fileText, Encoding.UTF8);
+
+        var configStub = new Mock<IConfigurationRoot>();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!, configStub.Object);
+
+        // Act
+        sut.Update(new()
+        {
+            LastLaunchedAt = new(2020, 12, 1),
+            Interval = 5000,
+            ConnectionString = "foo",
+        });
+
+        // Assert
+        string newLine = Environment.NewLine;
+        tempFile.ReadAllText(Encoding.UTF8).Should().Be("{" + newLine
+            + "  \"" + nameof(SampleOption) + "\": {" + newLine
+            + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
+            + "    \"Interval\": 5000," + newLine
+            + "    \"ConnectionString\": \"foo\"" + newLine
+            + "  }" + newLine
+            + "}"
+        );
+        configStub.Verify(m => m.Reload(), Times.Never());
+    }
+
+    /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Update(TOptions, bool)"/> does not changes other JSON section.
     /// </summary>
     /// <param name="fileText">Current JSON text</param>
@@ -187,6 +227,8 @@ public sealed class JsonWritableOptionsTest
         }
 
         public string ReadAllText() => File.ReadAllText(Path);
+        public string ReadAllText(Encoding encoding) => File.ReadAllText(Path, encoding);
         public void AppendAllText(string contents) => File.AppendAllText(Path, contents);
+        public void AppendAllText(string contents, Encoding encoding) => File.AppendAllText(Path, contents, encoding);
     }
 }
