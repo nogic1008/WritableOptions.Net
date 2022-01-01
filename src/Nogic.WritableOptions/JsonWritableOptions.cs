@@ -1,6 +1,7 @@
 namespace Nogic.WritableOptions;
 
 using System.IO;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +37,18 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <inheritdoc/>
     public void Update(TOptions changedValue, bool reload = false)
     {
-        using var jsonDocument = JsonDocument.Parse(File.ReadAllBytes(_jsonFilePath));
+        ReadOnlyMemory<byte> jsonByteData = File.ReadAllBytes(_jsonFilePath);
+
+        // Check BOM
+        bool isBOM = false;
+        ReadOnlySpan<byte> utf8bom = Encoding.UTF8.GetPreamble();
+        if (jsonByteData.Span.StartsWith(utf8bom))
+        {
+            isBOM = true;
+            jsonByteData = jsonByteData.Slice(utf8bom.Length);
+        }
+
+        using var jsonDocument = JsonDocument.Parse(jsonByteData);
 
         using var stream = File.OpenWrite(_jsonFilePath);
         var writer = new Utf8JsonWriter(stream, new()
