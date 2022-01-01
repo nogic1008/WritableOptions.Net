@@ -45,7 +45,11 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         if (jsonByteData.Span.StartsWith(utf8bom))
         {
             isBOM = true;
+#if NETCOREAPP3_1_OR_GREATER
+            jsonByteData = jsonByteData[utf8bom.Length..];
+#else
             jsonByteData = jsonByteData.Slice(utf8bom.Length);
+#endif
         }
 
         using var jsonDocument = JsonDocument.Parse(jsonByteData);
