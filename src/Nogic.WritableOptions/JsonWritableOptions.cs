@@ -51,6 +51,16 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         using var jsonDocument = JsonDocument.Parse(jsonByteData);
 
         using var stream = File.OpenWrite(_jsonFilePath);
+        // Write BOM
+        if (isBOM)
+        {
+#if NETCOREAPP3_1_OR_GREATER
+            stream.Write(utf8bom);
+#else
+            stream.Write(utf8bom.ToArray(), 0, utf8bom.Length);
+#endif
+        }
+
         var writer = new Utf8JsonWriter(stream, new()
         {
             Indented = true,
