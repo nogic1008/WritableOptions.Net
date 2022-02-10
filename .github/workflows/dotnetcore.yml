@@ -23,10 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
 
-      - name: Setup .NET Core 3.1 SDK
-        uses: actions/setup-dotnet@v1.9.0
-        with:
-          dotnet-version: 3.1.x
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1.9.0
 
@@ -35,7 +31,13 @@ jobs:
       - name: Run .NET format command
         run: dotnet format --verify-no-changes
 
-      - name: Run .NET Code Analysis
+  code-analysis:
+    name: .NET Code Analysis
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      - name: Run .NET Code Analysis Action
         uses: dotnet/code-analysis@d3a5cb6ef8547e36e87c4378cc3e982d9fe1afe7
         with:
           build-breaking: true
