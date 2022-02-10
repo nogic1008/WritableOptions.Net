@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0;netcoreapp3.1</TargetFrameworks>
     <IsPackable>false</IsPackable>
+    <NoWarn>CA1707</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

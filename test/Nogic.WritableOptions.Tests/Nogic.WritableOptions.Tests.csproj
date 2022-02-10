@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
+    <NoWarn>CA1707</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="FluentAssertions"/>
-    <Using Include="Xunit"/>
+    <Using Include="FluentAssertions" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
   <ItemGroup>
