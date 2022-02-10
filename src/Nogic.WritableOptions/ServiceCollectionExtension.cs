@@ -21,17 +21,15 @@ public static class ServiceCollectionExtension
         this IServiceCollection services,
         IConfigurationSection section,
         string file = "appsettings.json") where TOptions : class, new()
-    {
-        services.Configure<TOptions>(section);
-        services.AddTransient<IWritableOptions<TOptions>>(provider =>
-        {
-            var environment = provider.GetService<IHostEnvironment>();
-            string jsonFilePath = environment?.ContentRootFileProvider.GetFileInfo(file).PhysicalPath
-                ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+        => services.Configure<TOptions>(section)
+            .AddTransient<IWritableOptions<TOptions>>(provider =>
+            {
+                var environment = provider.GetService<IHostEnvironment>();
+                string jsonFilePath = environment?.ContentRootFileProvider.GetFileInfo(file).PhysicalPath
+                    ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
 
-            var configuration = provider.GetService<IConfigurationRoot>();
-            var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-            return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, configuration);
-        });
-    }
+                var configuration = provider.GetService<IConfigurationRoot>();
+                var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
+                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, configuration);
+            });
 }
