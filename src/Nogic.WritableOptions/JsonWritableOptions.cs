@@ -1,11 +1,10 @@
-namespace Nogic.WritableOptions;
-
-using System.IO;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+
+namespace Nogic.WritableOptions;
 
 /// <summary>
 /// Read and write <typeparamref name="TOptions"/> in JSON file.

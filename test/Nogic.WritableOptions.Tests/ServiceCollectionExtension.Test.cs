@@ -1,7 +1,7 @@
-namespace Nogic.WritableOptions.Tests;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Nogic.WritableOptions.Tests;
 
 /// <summary>
 /// Unit Test Class for <see cref="ServiceCollectionExtension"/>.

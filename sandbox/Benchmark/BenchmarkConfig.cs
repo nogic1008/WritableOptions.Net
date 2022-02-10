@@ -1,8 +1,8 @@
-namespace Benchmark;
-
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
+
+namespace Benchmark;
 
 public class BenchmarkConfig : ManualConfig
 {
