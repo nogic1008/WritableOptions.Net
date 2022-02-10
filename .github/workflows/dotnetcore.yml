@@ -26,8 +26,13 @@ jobs:
         uses: actions/setup-dotnet@v1.9.0
       - name: Add Problem Matcher for dotnet-format
         uses: xt0rted/dotnet-format-problem-matcher@v1
-      - name: Lint
+      - name: Run .NET format command
         run: dotnet format --verify-no-changes
+      - name: Run .NET Code Analysis
+        uses: dotnet/code-analysis@d3a5cb6ef8547e36e87c4378cc3e982d9fe1afe7
+        with:
+          build-breaking: true
+          all-categories: all
 
   test:
     strategy:
