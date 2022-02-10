@@ -19,15 +19,22 @@ env:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
+
+      - name: Setup .NET Core 3.1 SDK
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: 3.1.x
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1.9.0
+
       - name: Add Problem Matcher for dotnet-format
         uses: xt0rted/dotnet-format-problem-matcher@v1
       - name: Run .NET format command
         run: dotnet format --verify-no-changes
+
       - name: Run .NET Code Analysis
         uses: dotnet/code-analysis@d3a5cb6ef8547e36e87c4378cc3e982d9fe1afe7
         with:
