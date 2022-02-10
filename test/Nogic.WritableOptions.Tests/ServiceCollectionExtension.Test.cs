@@ -22,7 +22,7 @@ public sealed class ServiceCollectionExtensionTest
         var option = provider.GetService<IWritableOptions<SampleOption>>();
         var otherOption = provider.GetService<IWritableOptions<SampleOption>>();
 
-        option.Should().NotBeNull()
+        _ = option.Should().NotBeNull()
             .And.BeOfType<JsonWritableOptions<SampleOption>>()
             .And.NotBe(otherOption);
     }

@@ -30,12 +30,12 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
-        optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
+        _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
 
         var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
 
         // Act - Assert
-        sut.Value.Should().Be(sampleOption);
+        _ = sut.Value.Should().Be(sampleOption);
         optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
     }
 
@@ -48,13 +48,13 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
-        optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(sampleOption);
+        _ = optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(sampleOption);
 
         var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
 
         // Act - Assert
-        sut.Get("Foo").Should().Be(sampleOption);
-        sut.Get("Bar").Should().Be(sampleOption);
+        _ = sut.Get("Foo").Should().Be(sampleOption);
+        _ = sut.Get("Bar").Should().Be(sampleOption);
 
         optionsMock.Verify(m => m.Get(It.IsAny<string>()), Times.Exactly(2));
         optionsMock.Verify(m => m.Get("Foo"), Times.Once());
@@ -89,7 +89,7 @@ public sealed class JsonWritableOptionsTest
 
         // Assert
         string newLine = Environment.NewLine;
-        tempFile.ReadAllText().Should().Be("{" + newLine
+        _ = tempFile.ReadAllText().Should().Be("{" + newLine
             + "  \"" + nameof(SampleOption) + "\": {" + newLine
             + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
             + "    \"Interval\": 5000," + newLine
@@ -128,7 +128,7 @@ public sealed class JsonWritableOptionsTest
 
         // Assert
         string newLine = Environment.NewLine;
-        tempFile.ReadAllText(Encoding.UTF8).Should().Be("{" + newLine
+        _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be("{" + newLine
             + "  \"" + nameof(SampleOption) + "\": {" + newLine
             + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
             + "    \"Interval\": 5000," + newLine
@@ -165,7 +165,7 @@ public sealed class JsonWritableOptionsTest
 
         // Assert
         string newLine = Environment.NewLine;
-        tempFile.ReadAllText().Should().Contain("\"fooOption\": {},");
+        _ = tempFile.ReadAllText().Should().Contain("\"fooOption\": {},");
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ public sealed class JsonWritableOptionsTest
 
         // Assert
         string newLine = Environment.NewLine;
-        tempFile.ReadAllText().Should().Be("{" + newLine
+        _ = tempFile.ReadAllText().Should().Be("{" + newLine
             + "  \"" + nameof(SampleOption) + "\": {" + newLine
             + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
             + "    \"Interval\": 5000," + newLine
