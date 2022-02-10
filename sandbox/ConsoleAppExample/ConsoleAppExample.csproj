@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleAppFramework" Version="4.0.5" />
+    <PackageReference Include="ConsoleAppFramework" Version="4.0.6" />
   </ItemGroup>
 
   <ItemGroup>
