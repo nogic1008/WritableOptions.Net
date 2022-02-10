@@ -1,6 +1,6 @@
-namespace Nogic.WritableOptions;
-
 using Microsoft.Extensions.Options;
+
+namespace Nogic.WritableOptions;
 
 /// <summary>
 /// Used to access or update the value of <typeparamref name="TOptions"/>.

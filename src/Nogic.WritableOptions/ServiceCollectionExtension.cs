@@ -1,10 +1,9 @@
-namespace Nogic.WritableOptions;
-
-using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+
+namespace Nogic.WritableOptions;
 
 /// <summary>
 /// Extension methods for adding configuration related writable options services to the DI container.

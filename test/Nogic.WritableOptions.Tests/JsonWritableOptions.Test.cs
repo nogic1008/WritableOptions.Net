@@ -1,10 +1,10 @@
-namespace Nogic.WritableOptions.Tests;
-
 using System.IO;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Moq;
+
+namespace Nogic.WritableOptions.Tests;
 
 /// <summary>
 /// Unit Test Class for <see cref="JsonWritableOptions{TOptions}"/>.

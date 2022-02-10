@@ -1,8 +1,7 @@
 #nullable disable
-namespace Benchmark;
-
-using System.IO;
 using BenchmarkDotNet.Attributes;
+
+namespace Benchmark;
 
 [Config(typeof(BenchmarkConfig))]
 public class WritableOptionsBenchmark
