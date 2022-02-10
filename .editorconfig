@@ -91,6 +91,7 @@ csharp_prefer_braces = when_multiline:warning
 csharp_prefer_simple_using_statement = true:warning
 
 csharp_using_directive_placement = outside_namespace
+csharp_style_namespace_declarations = file_scoped
 
 csharp_prefer_static_local_function = true:warning
 
