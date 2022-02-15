@@ -31,7 +31,7 @@ jobs:
 
   restore:
     name: Update NuGet Lock Files
-    if: contains(github.ref, 'dependabot') && github.event_name == 'pull_request'
+    if: contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.0
