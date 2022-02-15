@@ -29,6 +29,51 @@ jobs:
       - name: Lint
         run: dotnet format --verify-no-changes
 
+  restore:
+    name: Update NuGet Lock Files
+    if: contains(github.ref, 'dependabot') && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - uses: actions/cache@v2.1.7
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - name: Setup .NET Core 3.1 SDK
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: 3.1.x
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v1.9.0
+
+      - name: Restore
+        run: dotnet restore --force-evaluate
+      - name: Diff
+        id: diff
+        continue-on-error: true
+        run: |
+          git add -N .
+          git diff --name-only --exit-code
+
+      - name: Run ECLint
+        if: steps.diff.outcome == 'failure'
+        run: |
+          npm install -g eclint
+          eclint fix "**/packages.lock.json"
+      - name: Commit & Push
+        if: steps.diff.outcome == 'failure'
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add .
+          git commit -m "chore(deps): update NuGet lock file"
+          git push
+
   test:
     strategy:
       fail-fast: false
