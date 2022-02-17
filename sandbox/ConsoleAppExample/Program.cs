@@ -10,22 +10,26 @@ builder.ConfigureServices((ctx, services) =>
     services.ConfigureWritable<AppOption>(config.GetSection(ctx.HostingEnvironment.ApplicationName));
 });
 
+var rootEventId = new EventId(0, $"{nameof(ConsoleAppExample)}.Root");
+var logInfomation = LoggerMessage.Define<string>(LogLevel.Information, rootEventId, "{Message}");
+var logDebug = LoggerMessage.Define<string>(LogLevel.Debug, rootEventId, "{Message}");
+
 var app = builder.Build();
 app.AddRootCommand((ConsoleAppContext ctx, IWritableOptions<AppOption> writableOptions) =>
 {
-    ctx.Logger.LogDebug("Start.");
+    logDebug(ctx.Logger, "Start.", null);
 
     var currentOption = writableOptions.Value;
-    ctx.Logger.LogInformation("Current Settings: {currentOption}", currentOption);
+    AppOption.LogInfomation(ctx.Logger, currentOption);
 
     var newOption = new AppOption { LastLaunchedAt = ctx.Timestamp, ApiKey = Guid.NewGuid().ToString() };
-    ctx.Logger.LogInformation("New Settings: {newOption}", newOption);
+    AppOption.LogInfomation(ctx.Logger, newOption);
 
-    ctx.Logger.LogInformation("Try to write new settings.");
+    logInfomation(ctx.Logger, "Try to write new settings.", null);
     writableOptions.Update(newOption);
-    ctx.Logger.LogInformation("Success! Check your appsettings.json.");
+    logInfomation(ctx.Logger, "Success! Check your appsettings.json.", null);
 
-    ctx.Logger.LogDebug("End.");
+    logDebug(ctx.Logger, "End.", null);
 });
 
 app.Run();
