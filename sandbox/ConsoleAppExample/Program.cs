@@ -16,10 +16,10 @@ app.AddRootCommand((ConsoleAppContext ctx, IWritableOptions<AppOption> writableO
     ctx.Logger.LogDebug("Start.");
 
     var currentOption = writableOptions.Value;
-    ctx.Logger.LogInformation("Current Settings: {CurrentOption}", currentOption);
+    AppOption.LogInfomation(ctx.Logger, currentOption);
 
     var newOption = new AppOption { LastLaunchedAt = ctx.Timestamp, ApiKey = Guid.NewGuid().ToString() };
-    ctx.Logger.LogInformation("New Settings: {NewOption}", newOption);
+    AppOption.LogInfomation(ctx.Logger, newOption);
 
     ctx.Logger.LogInformation("Try to write new settings.");
     writableOptions.Update(newOption);
