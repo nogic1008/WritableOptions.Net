@@ -16,7 +16,7 @@ jobs:
     name: Publish to NuGet
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.0.0
       - uses: actions/cache@v2.1.7
         with:
           path: ${{ env.NUGET_PACKAGES }}
