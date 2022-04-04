@@ -11,8 +11,8 @@ Provides `Options<T>` that can update values to source JSON file
 
 This is a fork of [Awesome.Net.WritableOptions](https://www.nuget.org/packages/Awesome.Net.WritableOptions), but:
 
-- Fixes [the issue](https://github.com/Nongzhsh/Awesome.Net.WritableOptions/issues/1) with `Microsoft.Extensions.Configuration.Json` >= 3.0.0
-- improves performance by using `System.Text.Json` (see [benchmark](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/Benchmark))
+- Supports [UTF-8+BOM](https://github.com/nogic1008/WritableOptions.Net/issues/55) files
+- improves performance by using `Span<T>` (see [benchmark](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/Benchmark))
 
 See also: [How to update values into appsetting.json?](https://stackoverflow.com/questions/40970944/how-to-update-values-into-appsetting-json)
 
