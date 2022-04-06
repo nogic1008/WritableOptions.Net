@@ -108,3 +108,4 @@ jobs:
         uses: codecov/codecov-action@v3.0.0
         with:
           flags: ${{ runner.os }},${{ matrix.framework }}
+          file: '*.opencover.xml'
