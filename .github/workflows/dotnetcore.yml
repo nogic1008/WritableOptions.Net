@@ -79,6 +79,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         framework: [netcoreapp3.1, net6.0]
+        include:
+          - os: windows-latest
+            framework: net48
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}
     steps:
@@ -108,4 +111,4 @@ jobs:
         uses: codecov/codecov-action@v3.0.0
         with:
           flags: ${{ runner.os }},${{ matrix.framework }}
-          file: '*.opencover.xml'
+          file: "*.opencover.xml"
