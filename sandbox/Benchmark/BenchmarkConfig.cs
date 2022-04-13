@@ -10,5 +10,7 @@ public class BenchmarkConfig : ManualConfig
         => AddJob(Job.Default.WithRuntime(CoreRuntime.Core31))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
             .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60))
+            .WithOptions(ConfigOptions.DisableOptimizationsValidator)
+            .AddJob(Job.Default.WithRuntime(ClrRuntime.Net48))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator);
 }
