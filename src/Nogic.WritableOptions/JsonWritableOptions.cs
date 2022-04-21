@@ -92,7 +92,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         writer.WriteEndObject();
         writer.Flush();
         stream.SetLength(stream.Position);
-
+        stream.Close();
         if (reload)
             _configuration?.Reload();
     }
