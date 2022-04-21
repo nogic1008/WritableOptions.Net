@@ -28,10 +28,13 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         => (_jsonFilePath, _section, _options, _configuration) = (jsonFilePath, section, options, configuration);
 
     /// <inheritdoc/>
-    public TOptions Value => _options.CurrentValue;
+    public TOptions CurrentValue => _options.CurrentValue;
 
     /// <inheritdoc/>
     public TOptions Get(string name) => _options.Get(name);
+
+    /// <inheritdoc/>
+    public IDisposable OnChange(Action<TOptions, string> listener) => _options.OnChange(listener);
 
     /// <inheritdoc/>
     public void Update(TOptions changedValue, bool reload = false)
