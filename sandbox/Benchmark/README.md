@@ -34,20 +34,24 @@ for (int i = 0; i < 1000; i++)
 ## Result
 
 ``` ini
-BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19043.928 (21H1/May2021Update)
-AMD Ryzen 5 2500U with Radeon Vega Mobile Gfx, 1 CPU, 8 logical and 4 physical cores
-.NET SDK=6.0.101
-  [Host]     : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
-  Job-AQXYGX : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
-  Job-EIGSMZ : .NET Core 3.1.17 (CoreCLR 4.700.21.31506, CoreFX 4.700.21.31502), X64 RyuJIT
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.20348
+Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET SDK=6.0.202
+  [Host]     : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
+  Job-DTZKXX : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
+  Job-DXZGAX : .NET Core 3.1.24 (CoreCLR 4.700.22.16002, CoreFX 4.700.22.17909), X64 RyuJIT
+  Job-GZJUJV : .NET Framework 4.8 (4.8.4470.0), X64 RyuJIT
 
 InvocationCount=1  UnrollFactor=1  
 ```
 
-|                        Method |        Job |       Runtime |    Mean |    Error |   StdDev |  Median | Ratio | RatioSD |
-|------------------------------ |----------- |-------------- |--------:|---------:|---------:|--------:|------:|--------:|
-| AwesomeWritableOptions_Update | Job-AQXYGX |      .NET 6.0 | 2.922 s | 0.1199 s | 0.3535 s | 2.736 s |  1.00 |    0.00 |
-|      MyWritableOptions_Update | Job-AQXYGX |      .NET 6.0 | 1.695 s | 0.0631 s | 0.1862 s | 1.758 s |  0.59 |    0.10 |
-|                               |            |               |         |          |          |         |       |         |
-| AwesomeWritableOptions_Update | Job-EIGSMZ | .NET Core 3.1 | 3.245 s | 0.1130 s | 0.3333 s | 3.302 s |  1.00 |    0.00 |
-|      MyWritableOptions_Update | Job-EIGSMZ | .NET Core 3.1 | 1.743 s | 0.0648 s | 0.1910 s | 1.787 s |  0.54 |    0.08 |
+|                        Method |        Job |            Runtime |     Mean |   Error |  StdDev | Ratio |
+|------------------------------ |----------- |------------------- |---------:|--------:|--------:|------:|
+| AwesomeWritableOptions_Update | Job-DTZKXX |           .NET 6.0 | 404.3 ms | 6.94 ms | 5.79 ms |  1.00 |
+|      MyWritableOptions_Update | Job-DTZKXX |           .NET 6.0 | 264.5 ms | 2.72 ms | 2.41 ms |  0.65 |
+|                               |            |                    |          |         |         |       |
+| AwesomeWritableOptions_Update | Job-DXZGAX |      .NET Core 3.1 | 444.5 ms | 6.88 ms | 6.10 ms |  1.00 |
+|      MyWritableOptions_Update | Job-DXZGAX |      .NET Core 3.1 | 295.0 ms | 5.30 ms | 4.70 ms |  0.66 |
+|                               |            |                    |          |         |         |       |
+| AwesomeWritableOptions_Update | Job-GZJUJV | .NET Framework 4.8 | 640.3 ms | 7.18 ms | 6.72 ms |  1.00 |
+|      MyWritableOptions_Update | Job-GZJUJV | .NET Framework 4.8 | 421.7 ms | 6.05 ms | 5.06 ms |  0.66 |
