@@ -28,6 +28,9 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         => (_jsonFilePath, _section, _options, _configuration) = (jsonFilePath, section, options, configuration);
 
     /// <inheritdoc/>
+    public TOptions Value => _options.CurrentValue;
+
+    /// <inheritdoc/>
     public TOptions CurrentValue => _options.CurrentValue;
 
     /// <inheritdoc/>
