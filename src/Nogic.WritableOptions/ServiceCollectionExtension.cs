@@ -39,14 +39,13 @@ public static class ServiceCollectionExtension
     /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
     /// <param name="section">The configuration being bound.</param>
     /// <param name="file">Setting JSON file name. (should be placed in content-root folder or current folder)</param>
-    public static void ConfigureWritable<TOptions>(
+    public static void ConfigureWritableWithExplicitPath<TOptions>(
         this IServiceCollection services,
         IConfigurationSection section, string filePath,
         string file = "appsettings.json") where TOptions : class, new()
         => services.Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
-                var environment = provider.GetService<IHostEnvironment>();
                 string jsonFilePath = Path.Combine(filePath, file);
                 var configuration = provider.GetService<IConfigurationRoot>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
