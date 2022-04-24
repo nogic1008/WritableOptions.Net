@@ -38,6 +38,23 @@ public sealed class JsonWritableOptionsTest
         _ = sut.Value.Should().Be(sampleOption);
         optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
     }
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.CurrentValue"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
+    /// </summary>
+    [Fact(DisplayName = ".CurrentValue returns TOptions via IOptionsMonitor<TOptions>")]
+    public void CurrentValue_Returns_T()
+    {
+        // Arrange
+        var sampleOption = GenerateOption();
+        var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
+        _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
+
+        var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
+
+        // Act - Assert
+        _ = sut.CurrentValue.Should().Be(sampleOption);
+        optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
+    }
 
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Get"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
