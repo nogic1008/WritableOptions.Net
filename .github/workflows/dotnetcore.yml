@@ -21,7 +21,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3.0.1
+      - uses: actions/checkout@v3.0.2
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v2.0.0
       - name: Add Problem Matcher for dotnet-format
@@ -34,7 +34,7 @@ jobs:
     if: contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.0.1
+      - uses: actions/checkout@v3.0.2
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -85,7 +85,7 @@ jobs:
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3.0.1
+      - uses: actions/checkout@v3.0.2
       - uses: actions/cache@v3.0.2
         with:
           path: ${{ env.NUGET_PACKAGES }}
@@ -108,7 +108,7 @@ jobs:
         run: dotnet test -f ${{ matrix.framework }} --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3.0.0
+        uses: codecov/codecov-action@v3.1.0
         with:
           flags: ${{ runner.os }},${{ matrix.framework }}
           file: "*.opencover.xml"
