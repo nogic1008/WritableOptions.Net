@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 
 namespace XamarinExample;
+
 public partial class AppOption
 {
     public DateTime LastChanged { get; set; }

@@ -32,6 +32,7 @@ public static class ServiceCollectionExtension
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
                 return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, configuration);
             });
+
     /// <summary>
     /// Registers a writable configuration instance which <typeparamref name="TOptions"/> will bind against.
     /// </summary>

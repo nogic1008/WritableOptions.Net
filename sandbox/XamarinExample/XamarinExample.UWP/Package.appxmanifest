@@ -4,12 +4,14 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
+  IgnorableNamespaces="uap mp"
+>
 
   <Identity
     Name="5FD459B7-ACC5-4E82-9A58-383D2EA0527F"
     Publisher="CN=86248671-D8BD-45FF-A810-1FEEA54F9EE4"
-    Version="1.0.0.0" />
+    Version="1.0.0.0"
+  />
 
   <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -28,15 +30,18 @@
   </Resources>
 
   <Applications>
-    <Application Id="App"
+    <Application
+      Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="XamarinExample.UWP.App">
+      EntryPoint="XamarinExample.UWP.App"
+    >
       <uap:VisualElements
         DisplayName="XamarinExample.UWP"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="XamarinExample.UWP"
-        BackgroundColor="transparent">
+        BackgroundColor="transparent"
+      >
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\LargeTile.png" Square71x71Logo="Assets\SmallTile.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo" />

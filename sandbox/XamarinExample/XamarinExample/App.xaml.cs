@@ -1,8 +1,8 @@
 using System;
 using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Nogic.WritableOptions;
 using Xamarin.Essentials;
@@ -14,13 +14,11 @@ namespace XamarinExample;
 public partial class App : Application
 {
     private static string settingsFileName = "appsettings.json";
-    
+
     internal static void CreateSettingFile(string path, string defaultContent = "{}")
     {
         if (!File.Exists(path))
-        {
             File.WriteAllText(path, defaultContent, Encoding.UTF8);
-        }
     }
 
     readonly IServiceProvider _services;

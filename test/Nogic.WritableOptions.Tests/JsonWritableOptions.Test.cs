@@ -38,6 +38,7 @@ public sealed class JsonWritableOptionsTest
         _ = sut.Value.Should().Be(sampleOption);
         optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
     }
+
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.CurrentValue"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
