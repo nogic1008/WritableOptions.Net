@@ -9,10 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nogic.WritableOptions.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "sandbox\Benchmark\Benchmark.csproj", "{42A16976-6172-414A-9AC8-056C9EE18848}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppExample", "sandbox\ConsoleAppExample\ConsoleAppExample.csproj", "{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiExample", "sandbox\MauiExample\MauiExample.csproj", "{2C2E18F1-9A7D-446C-8DC8-58444F90F876}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,15 +26,6 @@ Global
 		{42A16976-6172-414A-9AC8-056C9EE18848}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42A16976-6172-414A-9AC8-056C9EE18848}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42A16976-6172-414A-9AC8-056C9EE18848}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C2E18F1-9A7D-446C-8DC8-58444F90F876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C2E18F1-9A7D-446C-8DC8-58444F90F876}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C2E18F1-9A7D-446C-8DC8-58444F90F876}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{2C2E18F1-9A7D-446C-8DC8-58444F90F876}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C2E18F1-9A7D-446C-8DC8-58444F90F876}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
