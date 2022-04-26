@@ -54,5 +54,3 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         _options.Update(current, true);
     }
 }
-
-
