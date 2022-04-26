@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nogic.WritableOptions", "src\Nogic.WritableOptions\Nogic.WritableOptions.csproj", "{BAD87D61-00A9-4AF7-8090-6EDAE5D359CE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nogic.WritableOptions.Tests", "test\Nogic.WritableOptions.Tests\Nogic.WritableOptions.Tests.csproj", "{B0C1A687-7BE9-43A1-92F2-F3DBA160922E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "sandbox\Benchmark\Benchmark.csproj", "{42A16976-6172-414A-9AC8-056C9EE18848}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppExample", "sandbox\ConsoleAppExample\ConsoleAppExample.csproj", "{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +26,6 @@ Global
 		{42A16976-6172-414A-9AC8-056C9EE18848}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42A16976-6172-414A-9AC8-056C9EE18848}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42A16976-6172-414A-9AC8-056C9EE18848}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63268F98-8F43-4403-A38F-D3F6DAEEC2A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@ namespace Nogic.WritableOptions;
 /// Used to access or update the value of <typeparamref name="TOptions"/>.
 /// </summary>
 /// <typeparam name="TOptions">Options type.</typeparam>
-public interface IWritableOptions<TOptions> : IOptionsSnapshot<TOptions> where TOptions : class, new()
+public interface IWritableOptions<TOptions> : IOptionsSnapshot<TOptions>, IOptionsMonitor<TOptions> where TOptions : class, new()
 {
     /// <summary>
     /// Update current <typeparamref name="TOptions"/> value.

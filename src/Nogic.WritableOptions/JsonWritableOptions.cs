@@ -31,7 +31,13 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     public TOptions Value => _options.CurrentValue;
 
     /// <inheritdoc/>
+    public TOptions CurrentValue => _options.CurrentValue;
+
+    /// <inheritdoc/>
     public TOptions Get(string name) => _options.Get(name);
+
+    /// <inheritdoc/>
+    public IDisposable OnChange(Action<TOptions, string> listener) => _options.OnChange(listener);
 
     /// <inheritdoc/>
     public void Update(TOptions changedValue, bool reload = false)
@@ -53,46 +59,47 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 
         using var jsonDocument = JsonDocument.Parse(jsonByteData);
 
-        using var stream = File.OpenWrite(_jsonFilePath);
-        // Write BOM
-        if (isBOM)
+        using (var stream = File.OpenWrite(_jsonFilePath))
         {
-#if NETCOREAPP3_1_OR_GREATER
-            stream.Write(utf8bom);
-#else
-            stream.Write(utf8bom.ToArray(), 0, utf8bom.Length);
-#endif
-        }
-
-        var writer = new Utf8JsonWriter(stream, new()
-        {
-            Indented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-        });
-
-        writer.WriteStartObject();
-        bool isWritten = false;
-        var optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(changedValue));
-        foreach (var element in jsonDocument.RootElement.EnumerateObject())
-        {
-            if (element.Name != _section)
+            // Write BOM
+            if (isBOM)
             {
-                element.WriteTo(writer);
-                continue;
+#if NETCOREAPP3_1_OR_GREATER
+                stream.Write(utf8bom);
+#else
+                stream.Write(utf8bom.ToArray(), 0, utf8bom.Length);
+#endif
             }
-            writer.WritePropertyName(element.Name);
-            optionsElement.WriteTo(writer);
-            isWritten = true;
-        }
-        if (!isWritten)
-        {
-            writer.WritePropertyName(_section);
-            optionsElement.WriteTo(writer);
-        }
-        writer.WriteEndObject();
-        writer.Flush();
-        stream.SetLength(stream.Position);
 
+            var writer = new Utf8JsonWriter(stream, new()
+            {
+                Indented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
+
+            writer.WriteStartObject();
+            bool isWritten = false;
+            var optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(changedValue));
+            foreach (var element in jsonDocument.RootElement.EnumerateObject())
+            {
+                if (element.Name != _section)
+                {
+                    element.WriteTo(writer);
+                    continue;
+                }
+                writer.WritePropertyName(element.Name);
+                optionsElement.WriteTo(writer);
+                isWritten = true;
+            }
+            if (!isWritten)
+            {
+                writer.WritePropertyName(_section);
+                optionsElement.WriteTo(writer);
+            }
+            writer.WriteEndObject();
+            writer.Flush();
+            stream.SetLength(stream.Position);
+        }
         if (reload)
             _configuration?.Reload();
     }

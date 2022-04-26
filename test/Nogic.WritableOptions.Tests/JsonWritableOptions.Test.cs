@@ -40,6 +40,24 @@ public sealed class JsonWritableOptionsTest
     }
 
     /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.CurrentValue"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
+    /// </summary>
+    [Fact(DisplayName = ".CurrentValue returns TOptions via IOptionsMonitor<TOptions>")]
+    public void CurrentValue_Returns_T()
+    {
+        // Arrange
+        var sampleOption = GenerateOption();
+        var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
+        _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
+
+        var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
+
+        // Act - Assert
+        _ = sut.CurrentValue.Should().Be(sampleOption);
+        optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
+    }
+
+    /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Get"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
     [Fact(DisplayName = ".Get(string) returns TOptions via IOptionsMonitor<TOptions>")]
@@ -59,6 +77,27 @@ public sealed class JsonWritableOptionsTest
         optionsMock.Verify(m => m.Get(It.IsAny<string>()), Times.Exactly(2));
         optionsMock.Verify(m => m.Get("Foo"), Times.Once());
         optionsMock.Verify(m => m.Get("Bar"), Times.Once());
+    }
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.OnChange"/> returns <see cref="IDisposable"/> via <see cref="IOptionsMonitor{TOptions}"/>.
+    /// </summary>
+    [Fact]
+    public void OnChange_Called_IOptionsMonitor_OnChange()
+    {
+        // Arrange
+        var sampleOption = GenerateOption();
+        var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
+        var action = (SampleOption option, string section)
+            => Console.WriteLine($"{nameof(SampleOption)}:{section} changed to {option}");
+
+        var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
+
+        // Act
+        _ = sut.OnChange(action);
+
+        // Assert
+        optionsMock.Verify(m => m.OnChange(action), Times.Once());
     }
 
     /// <summary>

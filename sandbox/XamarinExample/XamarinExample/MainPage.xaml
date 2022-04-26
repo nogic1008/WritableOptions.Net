@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  x:Class="XamarinExample.MainPage"
+  x:Name="page"
+>
+  <StackLayout>
+    <Label
+      Text="{Binding LastChanged, Source={x:Reference page}, StringFormat='Last written @ {0}'}"
+      FontSize="32"
+      HorizontalOptions="Center"
+    />
+    <Label
+      Text="{Binding ApiKey, Source={x:Reference page}, StringFormat='Key is {0}'}"
+      FontSize="18"
+      FontAttributes="Bold"
+      HorizontalOptions="Center"
+    />
+    <Button
+      Text="Update key"
+      FontAttributes="Bold"
+      Clicked="OnClicked"
+      HorizontalOptions="Center"
+    />
+  </StackLayout>
+</ContentPage>
