@@ -12,9 +12,21 @@ namespace Nogic.WritableOptions;
 /// <typeparam name="TOptions">Options type.</typeparam>
 public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TOptions : class, new()
 {
-    private readonly IOptionsMonitor<TOptions> _options;
+    /// <summary>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfigurationRoot?)" path="/param[@name='jsonFilePath']"/>
+    /// </summary>
     private readonly string _jsonFilePath;
+    /// <summary>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfigurationRoot?)" path="/param[@name='section']"/>
+    /// </summary>
     private readonly JsonEncodedText _section;
+    /// <summary>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfigurationRoot?)" path="/param[@name='options']"/>
+    /// </summary>
+    private readonly IOptionsMonitor<TOptions> _options;
+    /// <summary>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfigurationRoot?)" path="/param[@name='configuration']"/>
+    /// </summary>
     private readonly IConfigurationRoot? _configuration;
 
     /// <summary>
