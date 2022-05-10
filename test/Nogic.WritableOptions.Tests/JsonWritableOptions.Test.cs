@@ -32,7 +32,7 @@ public sealed class JsonWritableOptionsTest
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
         _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
 
         // Act - Assert
         _ = sut.Value.Should().Be(sampleOption);
@@ -50,7 +50,7 @@ public sealed class JsonWritableOptionsTest
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
         _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
 
         // Act - Assert
         _ = sut.CurrentValue.Should().Be(sampleOption);
@@ -68,7 +68,7 @@ public sealed class JsonWritableOptionsTest
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
         _ = optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(sampleOption);
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
 
         // Act - Assert
         _ = sut.Get("Foo").Should().Be(sampleOption);
@@ -91,7 +91,7 @@ public sealed class JsonWritableOptionsTest
         var action = (SampleOption option, string section)
             => Console.WriteLine($"{nameof(SampleOption)}:{section} changed to {option}");
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, null!, optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
 
         // Act
         _ = sut.OnChange(action);
