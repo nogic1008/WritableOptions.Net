@@ -14,7 +14,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 {
     private readonly IOptionsMonitor<TOptions> _options;
     private readonly string _jsonFilePath;
-    private readonly string _section;
+    private readonly byte[] _sectionUtf8Bytes;
     private readonly IConfigurationRoot? _configuration;
 
     /// <summary>
@@ -25,7 +25,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <param name="options">Instance to read <typeparamref name="TOptions"/>. Should be referenced <paramref name="jsonFilePath"/>.</param>
     /// <param name="configuration">Configuration root for reload</param>
     public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfigurationRoot? configuration = null)
-        => (_jsonFilePath, _section, _options, _configuration) = (jsonFilePath, section, options, configuration);
+        => (_jsonFilePath, _sectionUtf8Bytes, _options, _configuration) = (jsonFilePath, Encoding.UTF8.GetBytes(section), options, configuration);
 
     /// <inheritdoc/>
     public TOptions Value => _options.CurrentValue;
@@ -82,18 +82,18 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
             var optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(changedValue));
             foreach (var element in jsonDocument.RootElement.EnumerateObject())
             {
-                if (element.Name != _section)
+                if (!element.NameEquals(_sectionUtf8Bytes))
                 {
                     element.WriteTo(writer);
                     continue;
                 }
-                writer.WritePropertyName(element.Name);
+                writer.WritePropertyName(_sectionUtf8Bytes);
                 optionsElement.WriteTo(writer);
                 isWritten = true;
             }
             if (!isWritten)
             {
-                writer.WritePropertyName(_section);
+                writer.WritePropertyName(_sectionUtf8Bytes);
                 optionsElement.WriteTo(writer);
             }
             writer.WriteEndObject();
