@@ -14,7 +14,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 {
     private readonly IOptionsMonitor<TOptions> _options;
     private readonly string _jsonFilePath;
-    private readonly byte[] _sectionUtf8Bytes;
+    private readonly ReadOnlyMemory<byte> _sectionUtf8Bytes;
     private readonly IConfigurationRoot? _configuration;
 
     /// <summary>
@@ -82,18 +82,18 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
             var optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(changedValue));
             foreach (var element in jsonDocument.RootElement.EnumerateObject())
             {
-                if (!element.NameEquals(_sectionUtf8Bytes))
+                if (!element.NameEquals(_sectionUtf8Bytes.Span))
                 {
                     element.WriteTo(writer);
                     continue;
                 }
-                writer.WritePropertyName(_sectionUtf8Bytes);
+                writer.WritePropertyName(_sectionUtf8Bytes.Span);
                 optionsElement.WriteTo(writer);
                 isWritten = true;
             }
             if (!isWritten)
             {
-                writer.WritePropertyName(_sectionUtf8Bytes);
+                writer.WritePropertyName(_sectionUtf8Bytes.Span);
                 optionsElement.WriteTo(writer);
             }
             writer.WriteEndObject();
