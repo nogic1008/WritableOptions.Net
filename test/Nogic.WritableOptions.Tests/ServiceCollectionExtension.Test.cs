@@ -8,7 +8,10 @@ namespace Nogic.WritableOptions.Tests;
 /// </summary>
 public sealed class ServiceCollectionExtensionTest
 {
-    [Fact]
+    /// <summary>
+    /// <see cref="ServiceCollectionExtension.ConfigureWritable{TOptions}"/> calls <see cref="ServiceCollectionServiceExtensions.AddTransient{IWritableOptions{TOptions}}(IServiceCollection, Func{IServiceProvider, IWritableOptions{TOptions}})"/>.
+    /// </summary>
+    [Fact(DisplayName = $"{nameof(ServiceCollectionExtension.ConfigureWritable)}<TOptions>() calls {nameof(ServiceCollectionServiceExtensions.AddTransient)}<IWritableOptions<TOptions>>().")]
     public void ConfigureWritable_Calls_AddTransient()
     {
         var configuration = new ConfigurationBuilder()
@@ -27,7 +30,10 @@ public sealed class ServiceCollectionExtensionTest
             .And.NotBe(otherOption);
     }
 
-    [Fact]
+    /// <summary>
+    /// <see cref="ServiceCollectionExtension.ConfigureWritableWithExplicitPath{TOptions}"/> calls <see cref="ServiceCollectionServiceExtensions.AddTransient{IWritableOptions{TOptions}}(IServiceCollection, Func{IServiceProvider, IWritableOptions{TOptions}})"/>.
+    /// </summary>
+    [Fact(DisplayName = $"{nameof(ServiceCollectionExtension.ConfigureWritableWithExplicitPath)}<TOptions>() calls {nameof(ServiceCollectionServiceExtensions.AddTransient)}<IWritableOptions<TOptions>>().")]
     public void ConfigureWritableWithExplicitPath_Calls_AddTransient()
     {
         var configuration = new ConfigurationBuilder()
