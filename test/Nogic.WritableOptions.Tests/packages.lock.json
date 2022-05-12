@@ -1445,7 +1445,7 @@
           "xunit.extensibility.core": "[2.4.1]"
         }
       },
-      "nogic.writableoptions": {
+      "Nogic.WritableOptions.Dev": {
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
@@ -1996,7 +1996,7 @@
           "xunit.extensibility.core": "[2.4.1]"
         }
       },
-      "nogic.writableoptions": {
+      "Nogic.WritableOptions.Dev": {
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
@@ -3420,7 +3420,7 @@
           "xunit.extensibility.core": "[2.4.1]"
         }
       },
-      "nogic.writableoptions": {
+      "Nogic.WritableOptions.Dev": {
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",

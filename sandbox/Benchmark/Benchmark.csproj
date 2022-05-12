@@ -10,10 +10,11 @@
   <ItemGroup>
     <PackageReference Include="Awesome.Net.WritableOptions" Version="3.0.0" />
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+    <PackageReference Include="Nogic.WritableOptions" Version="1.1.1" Aliases="release" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/Nogic.WritableOptions/Nogic.WritableOptions.csproj" />
+    <ProjectReference Include="../../src/Nogic.WritableOptions/Nogic.WritableOptions.csproj" Aliases="dev" />
   </ItemGroup>
 
 </Project>

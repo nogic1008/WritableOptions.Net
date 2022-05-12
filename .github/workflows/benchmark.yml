@@ -10,7 +10,7 @@ env:
 
 jobs:
   benchmark:
-    name: Run
+    name: Benchmark
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3.0.2

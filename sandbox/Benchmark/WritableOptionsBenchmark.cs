@@ -1,5 +1,10 @@
 #nullable disable
+extern alias dev;
+extern alias release;
 using BenchmarkDotNet.Attributes;
+using AwesomeNet = Awesome.Net.WritableOptions;
+using Dev = dev::Nogic.WritableOptions;
+using Release = release::Nogic.WritableOptions;
 
 namespace Benchmark;
 
@@ -13,8 +18,9 @@ public class WritableOptionsBenchmark
         public int[] IntSettings { get; set; }
     }
 
-    private Awesome.Net.WritableOptions.WritableOptions<SampleOption> _awesomeWritableOptions;
-    private Nogic.WritableOptions.JsonWritableOptions<SampleOption> _myWritableOptions;
+    private AwesomeNet.WritableOptions<SampleOption> _awesomeWritableOptions;
+    private Release.JsonWritableOptions<SampleOption> _releaseWritableOptions;
+    private Dev.JsonWritableOptions<SampleOption> _devWritableOptions;
     private SampleOption _option;
     private string _jsonFilePath;
 
@@ -32,10 +38,11 @@ public class WritableOptionsBenchmark
         _jsonFilePath = Path.GetTempFileName();
         File.AppendAllText(_jsonFilePath, "{}");
         _awesomeWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
-        _myWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
+        _releaseWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
+        _devWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
     }
 
-    [Benchmark(Baseline = true)]
+    [Benchmark]
     public void AwesomeWritableOptions_Update()
     {
         for (int i = 0; i < 1000; i++)
@@ -49,13 +56,18 @@ public class WritableOptionsBenchmark
         }
     }
 
-    [Benchmark]
-    public void MyWritableOptions_Update()
+    [Benchmark(Baseline = true)]
+    public void ReleaseWritableOptions_Update()
     {
         for (int i = 0; i < 1000; i++)
-        {
-            _myWritableOptions.Update(_option);
-        }
+            _releaseWritableOptions.Update(_option);
+    }
+
+    [Benchmark]
+    public void DevWritableOptions_Update()
+    {
+        for (int i = 0; i < 1000; i++)
+            _devWritableOptions.Update(_option);
     }
 
     [IterationCleanup]
