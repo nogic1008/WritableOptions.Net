@@ -39,13 +39,12 @@ jobs:
           path: sandbox/Benchmark/BenchmarkDotNet.Artifacts/
 
       - name: Add Job Summaries
-        shell: pwsh
         run: |
-          "# Benchmark Result:bar_chart:" >> $GITHUB_STEP_SUMMARY
-          Get-Content -Path ./sandbox/Benchmark/BenchmarkDotNet.Artifacts/results/Benchmark.WritableOptionsBenchmark-report-github.md >> $GITHUB_STEP_SUMMARY
+          "# Benchmark Result:bar_chart:" >> $env:GITHUB_STEP_SUMMARY
+          cat ./sandbox/Benchmark/BenchmarkDotNet.Artifacts/results/Benchmark.WritableOptionsBenchmark-report-github.md >> $env:GITHUB_STEP_SUMMARY
           "## Legends" >> $GITHUB_STEP_SUMMARY
-          "- **Mean**: Arithmetic mean of all measurements" >> $GITHUB_STEP_SUMMARY
-          "- **Error**: Half of 99.9% confidence interval" >> $GITHUB_STEP_SUMMARY
-          "- **StdDev**: Standard deviation of all measurements" >> $GITHUB_STEP_SUMMARY
-          "- **Ratio**: Mean of the ratio distribution ([Current]/[Baseline])" >> $GITHUB_STEP_SUMMARY
-          "- **1 ms**: 1 Millisecond (0.001 sec)" >> $GITHUB_STEP_SUMMARY
+          "- **Mean**: Arithmetic mean of all measurements" >> $env:GITHUB_STEP_SUMMARY
+          "- **Error**: Half of 99.9% confidence interval" >> $env:GITHUB_STEP_SUMMARY
+          "- **StdDev**: Standard deviation of all measurements" >> $env:GITHUB_STEP_SUMMARY
+          "- **Ratio**: Mean of the ratio distribution ([Current]/[Baseline])" >> $env:GITHUB_STEP_SUMMARY
+          "- **1 ms**: 1 Millisecond (0.001 sec)" >> $env:GITHUB_STEP_SUMMARY
