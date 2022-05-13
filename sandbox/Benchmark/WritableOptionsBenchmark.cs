@@ -18,6 +18,8 @@ public class WritableOptionsBenchmark
         public int[] IntSettings { get; set; }
     }
 
+    private const int UpdateLoopCount = 100;
+
     private AwesomeNet.WritableOptions<SampleOption> _awesomeWritableOptions;
     private Release.JsonWritableOptions<SampleOption> _releaseWritableOptions;
     private Dev.JsonWritableOptions<SampleOption> _devWritableOptions;
@@ -42,10 +44,10 @@ public class WritableOptionsBenchmark
         _devWritableOptions = new(_jsonFilePath, nameof(SampleOption), null!, null);
     }
 
-    [Benchmark]
+    [Benchmark(Description = $"{nameof(Awesome)}.{nameof(Awesome.Net)}.{nameof(Awesome.Net.WritableOptions)}")]
     public void AwesomeWritableOptions_Update()
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < UpdateLoopCount; i++)
         {
             _awesomeWritableOptions.Update(o =>
             {
@@ -56,17 +58,17 @@ public class WritableOptionsBenchmark
         }
     }
 
-    [Benchmark(Baseline = true)]
+    [Benchmark(Baseline = true, Description = $"(NuGet){nameof(release.Nogic)}.{nameof(release.Nogic.WritableOptions)}")]
     public void ReleaseWritableOptions_Update()
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < UpdateLoopCount; i++)
             _releaseWritableOptions.Update(_option);
     }
 
-    [Benchmark]
+    [Benchmark(Description = $"(Dev){nameof(dev.Nogic)}.{nameof(dev.Nogic.WritableOptions)}")]
     public void DevWritableOptions_Update()
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < UpdateLoopCount; i++)
             _devWritableOptions.Update(_option);
     }
 
