@@ -14,7 +14,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 {
     private readonly IOptionsMonitor<TOptions> _options;
     private readonly string _jsonFilePath;
-    private readonly string _section;
+    private readonly JsonEncodedText _section;
     private readonly IConfigurationRoot? _configuration;
 
     /// <summary>
@@ -24,8 +24,34 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <param name="section">JSON property name to store settings.</param>
     /// <param name="options">Instance to read <typeparamref name="TOptions"/>. Should be referenced <paramref name="jsonFilePath"/>.</param>
     /// <param name="configuration">Configuration root for reload</param>
+    /// <exception cref="ArgumentNullException">
+    /// Throws if <paramref name="jsonFilePath"/>, <paramref name="section"/> or <paramref name="options"/> is <see langword="null"/>.
+    /// </exception>
     public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfigurationRoot? configuration = null)
-        => (_jsonFilePath, _section, _options, _configuration) = (jsonFilePath, section, options, configuration);
+    {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(jsonFilePath);
+        ArgumentNullException.ThrowIfNull(section);
+        ArgumentNullException.ThrowIfNull(options);
+#else
+        ThrowIfNull(jsonFilePath, nameof(jsonFilePath));
+        ThrowIfNull(section, nameof(section));
+        ThrowIfNull(options, nameof(options));
+#endif
+
+        _jsonFilePath = jsonFilePath;
+        _section = JsonEncodedText.Encode(section);
+        _options = options;
+        _configuration = configuration;
+#if !NET6_0_OR_GREATER
+        // Port of ArgumentNullException.ThrowIfNull
+        static void ThrowIfNull(object? argument, string paramName)
+        {
+            if (argument is null)
+                throw new ArgumentNullException(paramName);
+        }
+#endif
+    }
 
     /// <inheritdoc/>
     public TOptions Value => _options.CurrentValue;
@@ -82,12 +108,12 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
             var optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(changedValue));
             foreach (var element in jsonDocument.RootElement.EnumerateObject())
             {
-                if (element.Name != _section)
+                if (!element.NameEquals(_section.EncodedUtf8Bytes))
                 {
                     element.WriteTo(writer);
                     continue;
                 }
-                writer.WritePropertyName(element.Name);
+                writer.WritePropertyName(_section);
                 optionsElement.WriteTo(writer);
                 isWritten = true;
             }
