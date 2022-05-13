@@ -21,6 +21,13 @@ public sealed class JsonWritableOptionsTest
         ConnectionString = new Guid().ToString()
     };
 
+    /// <summary>
+    /// Constractor throws <see cref="ArgumentNullException"/>
+    /// </summary>
+    /// <param name="jsonFilePath"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='jsonFilePath']" /></param>
+    /// <param name="section"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='section']" /></param>
+    /// <param name="hasOptions">set options as <see langword="null"/> or not</param>
+    /// <param name="paramName">Expected <see cref="ArgumentNullException"/> param name</param>
     [Theory]
     [InlineData(null, "", true, "jsonFilePath")]
     [InlineData("", null, true, "section")]
