@@ -40,11 +40,14 @@ jobs:
 
       - name: Add Job Summaries
         run: |
-          "# Benchmark Result:bar_chart:" >> $env:GITHUB_STEP_SUMMARY
+          "# Benchmark Result:bar_chart: from ${{ github.sha }}" >> $env:GITHUB_STEP_SUMMARY
           cat ./sandbox/Benchmark/BenchmarkDotNet.Artifacts/results/Benchmark.WritableOptionsBenchmark-report-github.md >> $env:GITHUB_STEP_SUMMARY
           "## Legends" >> $GITHUB_STEP_SUMMARY
           "- **Mean**: Arithmetic mean of all measurements" >> $env:GITHUB_STEP_SUMMARY
           "- **Error**: Half of 99.9% confidence interval" >> $env:GITHUB_STEP_SUMMARY
           "- **StdDev**: Standard deviation of all measurements" >> $env:GITHUB_STEP_SUMMARY
           "- **Ratio**: Mean of the ratio distribution ([Current]/[Baseline])" >> $env:GITHUB_STEP_SUMMARY
+          "- **RatioSD**: Standard deviation of the ratio distribution ([Current]/[Baseline])" >> $env:GITHUB_STEP_SUMMARY
+          "- **Gen 0**: GC Generation 0 collects per 1000 operations" >> $env:GITHUB_STEP_SUMMARY
+          "- **Allocated**: Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)" >> $env:GITHUB_STEP_SUMMARY
           "- **1 ms**: 1 Millisecond (0.001 sec)" >> $env:GITHUB_STEP_SUMMARY
