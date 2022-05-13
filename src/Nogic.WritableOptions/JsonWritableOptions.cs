@@ -24,8 +24,34 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <param name="section">JSON property name to store settings.</param>
     /// <param name="options">Instance to read <typeparamref name="TOptions"/>. Should be referenced <paramref name="jsonFilePath"/>.</param>
     /// <param name="configuration">Configuration root for reload</param>
+    /// <exception cref="ArgumentNullException">
+    /// Throws if <paramref name="jsonFilePath"/>, <paramref name="section"/> or <paramref name="options"/> is <see langword="null"/>.
+    /// </exception>
     public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfigurationRoot? configuration = null)
-        => (_jsonFilePath, _section, _options, _configuration) = (jsonFilePath, JsonEncodedText.Encode(section), options, configuration);
+    {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(jsonFilePath);
+        ArgumentNullException.ThrowIfNull(section);
+        ArgumentNullException.ThrowIfNull(options);
+#else
+        ThrowIfNull(jsonFilePath, nameof(jsonFilePath));
+        ThrowIfNull(section, nameof(section));
+        ThrowIfNull(options, nameof(options));
+#endif
+
+        _jsonFilePath = jsonFilePath;
+        _section = JsonEncodedText.Encode(section);
+        _options = options;
+        _configuration = configuration;
+#if !NET6_0_OR_GREATER
+        // Port of ArgumentNullException.ThrowIfNull
+        static void ThrowIfNull(object? argument, string paramName)
+        {
+            if (argument is null)
+                throw new ArgumentNullException(paramName);
+        }
+#endif
+    }
 
     /// <inheritdoc/>
     public TOptions Value => _options.CurrentValue;

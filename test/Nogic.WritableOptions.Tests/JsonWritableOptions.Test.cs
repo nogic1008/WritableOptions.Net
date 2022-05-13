@@ -21,6 +21,20 @@ public sealed class JsonWritableOptionsTest
         ConnectionString = new Guid().ToString()
     };
 
+    [Theory]
+    [InlineData(null, "", true, "jsonFilePath")]
+    [InlineData("", null, true, "section")]
+    [InlineData("", "", false, "options")]
+    public void Constractor_Throws_ArgumentNullException(string? jsonFilePath, string? section, bool hasOptions, string paramName)
+    {
+        // Arrange
+        var options = hasOptions ? new Mock<IOptionsMonitor<SampleOption>>().Object : null;
+        var constractor = () => new JsonWritableOptions<SampleOption>(jsonFilePath!, section!, options!);
+
+        // Act - Assert
+        _ = constractor.Should().ThrowExactly<ArgumentNullException>().WithParameterName(paramName);
+    }
+
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Value"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
@@ -32,7 +46,7 @@ public sealed class JsonWritableOptionsTest
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
         _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
 
         // Act - Assert
         _ = sut.Value.Should().Be(sampleOption);
@@ -50,7 +64,7 @@ public sealed class JsonWritableOptionsTest
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
         _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
 
         // Act - Assert
         _ = sut.CurrentValue.Should().Be(sampleOption);
@@ -68,7 +82,7 @@ public sealed class JsonWritableOptionsTest
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
         _ = optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(sampleOption);
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
 
         // Act - Assert
         _ = sut.Get("Foo").Should().Be(sampleOption);
@@ -91,7 +105,7 @@ public sealed class JsonWritableOptionsTest
         var action = (SampleOption option, string section)
             => Console.WriteLine($"{nameof(SampleOption)}:{section} changed to {option}");
 
-        var sut = new JsonWritableOptions<SampleOption>(null!, "", optionsMock.Object, null);
+        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
 
         // Act
         _ = sut.OnChange(action);
@@ -114,9 +128,10 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText(fileText);
 
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
         var configStub = new Mock<IConfigurationRoot>();
 
-        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!, configStub.Object);
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
 
         // Act
         sut.Update(new()
@@ -153,9 +168,10 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText(fileText, Encoding.UTF8);
 
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
         var configStub = new Mock<IConfigurationRoot>();
 
-        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!, configStub.Object);
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
 
         // Act
         sut.Update(new()
@@ -192,7 +208,9 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText(fileText);
 
-        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!);
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub);
 
         // Act
         sut.Update(new()
@@ -217,9 +235,10 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText("{}");
 
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
         var configStub = new Mock<IConfigurationRoot>();
 
-        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), null!, configStub.Object);
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
 
         // Act
         sut.Update(new()
