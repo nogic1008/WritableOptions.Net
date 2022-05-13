@@ -21,24 +21,24 @@ public sealed class JsonWritableOptionsTest
     };
 
     /// <summary>
-    /// Constractor throws <see cref="ArgumentNullException"/>
+    /// Constructor throws <see cref="ArgumentNullException"/> if param is <see langword="null"/>.
     /// </summary>
     /// <param name="jsonFilePath"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='jsonFilePath']" /></param>
     /// <param name="section"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='section']" /></param>
     /// <param name="hasOptions">set options as <see langword="null"/> or not</param>
     /// <param name="paramName">Expected <see cref="ArgumentNullException"/> param name</param>
-    [Theory]
+    [Theory(DisplayName = $"Constructor throws {nameof(ArgumentNullException)}")]
     [InlineData(null, "", true, "jsonFilePath")]
     [InlineData("", null, true, "section")]
     [InlineData("", "", false, "options")]
-    public void Constractor_Throws_ArgumentNullException(string? jsonFilePath, string? section, bool hasOptions, string paramName)
+    public void Constructor_Throws_ArgumentNullException(string? jsonFilePath, string? section, bool hasOptions, string paramName)
     {
         // Arrange
         var options = hasOptions ? new Mock<IOptionsMonitor<SampleOption>>().Object : null;
-        var constractor = () => new JsonWritableOptions<SampleOption>(jsonFilePath!, section!, options!);
+        var constructor = () => new JsonWritableOptions<SampleOption>(jsonFilePath!, section!, options!);
 
         // Act - Assert
-        _ = constractor.Should().ThrowExactly<ArgumentNullException>().WithParameterName(paramName);
+        _ = constructor.Should().ThrowExactly<ArgumentNullException>().WithParameterName(paramName);
     }
 
     /// <summary>
