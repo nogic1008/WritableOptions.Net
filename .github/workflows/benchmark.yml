@@ -31,7 +31,7 @@ jobs:
         run: dotnet restore --locked-mode
       - name: Run Benchmark
         working-directory: sandbox/Benchmark
-        run: dotnet run -c Release -f net6.0 --filter *WritableOptionsBenchmark*
+        run: dotnet run -c Release -f net6.0
 
       - uses: actions/upload-artifact@v3.0.0
         with:

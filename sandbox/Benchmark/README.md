@@ -5,7 +5,7 @@ Compare this project with [Awesome.Net.WritableOptions](https://www.nuget.org/pa
 ## How To
 
 ```console
-> dotnet run -c Release -f net6.0 --filter *WritableOptionsBenchmark*
+> dotnet run -c Release -f net6.0
 ```
 
 ## Test Code
@@ -14,7 +14,7 @@ Compare this project with [Awesome.Net.WritableOptions](https://www.nuget.org/pa
 
 ```cs
 // Awesome.Net.WritableOptions<T>
-for (int i = 0; i < 1000; i++)
+for (int i = 0; i < 100; i++)
 {
     _awesomeWritableOptions.Update(o =>
     {
@@ -25,7 +25,7 @@ for (int i = 0; i < 1000; i++)
 }
 
 // Nogic.WritableOptions<T>
-for (int i = 0; i < 1000; i++)
+for (int i = 0; i < 100; i++)
 {
     _myWritableOptions.Update(_option);
 }
