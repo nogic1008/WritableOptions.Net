@@ -10,6 +10,9 @@ namespace Nogic.WritableOptions;
 /// </summary>
 public static class ServiceCollectionExtension
 {
+    /// <summary>Default JSON setting file name</summary>
+    private const string DefaultFileName = "appsettings.json";
+
     /// <summary>
     /// Registers a writable configuration instance which <typeparamref name="TOptions"/> will bind against.
     /// </summary>
@@ -20,7 +23,7 @@ public static class ServiceCollectionExtension
     public static void ConfigureWritable<TOptions>(
         this IServiceCollection services,
         IConfigurationSection section,
-        string file = "appsettings.json") where TOptions : class, new()
+        string file = DefaultFileName) where TOptions : class, new()
         => services.Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
@@ -45,7 +48,7 @@ public static class ServiceCollectionExtension
         this IServiceCollection services,
         IConfigurationSection section,
         string directoryPath,
-        string file = "appsettings.json") where TOptions : class, new()
+        string file = DefaultFileName) where TOptions : class, new()
         => services.Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {

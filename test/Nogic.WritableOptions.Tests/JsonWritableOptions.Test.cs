@@ -10,10 +10,9 @@ namespace Nogic.WritableOptions.Tests;
 /// </summary>
 public sealed class JsonWritableOptionsTest
 {
+    /// <summary>Used in <see cref="GenerateOption"/></summary>
     private static readonly Random _random = new();
-    /// <summary>
-    /// Generates <see cref="SampleOption"/> randomly for test.
-    /// </summary>
+    /// <summary>Generates <see cref="SampleOption"/> randomly for test.</summary>
     private static SampleOption GenerateOption() => new()
     {
         LastLaunchedAt = DateTime.Now,
@@ -22,24 +21,24 @@ public sealed class JsonWritableOptionsTest
     };
 
     /// <summary>
-    /// Constractor throws <see cref="ArgumentNullException"/>
+    /// Constructor throws <see cref="ArgumentNullException"/> if param is <see langword="null"/>.
     /// </summary>
     /// <param name="jsonFilePath"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='jsonFilePath']" /></param>
     /// <param name="section"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='section']" /></param>
     /// <param name="hasOptions">set options as <see langword="null"/> or not</param>
     /// <param name="paramName">Expected <see cref="ArgumentNullException"/> param name</param>
-    [Theory]
+    [Theory(DisplayName = $"Constructor throws {nameof(ArgumentNullException)}")]
     [InlineData(null, "", true, "jsonFilePath")]
     [InlineData("", null, true, "section")]
     [InlineData("", "", false, "options")]
-    public void Constractor_Throws_ArgumentNullException(string? jsonFilePath, string? section, bool hasOptions, string paramName)
+    public void Constructor_Throws_ArgumentNullException(string? jsonFilePath, string? section, bool hasOptions, string paramName)
     {
         // Arrange
         var options = hasOptions ? new Mock<IOptionsMonitor<SampleOption>>().Object : null;
-        var constractor = () => new JsonWritableOptions<SampleOption>(jsonFilePath!, section!, options!);
+        var constructor = () => new JsonWritableOptions<SampleOption>(jsonFilePath!, section!, options!);
 
         // Act - Assert
-        _ = constractor.Should().ThrowExactly<ArgumentNullException>().WithParameterName(paramName);
+        _ = constructor.Should().ThrowExactly<ArgumentNullException>().WithParameterName(paramName);
     }
 
     /// <summary>
@@ -103,7 +102,7 @@ public sealed class JsonWritableOptionsTest
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.OnChange"/> returns <see cref="IDisposable"/> via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
-    [Fact]
+    [Fact(DisplayName = $".OnChange(Action) returns {nameof(IDisposable)} via IOptionsMonitor<TOptions>")]
     public void OnChange_Called_IOptionsMonitor_OnChange()
     {
         // Arrange
@@ -268,31 +267,62 @@ public sealed class JsonWritableOptionsTest
         configStub.Verify(m => m.Reload(), Times.Once());
     }
 
+    /// <summary>Provides temporary file for testing.</summary>
     private class TempFileProvider : IDisposable
     {
+        /// <summary>Temporary file path</summary>
         public string Path { get; } = System.IO.Path.GetTempFileName();
+
+        /// <summary>Call <see cref="Dispose(bool)"/> or not</summary>
+        /// <remarks>Compliant Dispose pattern.</remarks>
         private bool _disposedValue;
 
+        /// <inheritdoc cref="IDisposable.Dispose" />
+        /// <param name="disposing">Call from <see cref="Dispose"/> or not.</param>
+        /// <remarks>Compliant Dispose pattern.</remarks>
         protected virtual void Dispose(bool disposing)
         {
             if (_disposedValue)
                 return;
+
+            if (disposing)
+            {
+                // Managed resource
+            }
+
+            // Unmanaged resource
             if (File.Exists(Path))
                 File.Delete(Path);
+
             _disposedValue = true;
         }
 
+        /// <inheritdoc/>
+        /// <remarks>Compliant Dispose pattern.</remarks>
         ~TempFileProvider() => Dispose(false);
 
+        /// <inheritdoc/>
+        /// <remarks>Compliant Dispose pattern.</remarks>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>Call <see cref="File.ReadAllText(string)"/>.</summary>
         public string ReadAllText() => File.ReadAllText(Path);
+
+        /// <summary>Call <see cref="File.ReadAllText(string, Encoding)"/>.</summary>
+        /// <inheritdoc cref="File.ReadAllText(string, Encoding)" path="/param[@name='encoding']" />
         public string ReadAllText(Encoding encoding) => File.ReadAllText(Path, encoding);
+
+        /// <summary>Call <see cref="File.AppendAllText(string, string)"/>.</summary>
+        /// <inheritdoc cref="File.AppendAllText(string, string)" path="/param[@name='contents']" />
         public void AppendAllText(string contents) => File.AppendAllText(Path, contents);
+
+        /// <summary>Call <see cref="File.AppendAllText(string, string, Encoding)"/>.</summary>
+        /// <inheritdoc cref="File.AppendAllText(string, string, Encoding)" path="/param[@name='contents']" />
+        /// <inheritdoc cref="File.AppendAllText(string, string, Encoding)" path="/param[@name='encoding']" />
         public void AppendAllText(string contents, Encoding encoding) => File.AppendAllText(Path, contents, encoding);
     }
 }
