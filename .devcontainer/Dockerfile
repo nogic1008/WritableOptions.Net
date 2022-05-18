@@ -4,9 +4,6 @@
 ARG VARIANT="6.0-bullseye-slim"
 FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-${VARIANT}
 
-# Install missing .NET SDK
-RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 3.1
-
 # [Choice] Node.js version: none, lts/*, 16, 14, 12, 10
 ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
