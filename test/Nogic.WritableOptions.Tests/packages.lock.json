@@ -10,9 +10,9 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[6.6.0, )",
-        "resolved": "6.6.0",
-        "contentHash": "gBsgPrNRkzUQfnxZSKnU0oVILIc5dr+dmdKXscyYKD5URcwNVQ72a7uuCvTyBzRZW98MZQNolSYC0y/MQTJ03A==",
+        "requested": "[6.7.0, )",
+        "resolved": "6.7.0",
+        "contentHash": "PWbow/R3MnYDP8UW7zh/w80rGb+1NufGoNJeuzouTo2bqpvwNTFxbDwF6XWfFZ5IuquL2225Um+qSyZ8jVsT+w==",
         "dependencies": {
           "System.Configuration.ConfigurationManager": "4.4.0"
         }
@@ -1464,9 +1464,9 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[6.6.0, )",
-        "resolved": "6.6.0",
-        "contentHash": "gBsgPrNRkzUQfnxZSKnU0oVILIc5dr+dmdKXscyYKD5URcwNVQ72a7uuCvTyBzRZW98MZQNolSYC0y/MQTJ03A==",
+        "requested": "[6.7.0, )",
+        "resolved": "6.7.0",
+        "contentHash": "PWbow/R3MnYDP8UW7zh/w80rGb+1NufGoNJeuzouTo2bqpvwNTFxbDwF6XWfFZ5IuquL2225Um+qSyZ8jVsT+w==",
         "dependencies": {
           "System.Net.Http": "4.3.4",
           "System.Threading.Tasks.Extensions": "4.5.0"
@@ -2021,9 +2021,9 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[6.6.0, )",
-        "resolved": "6.6.0",
-        "contentHash": "gBsgPrNRkzUQfnxZSKnU0oVILIc5dr+dmdKXscyYKD5URcwNVQ72a7uuCvTyBzRZW98MZQNolSYC0y/MQTJ03A==",
+        "requested": "[6.7.0, )",
+        "resolved": "6.7.0",
+        "contentHash": "PWbow/R3MnYDP8UW7zh/w80rGb+1NufGoNJeuzouTo2bqpvwNTFxbDwF6XWfFZ5IuquL2225Um+qSyZ8jVsT+w==",
         "dependencies": {
           "System.Configuration.ConfigurationManager": "4.4.0"
         }
