@@ -8,18 +8,14 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 {
     private readonly IWritableOptions<AppOption> _options;
 
-    public static readonly BindableProperty LastChangedProperty =
-        BindableProperty.Create(nameof(LastChanged), typeof(string), typeof(MainPage));
-
+    public static readonly BindableProperty LastChangedProperty = BindableProperty.Create(nameof(LastChanged), typeof(string), typeof(MainPage));
     public string LastChanged
     {
         get => (string)GetValue(LastChangedProperty);
         set => SetValue(LastChangedProperty, value);
     }
 
-    public static readonly BindableProperty ApiKeyProperty =
-        BindableProperty.Create(nameof(ApiKey), typeof(string), typeof(MainPage));
-
+    public static readonly BindableProperty ApiKeyProperty = BindableProperty.Create(nameof(ApiKey), typeof(string), typeof(MainPage));
     public string ApiKey
     {
         get => (string)GetValue(ApiKeyProperty);

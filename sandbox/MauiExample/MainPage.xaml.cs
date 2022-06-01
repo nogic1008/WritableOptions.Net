@@ -36,7 +36,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         OnBindingContextChanged();
     }
 
-    void OnClicked(object sender, EventArgs e)
+    private void OnClicked(object sender, EventArgs e)
     {
         var current = _options.CurrentValue;
         current.ApiKey = Guid.NewGuid().ToString();

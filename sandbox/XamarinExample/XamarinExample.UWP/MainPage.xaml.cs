@@ -13,15 +13,14 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace XamarinExample.UWP
-{
-    public sealed partial class MainPage
-    {
-        public MainPage()
-        {
-            this.InitializeComponent();
+namespace XamarinExample.UWP;
 
-            LoadApplication(new XamarinExample.App());
-        }
+public sealed partial class MainPage
+{
+    public MainPage()
+    {
+        this.InitializeComponent();
+
+        LoadApplication(new XamarinExample.App());
     }
 }
