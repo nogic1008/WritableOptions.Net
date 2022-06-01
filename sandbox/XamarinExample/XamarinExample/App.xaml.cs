@@ -18,8 +18,8 @@ public partial class App : Application
             File.WriteAllText(path, defaultContent, Encoding.UTF8);
     }
 
-    readonly IServiceProvider _services;
-    readonly IConfigurationRoot _configuration;
+    private readonly IServiceProvider _services;
+    private readonly IConfigurationRoot _configuration;
 
     public App()
     {

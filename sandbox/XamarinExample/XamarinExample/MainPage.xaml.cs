@@ -34,14 +34,14 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         UpdateViewFromOptions(_options.CurrentValue, string.Empty);
     }
 
-    void UpdateViewFromOptions(AppOption option, string section)
+    private void UpdateViewFromOptions(AppOption option, string section)
     {
         LastChanged = option.LastChanged.ToString();
         ApiKey = option.ApiKey;
         OnBindingContextChanged();
     }
 
-    void OnClicked(object sender, EventArgs e)
+    private void OnClicked(object sender, EventArgs e)
     {
         var current = _options.CurrentValue;
         current.ApiKey = Guid.NewGuid().ToString();

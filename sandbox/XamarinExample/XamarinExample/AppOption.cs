@@ -1,6 +1,6 @@
 namespace XamarinExample;
 
-public partial class AppOption
+public class AppOption
 {
     public DateTime LastChanged { get; set; }
     public string? ApiKey { get; set; }
