@@ -21,7 +21,7 @@ public sealed class ServiceCollectionExtensionTest
         var service = new ServiceCollection();
 
         // Act
-        service.ConfigureWritable<SampleOption>(configuration.GetSection("Nested"));
+        _ = service.ConfigureWritable<SampleOption>(configuration.GetSection("Nested"));
         var provider = service.BuildServiceProvider();
 
         // Assert
@@ -46,7 +46,7 @@ public sealed class ServiceCollectionExtensionTest
         var service = new ServiceCollection();
 
         // Act
-        service.ConfigureWritableWithExplicitPath<SampleOption>(configuration.GetSection("Nested"), AppDomain.CurrentDomain.BaseDirectory!);
+        _ = service.ConfigureWritableWithExplicitPath<SampleOption>(configuration.GetSection("Nested"), AppDomain.CurrentDomain.BaseDirectory!);
         var provider = service.BuildServiceProvider();
 
         // Assert

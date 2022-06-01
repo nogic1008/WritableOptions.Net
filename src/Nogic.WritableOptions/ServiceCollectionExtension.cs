@@ -20,7 +20,7 @@ public static class ServiceCollectionExtension
     /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
     /// <param name="section">The configuration being bound.</param>
     /// <param name="file">Setting JSON file name. (should be placed in content-root folder or current folder)</param>
-    public static void ConfigureWritable<TOptions>(
+    public static IServiceCollection ConfigureWritable<TOptions>(
         this IServiceCollection services,
         IConfigurationSection section,
         string file = DefaultFileName) where TOptions : class, new()
@@ -44,7 +44,7 @@ public static class ServiceCollectionExtension
     /// <param name="section">The configuration being bound.</param>
     /// <param name="directoryPath">The path to the directory containing <paramref name="file"/>.</param>
     /// <param name="file">Setting JSON file name. (should be placed in <paramref name="directoryPath"/>)</param>
-    public static void ConfigureWritableWithExplicitPath<TOptions>(
+    public static IServiceCollection ConfigureWritableWithExplicitPath<TOptions>(
         this IServiceCollection services,
         IConfigurationSection section,
         string directoryPath,

@@ -4,11 +4,7 @@ using Nogic.WritableOptions;
 
 var builder = ConsoleApp.CreateBuilder(args);
 builder.ConfigureServices((ctx, services) =>
-{
-    // Load app settings
-    var config = ctx.Configuration;
-    services.ConfigureWritable<AppOption>(config.GetSection(ctx.HostingEnvironment.ApplicationName));
-});
+    services.ConfigureWritable<AppOption>(ctx.Configuration.GetSection(ctx.HostingEnvironment.ApplicationName)));
 
 var rootEventId = new EventId(0, $"{nameof(ConsoleAppExample)}.Root");
 var logInfomation = LoggerMessage.Define<string>(LogLevel.Information, rootEventId, "{Message}");

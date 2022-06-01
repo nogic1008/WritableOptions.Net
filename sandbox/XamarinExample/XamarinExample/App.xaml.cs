@@ -13,7 +13,7 @@ namespace XamarinExample;
 
 public partial class App : Application
 {
-    private static string settingsFileName = "appsettings.json";
+    private const string SettingsFileName = "appsettings.json";
 
     internal static void CreateSettingFile(string path, string defaultContent = "{}")
     {
@@ -27,17 +27,21 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        CreateSettingFile(Path.Combine(FileSystem.AppDataDirectory, settingsFileName));
-        var sc = new ServiceCollection();
-        var config = new ConfigurationBuilder();
-        config.AddJsonFile(new PhysicalFileProvider(FileSystem.AppDataDirectory), settingsFileName, false, true);
-        _configuration = config.Build();
-        sc.AddSingleton<IConfigurationRoot>(_configuration);
-        sc.ConfigureWritableWithExplicitPath<AppOption>(_configuration.GetSection(nameof(AppOption)),
-            FileSystem.AppDataDirectory, settingsFileName);
-        sc.AddTransient<MainPage>();
-        sc.AddSingleton<App>(this);
-        _services = sc.BuildServiceProvider();
+        CreateSettingFile(Path.Combine(FileSystem.AppDataDirectory, SettingsFileName));
+
+        // Configuration
+        _configuration = new ConfigurationBuilder()
+            .AddJsonFile(new PhysicalFileProvider(FileSystem.AppDataDirectory), SettingsFileName, false, true)
+            .Build();
+
+        // DI
+        _services = new ServiceCollection()
+            .AddSingleton<IConfigurationRoot>(_configuration)
+            .ConfigureWritableWithExplicitPath<AppOption>(_configuration.GetSection(nameof(AppOption)), FileSystem.AppDataDirectory, SettingsFileName)
+            .AddTransient<MainPage>()
+            .AddSingleton<App>(this)
+            .BuildServiceProvider();
+
         MainPage = _services.GetRequiredService<MainPage>();
     }
 
