@@ -33,7 +33,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     private void UpdateViewFromOptions(AppOption option, string section)
     {
         LastChanged = option.LastChanged.ToString();
-        ApiKey = option.ApiKey;
+        ApiKey = option.ApiKey ?? "";
         OnBindingContextChanged();
     }
 
