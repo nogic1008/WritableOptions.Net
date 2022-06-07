@@ -6,8 +6,9 @@ public partial class App : Application
 
     public App(IServiceProvider services)
     {
+        ArgumentNullException.ThrowIfNull(services);
         InitializeComponent();
-        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _services = services;
         MainPage = _services.GetRequiredService<MainPage>();
     }
 }

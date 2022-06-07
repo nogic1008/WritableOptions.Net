@@ -1,5 +1,5 @@
-global using Nogic.WritableOptions;
 using Microsoft.Extensions.Configuration;
+using Nogic.WritableOptions;
 
 namespace MauiExample;
 
