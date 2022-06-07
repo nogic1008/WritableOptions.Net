@@ -23,7 +23,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
     public MainPage(IWritableOptions<AppOption> options)
     {
-        _options = options ?? throw new ArgumentNullException(nameof(options));
+        ArgumentException.ThrowIfNull(options);
+        _options = options;
         _options.OnChange(UpdateViewFromOptions);
         InitializeComponent();
         UpdateViewFromOptions(_options.CurrentValue, string.Empty);
