@@ -29,6 +29,12 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// </summary>
     private readonly IConfigurationRoot? _configuration;
 
+    private readonly JsonWriterOptions _jsonWriterOptions = new()
+    {
+        Indented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+
     /// <summary>
     /// Initializes a new instance of the JsonWritableOptions class.
     /// </summary>
@@ -108,12 +114,8 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                 stream.Write(utf8bom.ToArray(), 0, utf8bom.Length);
 #endif
             }
-
-            var writer = new Utf8JsonWriter(stream, new()
-            {
-                Indented = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            });
+            
+            var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
 
             writer.WriteStartObject();
             bool isWritten = false;
