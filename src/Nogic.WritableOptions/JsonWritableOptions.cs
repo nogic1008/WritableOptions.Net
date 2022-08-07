@@ -114,7 +114,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                 stream.Write(utf8bom.ToArray(), 0, utf8bom.Length);
 #endif
             }
-            
+
             var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
 
             writer.WriteStartObject();
