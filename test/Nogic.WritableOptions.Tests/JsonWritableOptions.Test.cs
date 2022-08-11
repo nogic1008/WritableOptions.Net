@@ -108,7 +108,7 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
-        var action = (SampleOption option, string section)
+        var action = (SampleOption option, string? section)
             => Console.WriteLine($"{nameof(SampleOption)}:{section} changed to {option}");
 
         var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
