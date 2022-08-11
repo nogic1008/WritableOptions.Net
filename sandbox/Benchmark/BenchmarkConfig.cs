@@ -12,6 +12,8 @@ public class BenchmarkConfig : ManualConfig
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
             .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
+            .AddJob(Job.Default.WithRuntime(CoreRuntime.CreateForNewVersion("net7.0", ".NET 7.0")))
+            .WithOptions(ConfigOptions.DisableOptimizationsValidator)
             .AddJob(Job.Default.WithRuntime(ClrRuntime.Net48))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
             .AddDiagnoser(MemoryDiagnoser.Default);
