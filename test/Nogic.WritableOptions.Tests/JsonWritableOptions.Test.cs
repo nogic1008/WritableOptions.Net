@@ -21,6 +21,13 @@ public sealed class JsonWritableOptionsTest
     };
 
     /// <summary>
+    /// Normalize EndLine(LF, CR+LF) to <see cref="Environment.NewLine"/>.
+    /// </summary>
+    /// <param name="source">Source text</param>
+    private static string NormalizeEndLine(string source)
+        => source.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+
+    /// <summary>
     /// Constructor throws <see cref="ArgumentNullException"/> if param is <see langword="null"/>.
     /// </summary>
     /// <param name="jsonFilePath"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='jsonFilePath']" /></param>
@@ -125,9 +132,21 @@ public sealed class JsonWritableOptionsTest
     /// </summary>
     /// <param name="fileText">Current JSON text</param>
     [Theory(DisplayName = ".Update(TOptions) writes expected JSON")]
-    [InlineData("{}")]
-    [InlineData("{\"" + nameof(SampleOption) + "\":{}}")]
-    [InlineData("{\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
+    [InlineData(/*lang=json,strict*/ "{}")]
+    [InlineData(/*lang=json,strict*/ $$"""
+    {
+      "{{nameof(SampleOption)}}": {}
+    }
+    """)]
+    [InlineData(/*lang=json,strict*/ $$"""
+    {
+      "{{nameof(SampleOption)}}": {
+          "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-10-01T00:00:00",
+          "{{nameof(SampleOption.Interval)}}": 1000,
+          "{{nameof(SampleOption.ConnectionString)}}": "bar"
+      }
+    }
+    """)]
     public void Update_Writes_Json(string fileText)
     {
         // Arrange
@@ -148,15 +167,18 @@ public sealed class JsonWritableOptionsTest
         });
 
         // Assert
-        string newLine = Environment.NewLine;
-        _ = tempFile.ReadAllText().Should().Be("{" + newLine
-            + "  \"" + nameof(SampleOption) + "\": {" + newLine
-            + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
-            + "    \"Interval\": 5000," + newLine
-            + "    \"ConnectionString\": \"foo\"" + newLine
-            + "  }" + newLine
-            + "}"
-        );
+        /*lang=json,strict*/
+        const string expectedJson =
+        $$"""
+        {
+          "{{nameof(SampleOption)}}": {
+            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
+            "{{nameof(SampleOption.Interval)}}": 5000,
+            "{{nameof(SampleOption.ConnectionString)}}": "foo"
+          }
+        }
+        """;
+        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
         configStub.Verify(m => m.Reload(), Times.Never());
     }
 
@@ -165,9 +187,21 @@ public sealed class JsonWritableOptionsTest
     /// </summary>
     /// <param name="fileText">Current JSON text</param>
     [Theory(DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
-    [InlineData("{}")]
-    [InlineData("{\"" + nameof(SampleOption) + "\":{}}")]
-    [InlineData("{\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
+    [InlineData(/*lang=json,strict*/ "{}")]
+    [InlineData(/*lang=json,strict*/ $$"""
+    {
+      "{{nameof(SampleOption)}}": {}
+    }
+    """)]
+    [InlineData(/*lang=json,strict*/ $$"""
+    {
+      "{{nameof(SampleOption)}}": {
+          "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-10-01T00:00:00",
+          "{{nameof(SampleOption.Interval)}}": 1000,
+          "{{nameof(SampleOption.ConnectionString)}}": "bar"
+      }
+    }
+    """)]
     public void Update_Writes_Json_WithBOM(string fileText)
     {
         // Arrange
@@ -188,15 +222,18 @@ public sealed class JsonWritableOptionsTest
         });
 
         // Assert
-        string newLine = Environment.NewLine;
-        _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be("{" + newLine
-            + "  \"" + nameof(SampleOption) + "\": {" + newLine
-            + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
-            + "    \"Interval\": 5000," + newLine
-            + "    \"ConnectionString\": \"foo\"" + newLine
-            + "  }" + newLine
-            + "}"
-        );
+        /*lang=json,strict*/
+        const string expectedJson =
+        $$"""
+        {
+          "{{nameof(SampleOption)}}": {
+            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
+            "{{nameof(SampleOption.Interval)}}": 5000,
+            "{{nameof(SampleOption.ConnectionString)}}": "foo"
+          }
+        }
+        """;
+        _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(expectedJson));
         configStub.Verify(m => m.Reload(), Times.Never());
     }
 
@@ -205,9 +242,23 @@ public sealed class JsonWritableOptionsTest
     /// </summary>
     /// <param name="fileText">Current JSON text</param>
     [Theory(DisplayName = ".Update(TOptions) does not changes other JSON section")]
-    [InlineData("{\"fooOption\":{}}")]
-    [InlineData("{\"fooOption\":{},\"" + nameof(SampleOption) + "\":{}}")]
-    [InlineData("{\"fooOption\":{},\"" + nameof(SampleOption) + "\":{\"LastLaunchedAt\":\"2020-10-01T00:00:00\",\"Interval\":1000,\"ConnectionString\":\"bar\"}}")]
+    [InlineData(/*lang=json,strict*/ "{\"fooOption\":{}}")]
+    [InlineData(/*lang=json,strict*/ $$"""
+    {
+      "fooOption": {},
+      "{{nameof(SampleOption)}}": {}
+    }
+    """)]
+    [InlineData(/*lang=json,strict*/ $$"""
+    {
+      "fooOption": {},
+      "{{nameof(SampleOption)}}": {
+          "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-10-01T00:00:00",
+          "{{nameof(SampleOption.Interval)}}": 1000,
+          "{{nameof(SampleOption.ConnectionString)}}": "bar"
+      }
+    }
+    """)]
     public void Update_DoesNot_Changes_Other_Section(string fileText)
     {
         // Arrange
@@ -255,15 +306,18 @@ public sealed class JsonWritableOptionsTest
         }, true);
 
         // Assert
-        string newLine = Environment.NewLine;
-        _ = tempFile.ReadAllText().Should().Be("{" + newLine
-            + "  \"" + nameof(SampleOption) + "\": {" + newLine
-            + "    \"LastLaunchedAt\": \"2020-12-01T00:00:00\"," + newLine
-            + "    \"Interval\": 5000," + newLine
-            + "    \"ConnectionString\": \"foo\"" + newLine
-            + "  }" + newLine
-            + "}"
-        );
+        /*lang=json,strict*/
+        const string expectedJson =
+        $$"""
+        {
+          "{{nameof(SampleOption)}}": {
+            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
+            "{{nameof(SampleOption.Interval)}}": 5000,
+            "{{nameof(SampleOption.ConnectionString)}}": "foo"
+          }
+        }
+        """;
+        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
         configStub.Verify(m => m.Reload(), Times.Once());
     }
 
