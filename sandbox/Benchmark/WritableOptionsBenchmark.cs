@@ -20,7 +20,7 @@ public class WritableOptionsBenchmark
         public int[] IntSettings { get; set; }
     }
 
-    private const int UpdateLoopCount = 100;
+    private const int UpdateLoopCount = 1000;
 
     private IOptionsMonitor<SampleOption> _options;
     private AwesomeNet.WritableOptions<SampleOption> _awesomeWritableOptions;
