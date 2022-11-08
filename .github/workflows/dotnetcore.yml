@@ -19,59 +19,18 @@ env:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3.1.0
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3.0.3
-      - name: Add Problem Matcher for dotnet-format
-        uses: xt0rted/dotnet-format-problem-matcher@v1
-      - name: Lint
-        run: dotnet format --verify-no-changes
+    uses: nogic1008/actions/.github/workflows/dotnet-format.yml@v1.0.0
 
-  restore:
-    name: Update NuGet Lock Files
-    if: contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3.1.0
-        with:
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - uses: actions/cache@v3.0.11
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-      - name: Setup .NET Core 3.1 SDK
-        uses: actions/setup-dotnet@v3.0.3
-        with:
-          dotnet-version: 3.1.x
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3.0.3
-
-      - name: Restore
-        run: dotnet restore --force-evaluate
-      - name: Run ECLint
-        run: |
-          npm install -g eclint
-          eclint fix "**/packages.lock.json"
-
-      - name: Diff
-        id: diff
-        continue-on-error: true
-        run: |
-          git add -N .
-          git diff --name-only --exit-code
-      - name: Commit & Push
-        if: steps.diff.outcome == 'failure'
-        run: |
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git add .
-          git commit -m "chore(deps): update NuGet lock file"
-          git push
+  lock-file:
+    name: Validate NuGet Lock Files
+    uses: nogic1008/actions/.github/workflows/nuget-lock-files.yml@v1.0.0
+    with:
+      update-lock-files: ${{ contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request' }}
+      dotnet-version: |
+        3.1.x
+        6.x
+    secrets:
+      PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
   test:
     strategy:
@@ -93,15 +52,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Setup .NET Core 3.1 SDK
-        uses: actions/setup-dotnet@v3.0.3
-        with:
-          dotnet-version: 3.1.x
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: |
+            3.1.x
+            6.x
 
       - name: Restore
-        run: dotnet restore --locked-mode
+        run: dotnet restore
       - name: Debug Build
         run: dotnet build --no-restore
       - name: Test
