@@ -14,7 +14,7 @@ Compare this project with [Awesome.Net.WritableOptions](https://www.nuget.org/pa
 
 ```cs
 // Awesome.Net.WritableOptions<T>
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < 1000; i++)
 {
     _awesomeWritableOptions.Update(o =>
     {
@@ -25,7 +25,7 @@ for (int i = 0; i < 100; i++)
 }
 
 // Nogic.WritableOptions<T>
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < 1000; i++)
 {
     _myWritableOptions.Update(_option);
 }
@@ -34,24 +34,28 @@ for (int i = 0; i < 100; i++)
 ## Result
 
 ``` ini
-BenchmarkDotNet=v0.13.1, OS=Windows 10.0.20348
-Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
-.NET SDK=6.0.202
-  [Host]     : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
-  Job-DTZKXX : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
-  Job-DXZGAX : .NET Core 3.1.24 (CoreCLR 4.700.22.16002, CoreFX 4.700.22.17909), X64 RyuJIT
-  Job-GZJUJV : .NET Framework 4.8 (4.8.4470.0), X64 RyuJIT
+BenchmarkDotNet=v0.13.2, OS=Windows 10 (10.0.20348.1006), VM=Hyper-V
+Intel Xeon Platinum 8272CL CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET SDK=7.0.100-rc.1.22431.12
+  [Host]     : .NET 6.0.9 (6.0.922.41905), X64 RyuJIT AVX2
+  Job-OLWNIV : .NET 6.0.9 (6.0.922.41905), X64 RyuJIT AVX2
+  Job-BHOJCA : .NET 7.0.0 (7.0.22.42610), X64 RyuJIT AVX2
+  Job-NSGOZA : .NET Core 3.1.29 (CoreCLR 4.700.22.41602, CoreFX 4.700.22.41702), X64 RyuJIT AVX2
+  Job-MUMWMC : .NET Framework 4.8.1 (4.8.9093.0), X64 RyuJIT VectorSize=256
 
 InvocationCount=1  UnrollFactor=1  
 ```
 
-|                        Method |        Job |            Runtime |     Mean |   Error |  StdDev | Ratio |
-|------------------------------ |----------- |------------------- |---------:|--------:|--------:|------:|
-| AwesomeWritableOptions_Update | Job-DTZKXX |           .NET 6.0 | 404.3 ms | 6.94 ms | 5.79 ms |  1.00 |
-|      MyWritableOptions_Update | Job-DTZKXX |           .NET 6.0 | 264.5 ms | 2.72 ms | 2.41 ms |  0.65 |
-|                               |            |                    |          |         |         |       |
-| AwesomeWritableOptions_Update | Job-DXZGAX |      .NET Core 3.1 | 444.5 ms | 6.88 ms | 6.10 ms |  1.00 |
-|      MyWritableOptions_Update | Job-DXZGAX |      .NET Core 3.1 | 295.0 ms | 5.30 ms | 4.70 ms |  0.66 |
-|                               |            |                    |          |         |         |       |
-| AwesomeWritableOptions_Update | Job-GZJUJV | .NET Framework 4.8 | 640.3 ms | 7.18 ms | 6.72 ms |  1.00 |
-|      MyWritableOptions_Update | Job-GZJUJV | .NET Framework 4.8 | 421.7 ms | 6.05 ms | 5.06 ms |  0.66 |
+|                       Method |            Runtime |     Mean |    Error |   StdDev |   Median | Ratio | RatioSD |       Gen0 |      Gen1 | Allocated | Alloc Ratio |
+|----------------------------- |------------------- |---------:|---------:|---------:|---------:|------:|--------:|-----------:|----------:|----------:|------------:|
+|  Awesome.Net.WritableOptions |           .NET 6.0 | 330.1 ms |  1.31 ms |  1.10 ms | 330.1 ms |  1.54 |    0.01 |  3000.0000 |         - |  63.43 MB |        1.98 |
+|        Nogic.WritableOptions |           .NET 6.0 | 214.2 ms |  1.49 ms |  1.16 ms | 214.1 ms |  1.00 |    0.01 |  1000.0000 |         - |  32.11 MB |        1.00 |
+|                              |                    |          |          |          |          |       |         |            |           |           |             |
+|  Awesome.Net.WritableOptions |           .NET 7.0 | 327.7 ms |  6.55 ms | 15.57 ms | 318.4 ms |  1.60 |    0.08 |  3000.0000 |         - |  63.26 MB |        1.98 |
+|        Nogic.WritableOptions |           .NET 7.0 | 206.0 ms |  3.78 ms |  3.54 ms | 205.1 ms |  1.01 |    0.02 |  1000.0000 |         - |  32.02 MB |        1.00 |
+|                              |                    |          |          |          |          |       |         |            |           |           |             |
+|  Awesome.Net.WritableOptions |      .NET Core 3.1 | 363.2 ms |  6.92 ms |  5.40 ms | 361.3 ms |  1.53 |    0.02 |  3000.0000 |         - |  63.53 MB |        1.97 |
+|        Nogic.WritableOptions |      .NET Core 3.1 | 239.3 ms |  1.13 ms |  0.94 ms | 239.4 ms |  1.01 |    0.00 |  1000.0000 |         - |  32.24 MB |        1.00 |
+|                              |                    |          |          |          |          |       |         |            |           |           |             |
+|  Awesome.Net.WritableOptions | .NET Framework 4.8 | 528.3 ms | 10.20 ms | 14.63 ms | 518.6 ms |  1.52 |    0.10 | 10000.0000 | 1000.0000 |  64.52 MB |        1.99 |
+|        Nogic.WritableOptions | .NET Framework 4.8 | 338.8 ms |  5.91 ms | 11.40 ms | 333.4 ms |  0.98 |    0.05 |  5000.0000 |         - |  32.35 MB |        1.00 |

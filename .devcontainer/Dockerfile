@@ -4,6 +4,9 @@
 ARG VARIANT=6.0-bullseye
 FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-${VARIANT}
 
+# Install missing .NET SDK
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 7.0 --install-dir /usr/share/dotnet
+
 # Install mono
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends mono-complete \
