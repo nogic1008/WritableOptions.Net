@@ -86,27 +86,24 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <inheritdoc/>
     public void Update(TOptions changedValue, bool reload = false)
     {
-        ReadOnlyMemory<byte> jsonByteData = File.ReadAllBytes(_jsonFilePath);
+        bool hasBOM = File.Exists(_jsonFilePath);
+        var jsonByteData = hasBOM ? File.ReadAllBytes(_jsonFilePath) : "{}"u8;
 
         // Check BOM
-        bool isBOM = false;
         ReadOnlySpan<byte> utf8bom = Encoding.UTF8.GetPreamble();
-        if (jsonByteData.Span.StartsWith(utf8bom))
-        {
-            isBOM = true;
-#if NETCOREAPP3_1_OR_GREATER
-            jsonByteData = jsonByteData[utf8bom.Length..];
-#else
+        hasBOM = hasBOM && jsonByteData.StartsWith(utf8bom);
+#pragma warning disable IDE0057
+        if (hasBOM)
             jsonByteData = jsonByteData.Slice(utf8bom.Length);
-#endif
-        }
+#pragma warning restore IDE0057
 
-        using var jsonDocument = JsonDocument.Parse(jsonByteData);
+        var reader = new Utf8JsonReader(jsonByteData);
+        using var jsonDocument = JsonDocument.ParseValue(ref reader);
 
         using (var stream = File.OpenWrite(_jsonFilePath))
         {
             // Write BOM
-            if (isBOM)
+            if (hasBOM)
             {
 #if NETCOREAPP3_1_OR_GREATER
                 stream.Write(utf8bom);
@@ -117,7 +114,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 
             var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
 
-            writer.WriteStartObject();
+            writer.WriteStartObject(); // {
             bool isWritten = false;
             var optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(changedValue));
             foreach (var element in jsonDocument.RootElement.EnumerateObject())
@@ -136,10 +133,12 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                 writer.WritePropertyName(_section);
                 optionsElement.WriteTo(writer);
             }
-            writer.WriteEndObject();
+            writer.WriteEndObject(); // }
+
             writer.Flush();
             stream.SetLength(stream.Position);
         }
+
         if (reload)
             _configuration?.Reload();
     }
