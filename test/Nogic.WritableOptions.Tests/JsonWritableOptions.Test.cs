@@ -321,6 +321,45 @@ public sealed class JsonWritableOptionsTest
         configStub.Verify(m => m.Reload(), Times.Once());
     }
 
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> creates new JSON file if not exists.
+    /// </summary>
+    [Fact(DisplayName = ".Update(TOptions, true) creates new JSON file if not exists")]
+    public void Update_Creates_File()
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        File.Delete(tempFile.Path);
+
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+        var configStub = new Mock<IConfigurationRoot>().Object;
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub);
+
+        // Act
+        sut.Update(new()
+        {
+            LastLaunchedAt = new(2020, 12, 1),
+            Interval = 5000,
+            ConnectionString = "foo",
+        });
+
+        // Assert
+        /*lang=json,strict*/
+        const string expectedJson =
+        $$"""
+        {
+          "{{nameof(SampleOption)}}": {
+            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
+            "{{nameof(SampleOption.Interval)}}": 5000,
+            "{{nameof(SampleOption.ConnectionString)}}": "foo"
+          }
+        }
+        """;
+        _ = File.Exists(tempFile.Path).Should().BeTrue();
+        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
+    }
+
     /// <summary>Provides temporary file for testing.</summary>
     private class TempFileProvider : IDisposable
     {
