@@ -62,14 +62,14 @@ public class WritableOptionsBenchmark
         }
     }
 
-    [Benchmark(Baseline = true, Description = $"(NuGet){nameof(release.Nogic)}.{nameof(release.Nogic.WritableOptions)}")]
+    [Benchmark(Description = $"(NuGet){nameof(release.Nogic)}.{nameof(release.Nogic.WritableOptions)}")]
     public void ReleaseWritableOptions_Update()
     {
         for (int i = 0; i < UpdateLoopCount; i++)
             _releaseWritableOptions.Update(_option);
     }
 
-    [Benchmark(Description = $"(Dev){nameof(dev.Nogic)}.{nameof(dev.Nogic.WritableOptions)}")]
+    [Benchmark(Baseline = true, Description = $"(Dev){nameof(dev.Nogic)}.{nameof(dev.Nogic.WritableOptions)}")]
     public void DevWritableOptions_Update()
     {
         for (int i = 0; i < UpdateLoopCount; i++)
