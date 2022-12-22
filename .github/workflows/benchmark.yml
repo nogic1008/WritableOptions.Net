@@ -8,7 +8,6 @@ env:
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
   DOTNET_VERSION: |
-    3.1.x
     6.x
     7.x
 
