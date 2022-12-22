@@ -16,7 +16,6 @@ env:
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
   DOTNET_VERSION: |
-    3.1.x
     6.x
     7.x
 
@@ -31,7 +30,6 @@ jobs:
     with:
       update-lock-files: ${{ contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request' }}
       dotnet-version: |
-        3.1.x
         6.x
         7.x
     secrets:
@@ -42,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        framework: [netcoreapp3.1, net6.0, net7.0]
+        framework: [net6.0, net7.0]
         include:
           - os: windows-latest
             framework: net48
