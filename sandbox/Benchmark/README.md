@@ -47,11 +47,11 @@ InvocationCount=1  UnrollFactor=1
 
 |                      Method |            Runtime |     Mean |    Error |   StdDev |   Median | Ratio | RatioSD |       Gen0 |      Gen1 | Allocated | Alloc Ratio |
 |---------------------------- |------------------- |---------:|---------:|---------:|---------:|------:|--------:|-----------:|----------:|----------:|------------:|
-| Awesome.Net.WritableOptions |           .NET 6.0 | 331.8 ms |  2.12 ms |  1.66 ms | 331.5 ms |  1.34 |    0.01 |  3000.0000 |         - |  63.43 MB |        1.98 |
-|       Nogic.WritableOptions |           .NET 6.0 | 247.8 ms |  1.04 ms |  0.87 ms | 248.0 ms |  1.00 |    0.00 |  1000.0000 |         - |  32.11 MB |        1.00 |
-|                             |                    |          |          |          |          |       |         |            |           |           |             |
 | Awesome.Net.WritableOptions |           .NET 7.0 | 322.5 ms |  6.45 ms | 13.32 ms | 316.0 ms |  1.37 |    0.06 |  3000.0000 |         - |  63.26 MB |        1.98 |
 |       Nogic.WritableOptions |           .NET 7.0 | 238.0 ms |  1.11 ms |  0.93 ms | 238.0 ms |  1.00 |    0.00 |  1000.0000 |         - |  32.02 MB |        1.00 |
+|                             |                    |          |          |          |          |       |         |            |           |           |             |
+| Awesome.Net.WritableOptions |           .NET 6.0 | 331.8 ms |  2.12 ms |  1.66 ms | 331.5 ms |  1.34 |    0.01 |  3000.0000 |         - |  63.43 MB |        1.98 |
+|       Nogic.WritableOptions |           .NET 6.0 | 247.8 ms |  1.04 ms |  0.87 ms | 248.0 ms |  1.00 |    0.00 |  1000.0000 |         - |  32.11 MB |        1.00 |
 |                             |                    |          |          |          |          |       |         |            |           |           |             |
 | Awesome.Net.WritableOptions | .NET Framework 4.8 | 531.8 ms | 10.39 ms | 17.08 ms | 521.3 ms |  1.33 |    0.07 | 10000.0000 | 1000.0000 |  64.52 MB |        1.99 |
 |       Nogic.WritableOptions | .NET Framework 4.8 | 401.3 ms |  8.00 ms | 18.07 ms | 390.6 ms |  1.00 |    0.00 |  5000.0000 |         - |  32.35 MB |        1.00 |
