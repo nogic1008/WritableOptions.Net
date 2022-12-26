@@ -20,34 +20,34 @@ main {
   display: flex;
   align-items: center;
 
-  ::deep a,
-  .btn-link {
-    white-space: nowrap;
-    margin-left: 1.5rem;
-  }
+}
 
-  a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.top-row ::deep a,
+.top-row .btn-link {
+  white-space: nowrap;
+  margin-left: 1.5rem;
+}
+
+.top-row a:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 640.98px) {
-  .top-row {
-    &:not(.auth) {
-      display: none;
-    }
+  .top-row:not(.auth) {
+    display: none;
+  }
 
-    &.auth {
-      justify-content: space-between;
-    }
+  .top-row.auth {
+    justify-content: space-between;
+  }
 
-    a,
-    .btn-link {
-      margin-left: 0;
-    }
+  .top-row a,
+  .top-row .btn-link {
+    margin-left: 0;
   }
 }
+
 
 @media (min-width: 641px) {
   .page {
