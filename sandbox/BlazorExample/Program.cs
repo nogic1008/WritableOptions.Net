@@ -1,4 +1,3 @@
-using BlazorExample.Data;
 using Nogic.WritableOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.ConfigureWritable<AppOption>(builder.Configuration.GetSection(builder.Environment.ApplicationName));
 
 var app = builder.Build();

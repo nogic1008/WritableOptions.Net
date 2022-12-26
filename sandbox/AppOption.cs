@@ -1,5 +1,4 @@
-namespace BlazorExample.Data;
-
+#pragma warning disable CA1050, RCS1110
 public class AppOption
 {
     public DateTime LastChanged { get; set; }
