@@ -31,7 +31,7 @@ public static class ServiceCollectionExtension
                 string jsonFilePath = environment?.ContentRootFileProvider.GetFileInfo(file).PhysicalPath
                     ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
 
-                var configuration = provider.GetService<IConfigurationRoot>();
+                var configuration = provider.GetService<IConfiguration>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
                 return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, configuration);
             });
