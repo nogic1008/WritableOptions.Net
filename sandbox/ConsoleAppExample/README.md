@@ -10,10 +10,11 @@ Need [appsettings.json](./appsettings.json) in current folder.
 
 ```console
 > dotnet run
-currentOption: { LastLaunchedAt: 2021/01/21 0:00:00, ApiKey : 00000000-0000-0000-0000-000000000000 }
-newOption: { LastLaunchedAt: 2021/02/23 7:30:00, ApiKey : 4b45b238-ff1c-4faf-93e9-4015f4dd3f48 }
+currentOption: { LastChanged: 2021/01/21 0:00:00, ApiKey : 00000000-0000-0000-0000-000000000000 }
+newOption: { LastChanged: 2021/02/23 7:30:00, ApiKey : 4b45b238-ff1c-4faf-93e9-4015f4dd3f48 }
 Try to write new settings.
 Success! Check your appsettings.json.
+writableOptions.Value: { LastChanged: 2021/02/23 7:30:00, ApiKey : 4b45b238-ff1c-4faf-93e9-4015f4dd3f48 }
 ```
 
 ## See also

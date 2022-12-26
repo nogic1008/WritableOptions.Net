@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="../AppOption.cs" />
     <ProjectReference Include="../../src/Nogic.WritableOptions/Nogic.WritableOptions.csproj" />
   </ItemGroup>
 
