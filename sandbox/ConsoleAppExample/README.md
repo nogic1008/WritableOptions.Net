@@ -19,5 +19,4 @@ writableOptions.Value: { LastChanged: 2021/02/23 7:30:00, ApiKey : 4b45b238-ff1c
 
 ## See also
 
-- [ConsoleAppFramework](https://github.com/Cysharp/ConsoleAppFramework)
-- [.NET Generic Host in ASP.NET Core](https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host)
+- [.NET Generic Host in ASP.NET Core](https://learn.microsoft.com/aspnet/core/fundamentals/host/generic-host)
