@@ -105,7 +105,8 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
             // Write BOM
             if (hasBOM)
             {
-#if NETCOREAPP3_1_OR_GREATER
+                // Stream.Write(ReadOnlySpan<byte>) overload only exists on .NET Core 2.1 or later
+#if NETCOREAPP2_1_OR_GREATER
                 stream.Write(utf8bom);
 #else
                 stream.Write(utf8bom.ToArray(), 0, utf8bom.Length);

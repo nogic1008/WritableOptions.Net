@@ -18,37 +18,50 @@ See also: [How to update values into appsetting.json?](https://stackoverflow.com
 
 ## Usage
 
-See [ConsoleApp Example](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/ConsoleAppExample/).
+This library is intended for use with [.NET Generic Host](https://learn.microsoft.com/aspnet/core/fundamentals/host/generic-host) context.
+
+### Setup
 
 ```csharp
 using Nogic.WritableOptions;
 
-// ...
-// in IHostBuilder.ConfigureServices((context, services) => {...})
+// Load config from { "MySection": {(here)} }
+IConfigurationSection section = context.Configration.GetSection("MySection");
 
-// Save & Load from appsettings.json
-services.ConfigureWritable<MyOptions>(context.Configration.GetSection("MySection"));
-// Or use custom JSON file
-services.ConfigureWritable<MyOptions>(context.Configration.GetSection("MySection"), "Resources/mysettings.json");
+// Save & Load from appsettings.json (from root folder)
+services.ConfigureWritable<MyOptions>(section);
+
+// Save & Load from (Special Folder)/appsettings.json.
+// It is useful for Xamarin
+services.ConfigureWritableWithExplicitPath<AppOption>(section, FileSystem.AppDataDirectory);
 ```
+
+### Consume
 
 ```csharp
 public class AppBase
 {
     private readonly IWritableOptions<MyOptions> _writableOptions;
-    public AppBase(IWritableOptions<MyOptions> writableOptions) => _writableOptions = writableOptions;
+
+    // Constructor DI
+    public AppBase(IWritableOptions<MyOptions> writableOptions)
+      => _writableOptions = writableOptions;
 
     public void Run()
     {
-        // IOptions<T>
+        // Read value via IOptions<T>
         var option = _writableOptions.Value;
 
-        // IOptionsMonitor<T>
-        var fooOption = _writableOptions.Get("Foo");
-
-        // IWritableOptions<T>
+        // Write value via IWritableOptions<T>
         var newOption = new MyOptions();
-        _writableOptions.Update(newOption);
+        _writableOptions.Update(newOption, reload: true);
     }
 }
 ```
+
+### Sample
+
+- [Console App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/ConsoleAppExample/)
+- [Xamarin App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/XamarinExample/)
+- [.NET MAUI App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/MauiExample/)
+- [Blazor Server App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/BlazorExample/)
