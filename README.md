@@ -30,6 +30,7 @@ IConfigurationSection section = context.Configration.GetSection("MySection");
 
 // Save & Load from appsettings.json (from root folder)
 services.ConfigureWritable<MyOptions>(section);
+
 // Save & Load from (Special Folder)/appsettings.json.
 // It is useful for Xamarin
 services.ConfigureWritableWithExplicitPath<AppOption>(section, FileSystem.AppDataDirectory);
