@@ -117,7 +117,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 
             writer.WriteStartObject(); // {
             bool isWritten = false;
-            var optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(changedValue));
+            var serializedOptionsValue = JsonSerializer.SerializeToDocument(changedValue);
             foreach (var element in jsonDocument.RootElement.EnumerateObject())
             {
                 if (!element.NameEquals(_section.EncodedUtf8Bytes))
@@ -126,13 +126,13 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                     continue;
                 }
                 writer.WritePropertyName(_section);
-                optionsElement.WriteTo(writer);
+                serializedOptionsValue.WriteTo(writer);
                 isWritten = true;
             }
             if (!isWritten)
             {
                 writer.WritePropertyName(_section);
-                optionsElement.WriteTo(writer);
+                serializedOptionsValue.WriteTo(writer);
             }
             writer.WriteEndObject(); // }
 
