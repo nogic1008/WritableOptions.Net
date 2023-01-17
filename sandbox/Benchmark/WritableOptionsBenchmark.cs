@@ -33,7 +33,7 @@ public class WritableOptionsBenchmark
     public void GlobalSetup() => _option = new()
     {
         LastLaunchedAt = DateTime.Now,
-        StringSettings = Enumerable.Range(1, 100).Select((_) => Guid.NewGuid().ToString()).ToArray(),
+        StringSettings = Enumerable.Range(1, 100).Select(static (_) => Guid.NewGuid().ToString()).ToArray(),
         IntSettings = Enumerable.Range(1, 100).ToArray()
     };
 

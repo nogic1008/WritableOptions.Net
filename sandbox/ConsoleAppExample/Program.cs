@@ -4,7 +4,7 @@ using Nogic.WritableOptions;
 const string ApplicationName = "ConsoleAppExample";
 
 var builder = ConsoleApp.CreateBuilder(args);
-builder.ConfigureServices((ctx, services) =>
+builder.ConfigureServices(static (ctx, services) =>
 {
     // Load app settings
     var config = ctx.Configuration;

@@ -30,7 +30,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// </summary>
     private readonly IConfiguration? _configuration;
 
-    private readonly JsonWriterOptions _jsonWriterOptions = new()
+    private static readonly JsonWriterOptions _jsonWriterOptions = new()
     {
         Indented = true,
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
