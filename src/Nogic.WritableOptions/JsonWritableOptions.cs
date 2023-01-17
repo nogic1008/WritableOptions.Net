@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -86,58 +87,68 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <inheritdoc/>
     public void Update(TOptions changedValue, bool reload = false)
     {
-        bool hasBOM = File.Exists(_jsonFilePath);
-        var jsonByteData = hasBOM ? File.ReadAllBytes(_jsonFilePath) : "{}"u8;
-
-        // Check BOM
-        ReadOnlySpan<byte> utf8bom = Encoding.UTF8.GetPreamble();
-        hasBOM = hasBOM && jsonByteData.StartsWith(utf8bom);
-#pragma warning disable IDE0057
-        if (hasBOM)
-            jsonByteData = jsonByteData.Slice(utf8bom.Length);
-#pragma warning restore IDE0057
-
-        var reader = new Utf8JsonReader(jsonByteData);
-        using var jsonDocument = JsonDocument.ParseValue(ref reader);
-
-        using (var stream = File.OpenWrite(_jsonFilePath))
+        using (var stream = new FileStream(_jsonFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
         {
-            // Write BOM
-            if (hasBOM)
+            byte[] buffer = ArrayPool<byte>.Shared.Rent((int)stream.Length);
+            try
             {
-                // Stream.Write(ReadOnlySpan<byte>) overload only exists on .NET Core 2.1 or later
 #if NETCOREAPP2_1_OR_GREATER
-                stream.Write(utf8bom);
+                _ = stream.Read(buffer);
 #else
-                stream.Write(utf8bom.ToArray(), 0, utf8bom.Length);
+                _ = stream.Read(buffer, 0, buffer.Length);
 #endif
-            }
+                ReadOnlySpan<byte> utf8Json = buffer.AsSpan();
 
-            var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
-
-            writer.WriteStartObject(); // {
-            bool isWritten = false;
-            var serializedOptionsValue = JsonSerializer.SerializeToDocument(changedValue);
-            foreach (var element in jsonDocument.RootElement.EnumerateObject())
-            {
-                if (!element.NameEquals(_section.EncodedUtf8Bytes))
+                // Check BOM
+                ReadOnlySpan<byte> utf8bom = Encoding.UTF8.GetPreamble();
+                if (utf8Json.StartsWith(utf8bom))
                 {
-                    element.WriteTo(writer);
-                    continue;
+#pragma warning disable IDE0057
+                    utf8Json = utf8Json.Slice(utf8bom.Length);
+#pragma warning restore IDE0057
+                    _ = stream.Seek(utf8bom.Length, SeekOrigin.Begin);
                 }
-                writer.WritePropertyName(_section);
-                serializedOptionsValue.WriteTo(writer);
-                isWritten = true;
-            }
-            if (!isWritten)
-            {
-                writer.WritePropertyName(_section);
-                serializedOptionsValue.WriteTo(writer);
-            }
-            writer.WriteEndObject(); // }
+                else
+                {
+                    stream.Position = 0;
+                }
 
-            writer.Flush();
-            stream.SetLength(stream.Position);
+                // Load fake JSON to avoid Utf8JsonReader error
+                if (utf8Json.Length == 0)
+                    utf8Json = "{}"u8;
+
+                var reader = new Utf8JsonReader(utf8Json);
+                using var jsonDocument = JsonDocument.ParseValue(ref reader);
+                var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
+
+                writer.WriteStartObject(); // {
+                bool isWritten = false;
+                var serializedOptionsValue = JsonSerializer.SerializeToDocument(changedValue);
+                foreach (var element in jsonDocument.RootElement.EnumerateObject())
+                {
+                    if (!element.NameEquals(_section.EncodedUtf8Bytes))
+                    {
+                        element.WriteTo(writer);
+                        continue;
+                    }
+                    writer.WritePropertyName(_section);
+                    serializedOptionsValue.WriteTo(writer);
+                    isWritten = true;
+                }
+                if (!isWritten)
+                {
+                    writer.WritePropertyName(_section);
+                    serializedOptionsValue.WriteTo(writer);
+                }
+                writer.WriteEndObject(); // }
+
+                writer.Flush();
+                stream.SetLength(stream.Position);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
         }
 
         if (reload && _configuration is IConfigurationRoot configurationRoot)
