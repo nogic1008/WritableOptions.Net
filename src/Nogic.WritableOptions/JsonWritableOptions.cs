@@ -113,18 +113,14 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                     stream.Position = 0;
                 }
 
-                // Load fake JSON to avoid Utf8JsonReader error
-                if (utf8Json.Length == 0)
-                    utf8Json = "{}"u8;
-
-                var reader = new Utf8JsonReader(utf8Json);
-                using var jsonDocument = JsonDocument.ParseValue(ref reader);
+                var reader = new Utf8JsonReader(utf8Json.Length > 0 ? utf8Json : "{}"u8);
+                var currentJson = JsonElement.ParseValue(ref reader);
                 var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
 
                 writer.WriteStartObject(); // {
                 bool isWritten = false;
-                var serializedOptionsValue = JsonSerializer.SerializeToDocument(changedValue);
-                foreach (var element in jsonDocument.RootElement.EnumerateObject())
+                var serializedOptionsValue = JsonSerializer.SerializeToElement(changedValue);
+                foreach (var element in currentJson.EnumerateObject())
                 {
                     if (!element.NameEquals(_section.EncodedUtf8Bytes))
                     {
