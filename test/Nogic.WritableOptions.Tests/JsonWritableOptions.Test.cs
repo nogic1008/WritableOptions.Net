@@ -57,13 +57,13 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
-        _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
+        _ = optionsMock.SetupGet(static m => m.CurrentValue).Returns(sampleOption);
 
         var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
 
         // Act - Assert
         _ = sut.Value.Should().Be(sampleOption);
-        optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
+        optionsMock.VerifyGet(static m => m.CurrentValue, Times.Once());
     }
 
     /// <summary>
@@ -75,13 +75,13 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
-        _ = optionsMock.SetupGet(m => m.CurrentValue).Returns(sampleOption);
+        _ = optionsMock.SetupGet(static m => m.CurrentValue).Returns(sampleOption);
 
         var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
 
         // Act - Assert
         _ = sut.CurrentValue.Should().Be(sampleOption);
-        optionsMock.VerifyGet(m => m.CurrentValue, Times.Once());
+        optionsMock.VerifyGet(static m => m.CurrentValue, Times.Once());
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
-        _ = optionsMock.Setup(m => m.Get(It.IsAny<string>())).Returns(sampleOption);
+        _ = optionsMock.Setup(static m => m.Get(It.IsAny<string>())).Returns(sampleOption);
 
         var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
 
@@ -101,9 +101,9 @@ public sealed class JsonWritableOptionsTest
         _ = sut.Get("Foo").Should().Be(sampleOption);
         _ = sut.Get("Bar").Should().Be(sampleOption);
 
-        optionsMock.Verify(m => m.Get(It.IsAny<string>()), Times.Exactly(2));
-        optionsMock.Verify(m => m.Get("Foo"), Times.Once());
-        optionsMock.Verify(m => m.Get("Bar"), Times.Once());
+        optionsMock.Verify(static m => m.Get(It.IsAny<string>()), Times.Exactly(2));
+        optionsMock.Verify(static m => m.Get("Foo"), Times.Once());
+        optionsMock.Verify(static m => m.Get("Bar"), Times.Once());
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = new Mock<IOptionsMonitor<SampleOption>>();
-        var action = (SampleOption option, string? section)
+        var action = static (SampleOption option, string? section)
             => Console.WriteLine($"{nameof(SampleOption)}:{section} changed to {option}");
 
         var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock.Object);
@@ -179,7 +179,7 @@ public sealed class JsonWritableOptionsTest
         }
         """;
         _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
-        configStub.Verify(m => m.Reload(), Times.Never());
+        configStub.Verify(static m => m.Reload(), Times.Never());
     }
 
     /// <summary>
@@ -234,7 +234,7 @@ public sealed class JsonWritableOptionsTest
         }
         """;
         _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(expectedJson));
-        configStub.Verify(m => m.Reload(), Times.Never());
+        configStub.Verify(static m => m.Reload(), Times.Never());
     }
 
     /// <summary>
@@ -318,7 +318,7 @@ public sealed class JsonWritableOptionsTest
         }
         """;
         _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
-        configStub.Verify(m => m.Reload(), Times.Once());
+        configStub.Verify(static m => m.Reload(), Times.Once());
     }
 
     /// <summary>
