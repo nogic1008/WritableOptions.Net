@@ -100,7 +100,11 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                 ReadOnlySpan<byte> utf8Json = buffer.AsSpan();
 
                 // Check BOM
+#if NETCOREAPP2_1_OR_GREATER
+                var utf8bom = Encoding.UTF8.Preamble;
+#else
                 ReadOnlySpan<byte> utf8bom = Encoding.UTF8.GetPreamble();
+#endif
                 if (utf8Json.StartsWith(utf8bom))
                 {
 #pragma warning disable IDE0057
