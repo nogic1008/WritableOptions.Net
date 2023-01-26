@@ -11,7 +11,7 @@
     <PackageReference Include="Awesome.Net.WritableOptions" Version="3.0.0" />
     <PackageReference Include="BenchmarkDotNet" Version="0.13.4" />
     <PackageReference Include="Moq" Version="4.18.4" />
-    <PackageReference Include="Nogic.WritableOptions" Version="3.0.0" Aliases="release" />
+    <PackageReference Include="Nogic.WritableOptions" Version="3.0.1" Aliases="release" />
   </ItemGroup>
 
   <ItemGroup>
