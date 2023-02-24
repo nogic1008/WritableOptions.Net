@@ -1,7 +1,6 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
 {
-  "name": "C# (.NET)",
+  "name": ".NET 7.0 + 6.0 with Mono",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:7.0",
   "build": {
     "dockerfile": "Dockerfile"
   },
@@ -15,6 +14,9 @@
   "features": {
     "ghcr.io/devcontainers/features/dotnet:1": {
       "version": "6"
+    },
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+      "packages": "mono-complete"
     }
   }
 }
