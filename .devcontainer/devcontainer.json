@@ -1,9 +1,6 @@
 {
   "name": ".NET 7.0 + 6.0 with Mono",
   "image": "mcr.microsoft.com/devcontainers/dotnet:7.0",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
   "customizations": {
     "vscode": {
       "extensions": ["EditorConfig.EditorConfig"]
