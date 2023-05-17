@@ -20,7 +20,9 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4.0.0
         with:
-          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          dotnet-version: |
+            ${{ vars.DOTNET_SDK_VERSIONS }}
+            8.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
 
