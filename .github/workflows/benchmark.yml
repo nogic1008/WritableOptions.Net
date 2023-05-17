@@ -7,9 +7,6 @@ env:
   DOTNET_NOLOGO: true
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-  DOTNET_VERSION: |
-    6.x
-    7.x
 
 jobs:
   benchmark:
@@ -26,7 +23,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
 
       - name: Restore
         run: dotnet restore --locked-mode

@@ -14,7 +14,7 @@ env:
 jobs:
   release:
     name: Publish to NuGet
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.2
       - uses: actions/cache@v3.3.1
@@ -27,9 +27,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: |
-            6.x
-            7.x
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
 
       - name: Restore
         run: dotnet restore
@@ -39,7 +37,7 @@ jobs:
           TAG_VERSION: ${{ github.event.release.tag_name }} # v0.0.0-abc
 
       - name: Publish to NuGet
-        run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "nupkgs/*.nupkg" --source ${{ vars.NUGET_API_SOURCE }} --api-key ${{ secrets.NUGET_API_KEY }}
       - uses: actions/upload-artifact@v3.1.2
         with:
           name: packages
