@@ -37,7 +37,7 @@ jobs:
           TAG_VERSION: ${{ github.event.release.tag_name }} # v0.0.0-abc
 
       - name: Publish to NuGet
-        run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "nupkgs/*.nupkg" --source ${{ vars.NUGET_API_SOURCE }} --api-key ${{ secrets.NUGET_API_KEY }}
       - uses: actions/upload-artifact@v3.1.2
         with:
           name: packages
