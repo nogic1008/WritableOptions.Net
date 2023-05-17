@@ -14,7 +14,7 @@ env:
 jobs:
   release:
     name: Publish to NuGet
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.2
       - uses: actions/cache@v3.3.1
@@ -27,9 +27,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: |
-            6.x
-            7.x
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
 
       - name: Restore
         run: dotnet restore
