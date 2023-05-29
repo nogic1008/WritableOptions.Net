@@ -25,7 +25,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3.1.0
+        uses: actions/setup-dotnet@v3.2.0
         with:
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
 
