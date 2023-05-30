@@ -19,14 +19,15 @@ env:
 jobs:
   lint:
     name: Lint
-    uses: nogic1008/actions/.github/workflows/dotnet-format.yml@v1.0.0
+    uses: nogic1008/actions/.github/workflows/dotnet-format.yml@v1.1.0
 
   lock-file:
     name: Validate NuGet Lock Files
-    uses: nogic1008/actions/.github/workflows/nuget-lock-files.yml@v1.0.0
+    uses: nogic1008/actions/.github/workflows/nuget-lock-files.yml@v1.1.0
     with:
       update-lock-files: ${{ contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request' }}
       dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+      lock-file-path: '**/packages.lock.json'
     secrets:
       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
@@ -43,17 +44,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3.5.2
-      - uses: actions/cache@v3.3.1
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3.1.0
+        uses: actions/setup-dotnet@v3.2.0
         with:
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Restore
         run: dotnet restore
