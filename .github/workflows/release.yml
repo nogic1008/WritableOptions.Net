@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3.2.0
+        uses: actions/setup-dotnet@v4.0.0
         with:
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
           cache: true
