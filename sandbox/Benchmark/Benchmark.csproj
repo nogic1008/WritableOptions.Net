@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Awesome.Net.WritableOptions" Version="3.0.0" />
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.10" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.11" />
     <PackageReference Include="Moq" Version="4.20.69" />
     <PackageReference Include="Nogic.WritableOptions" Version="3.0.0" Aliases="release" />
   </ItemGroup>
