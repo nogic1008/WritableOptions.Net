@@ -64,9 +64,9 @@
       },
       "xunit.runner.visualstudio": {
         "type": "Direct",
-        "requested": "[2.5.5, )",
-        "resolved": "2.5.5",
-        "contentHash": "AJsBBn8S00ZxdXPSIp8s+NcBQMO9tcll1UVCfGNoEi1DUH2z3f4Y1epV9nYbhgG6wFoTKJP6YuLT2MeTPV9gnA==",
+        "requested": "[2.5.6, )",
+        "resolved": "2.5.6",
+        "contentHash": "CW6uhMXNaQQNMSG1IWhHkBT+V5eqHqn7MP0zfNMhU9wS/sgKX7FGL3rzoaUgt26wkY3bpf7pDVw3IjXhwfiP4w==",
         "dependencies": {
           "Microsoft.TestPlatform.ObjectModel": "17.8.0"
         }
@@ -618,9 +618,9 @@
       },
       "xunit.runner.visualstudio": {
         "type": "Direct",
-        "requested": "[2.5.5, )",
-        "resolved": "2.5.5",
-        "contentHash": "AJsBBn8S00ZxdXPSIp8s+NcBQMO9tcll1UVCfGNoEi1DUH2z3f4Y1epV9nYbhgG6wFoTKJP6YuLT2MeTPV9gnA=="
+        "requested": "[2.5.6, )",
+        "resolved": "2.5.6",
+        "contentHash": "CW6uhMXNaQQNMSG1IWhHkBT+V5eqHqn7MP0zfNMhU9wS/sgKX7FGL3rzoaUgt26wkY3bpf7pDVw3IjXhwfiP4w=="
       },
       "Castle.Core": {
         "type": "Transitive",
@@ -1965,9 +1965,9 @@
       },
       "xunit.runner.visualstudio": {
         "type": "Direct",
-        "requested": "[2.5.5, )",
-        "resolved": "2.5.5",
-        "contentHash": "AJsBBn8S00ZxdXPSIp8s+NcBQMO9tcll1UVCfGNoEi1DUH2z3f4Y1epV9nYbhgG6wFoTKJP6YuLT2MeTPV9gnA=="
+        "requested": "[2.5.6, )",
+        "resolved": "2.5.6",
+        "contentHash": "CW6uhMXNaQQNMSG1IWhHkBT+V5eqHqn7MP0zfNMhU9wS/sgKX7FGL3rzoaUgt26wkY3bpf7pDVw3IjXhwfiP4w=="
       },
       "Castle.Core": {
         "type": "Transitive",
