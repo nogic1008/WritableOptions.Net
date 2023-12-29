@@ -56,10 +56,10 @@ jobs:
       - name: Debug Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test -f ${{ matrix.framework }} --no-build --settings coverlet.runsettings
+        run: dotnet test -f ${{ matrix.framework }} --no-build --settings coverage.runsettings
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.1.4
         with:
           flags: ${{ runner.os }},${{ matrix.framework }}
-          file: "*.opencover.xml"
+          file: "*.cobertura.xml"
