@@ -26,9 +26,7 @@ jobs:
     uses: nogic1008/actions/.github/workflows/nuget-lock-files.yml@v1.1.0
     with:
       update-lock-files: ${{ contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request' }}
-      dotnet-version: |
-        ${{ vars.DOTNET_SDK_VERSIONS }}
-        8.x
+      dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
       lock-file-path: '**/packages.lock.json'
     secrets:
       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -49,9 +47,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4.0.0
         with:
-          dotnet-version: |
-            ${{ vars.DOTNET_SDK_VERSIONS }}
-            8.x
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
           cache: true
           cache-dependency-path: '**/packages.lock.json'
 
