@@ -62,4 +62,4 @@ jobs:
         uses: codecov/codecov-action@v3.1.4
         with:
           flags: ${{ runner.os }},${{ matrix.framework }}
-          file: "*.cobertuna.xml"
+          file: "*.cobertura.xml"
