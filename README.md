@@ -62,6 +62,5 @@ public class AppBase
 ### Sample
 
 - [Console App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/ConsoleAppExample/)
-- [Xamarin App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/XamarinExample/)
 - [.NET MAUI App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/MauiExample/)
 - [Blazor Server App](https://github.com/nogic1008/WritableOptions.Net/tree/main/sandbox/BlazorExample/)
