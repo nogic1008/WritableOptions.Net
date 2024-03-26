@@ -10,6 +10,7 @@ To run locally, you need to install:
 
 - [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [.NET 7 SDK](https://dotnet.microsoft.com/download/dotnet/7.0)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [.NET Framework 4.8 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
 You can also run this benchmark on [GitHub Actions](https://github.com/nogic1008/WritableOptions.Net/actions/workflows/benchmark.yml).
