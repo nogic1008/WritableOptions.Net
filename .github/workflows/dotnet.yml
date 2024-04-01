@@ -59,7 +59,7 @@ jobs:
         run: dotnet test -f ${{ matrix.framework }} --no-build --settings coverage.runsettings
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4.1.0
+        uses: codecov/codecov-action@v4.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: ${{ runner.os }},${{ matrix.framework }}
