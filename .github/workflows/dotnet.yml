@@ -56,7 +56,7 @@ jobs:
       - name: Debug Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test -f ${{ matrix.framework }} --no-build --settings coverage.runsettings
+        run: dotnet test -f ${{ matrix.framework }} --no-build -p:TestingPlatformCommandLineArguments="--coverage --coverage-output-format cobertura"
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4.3.0
