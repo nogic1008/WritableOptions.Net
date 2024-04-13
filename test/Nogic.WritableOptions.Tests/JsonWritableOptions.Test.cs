@@ -8,6 +8,7 @@ namespace Nogic.WritableOptions.Tests;
 /// <summary>
 /// Unit Test Class for <see cref="JsonWritableOptions{TOptions}"/>.
 /// </summary>
+[TestClass]
 public sealed class JsonWritableOptionsTest
 {
     /// <summary>Used in <see cref="GenerateOption"/></summary>
@@ -34,10 +35,10 @@ public sealed class JsonWritableOptionsTest
     /// <param name="section"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='section']" /></param>
     /// <param name="hasOptions">set options as <see langword="null"/> or not</param>
     /// <param name="paramName">Expected <see cref="ArgumentNullException"/> param name</param>
-    [Theory(DisplayName = $"Constructor throws {nameof(ArgumentNullException)}")]
-    [InlineData(null, "", true, "jsonFilePath")]
-    [InlineData("", null, true, "section")]
-    [InlineData("", "", false, "options")]
+    [TestMethod($"Constructor throws {nameof(ArgumentNullException)}")]
+    [DataRow(null, "", true, "jsonFilePath", DisplayName = $"{nameof(JsonWritableOptions<SampleOption>)}(null, \"\", new()) throws {nameof(ArgumentNullException)}(jsonFilePath)")]
+    [DataRow("", null, true, "section", DisplayName = $"{nameof(JsonWritableOptions<SampleOption>)}(\"\", null, new()) throws {nameof(ArgumentNullException)}(section)")]
+    [DataRow("", "", false, "options", DisplayName = $"{nameof(JsonWritableOptions<SampleOption>)}(\"\", \"\", null) throws {nameof(ArgumentNullException)}(options)")]
     public void Constructor_Throws_ArgumentNullException(string? jsonFilePath, string? section, bool hasOptions, string paramName)
     {
         // Arrange
@@ -48,10 +49,11 @@ public sealed class JsonWritableOptionsTest
         _ = constructor.Should().ThrowExactly<ArgumentNullException>().WithParameterName(paramName);
     }
 
+    #region IOptionsMonitor<TOptions>
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Value"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
-    [Fact(DisplayName = ".Value returns TOptions via IOptionsMonitor<TOptions>")]
+    [TestMethod($".{nameof(JsonWritableOptions<SampleOption>.Value)} returns TOptions via {nameof(IOptionsMonitor<SampleOption>)}<TOptions>")]
     public void Value_Returns_T()
     {
         // Arrange
@@ -69,7 +71,7 @@ public sealed class JsonWritableOptionsTest
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.CurrentValue"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
-    [Fact(DisplayName = ".CurrentValue returns TOptions via IOptionsMonitor<TOptions>")]
+    [TestMethod($".{nameof(JsonWritableOptions<SampleOption>.CurrentValue)} returns TOptions via {nameof(IOptionsMonitor<SampleOption>)}<TOptions>")]
     public void CurrentValue_Returns_T()
     {
         // Arrange
@@ -87,7 +89,7 @@ public sealed class JsonWritableOptionsTest
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Get"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
-    [Fact(DisplayName = ".Get(string) returns TOptions via IOptionsMonitor<TOptions>")]
+    [TestMethod($".{nameof(JsonWritableOptions<SampleOption>.Get)}(string?) returns TOptions via {nameof(IOptionsMonitor<SampleOption>)}<TOptions>")]
     public void Get_Returns_T()
     {
         // Arrange
@@ -109,7 +111,7 @@ public sealed class JsonWritableOptionsTest
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.OnChange"/> returns <see cref="IDisposable"/> via <see cref="IOptionsMonitor{TOptions}"/>.
     /// </summary>
-    [Fact(DisplayName = $".OnChange(Action) returns {nameof(IDisposable)} via IOptionsMonitor<TOptions>")]
+    [TestMethod($".{nameof(JsonWritableOptions<SampleOption>.OnChange)}(Action) returns {nameof(IDisposable)} via {nameof(IOptionsMonitor<SampleOption>)}<TOptions>")]
     public void OnChange_Called_IOptionsMonitor_OnChange()
     {
         // Arrange
@@ -126,19 +128,36 @@ public sealed class JsonWritableOptionsTest
         // Assert
         optionsMock.Verify(m => m.OnChange(action), Times.Once());
     }
+    #endregion IOptionsMonitor<TOptions>
 
-    /// <summary>
-    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON.
-    /// </summary>
-    /// <param name="fileText">Current JSON text</param>
-    [Theory(DisplayName = ".Update(TOptions) writes expected JSON")]
-    [InlineData(/*lang=json,strict*/ "{}")]
-    [InlineData(/*lang=json,strict*/ $$"""
+    private static readonly SampleOption _updatedOption = new()
+    {
+        LastLaunchedAt = new(2020, 12, 1),
+        Interval = 5000,
+        ConnectionString = "foo",
+    };
+    /// <summary>JSON serialized <see cref="_updatedOption"/></summary>
+    // lang=json,strict
+    private const string ExpectedJson = $$"""
+    {
+      "{{nameof(SampleOption)}}": {
+        "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
+        "{{nameof(SampleOption.Interval)}}": 5000,
+        "{{nameof(SampleOption.ConnectionString)}}": "foo"
+      }
+    }
+    """;
+
+    // lang=json,strict
+    private const string EmptyJson = "{}";
+    // lang=json,strict
+    private const string ClassEmptyJson = $$"""
     {
       "{{nameof(SampleOption)}}": {}
     }
-    """)]
-    [InlineData(/*lang=json,strict*/ $$"""
+    """;
+    // lang=json,strict
+    private const string HasConfigJson = $$"""
     {
       "{{nameof(SampleOption)}}": {
           "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-10-01T00:00:00",
@@ -146,7 +165,16 @@ public sealed class JsonWritableOptionsTest
           "{{nameof(SampleOption.ConnectionString)}}": "bar"
       }
     }
-    """)]
+    """;
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON.
+    /// </summary>
+    /// <param name="fileText">Current JSON text</param>
+    [TestMethod(".Update(TOptions) writes expected JSON")]
+    [DataRow(EmptyJson, DisplayName = ".Update(TOptions) writes expected JSON")]
+    [DataRow(ClassEmptyJson, DisplayName = ".Update(TOptions) writes expected JSON")]
+    [DataRow(HasConfigJson, DisplayName = ".Update(TOptions) writes expected JSON")]
     public void Update_Writes_Json(string fileText)
     {
         // Arrange
@@ -159,26 +187,10 @@ public sealed class JsonWritableOptionsTest
         var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
 
         // Act
-        sut.Update(new()
-        {
-            LastLaunchedAt = new(2020, 12, 1),
-            Interval = 5000,
-            ConnectionString = "foo",
-        });
+        sut.Update(_updatedOption);
 
         // Assert
-        /*lang=json,strict*/
-        const string expectedJson =
-        $$"""
-        {
-          "{{nameof(SampleOption)}}": {
-            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
-            "{{nameof(SampleOption.Interval)}}": 5000,
-            "{{nameof(SampleOption.ConnectionString)}}": "foo"
-          }
-        }
-        """;
-        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
+        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(ExpectedJson));
         configStub.Verify(static m => m.Reload(), Times.Never());
     }
 
@@ -186,22 +198,10 @@ public sealed class JsonWritableOptionsTest
     /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON with BOM.
     /// </summary>
     /// <param name="fileText">Current JSON text</param>
-    [Theory(DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
-    [InlineData(/*lang=json,strict*/ "{}")]
-    [InlineData(/*lang=json,strict*/ $$"""
-    {
-      "{{nameof(SampleOption)}}": {}
-    }
-    """)]
-    [InlineData(/*lang=json,strict*/ $$"""
-    {
-      "{{nameof(SampleOption)}}": {
-          "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-10-01T00:00:00",
-          "{{nameof(SampleOption.Interval)}}": 1000,
-          "{{nameof(SampleOption.ConnectionString)}}": "bar"
-      }
-    }
-    """)]
+    [TestMethod(".Update(TOptions) writes expected JSON with BOM")]
+    [DataRow(EmptyJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
+    [DataRow(ClassEmptyJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
+    [DataRow(HasConfigJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
     public void Update_Writes_Json_WithBOM(string fileText)
     {
         // Arrange
@@ -214,12 +214,7 @@ public sealed class JsonWritableOptionsTest
         var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
 
         // Act
-        sut.Update(new()
-        {
-            LastLaunchedAt = new(2020, 12, 1),
-            Interval = 5000,
-            ConnectionString = "foo",
-        });
+        sut.Update(_updatedOption);
 
         // Assert
         /*lang=json,strict*/
@@ -237,19 +232,21 @@ public sealed class JsonWritableOptionsTest
         configStub.Verify(static m => m.Reload(), Times.Never());
     }
 
-    /// <summary>
-    /// <see cref="JsonWritableOptions{TOptions}.Update(TOptions, bool)"/> does not changes other JSON section.
-    /// </summary>
-    /// <param name="fileText">Current JSON text</param>
-    [Theory(DisplayName = ".Update(TOptions) does not changes other JSON section")]
-    [InlineData(/*lang=json,strict*/ "{\"fooOption\":{}}")]
-    [InlineData(/*lang=json,strict*/ $$"""
+    // lang=json,strict
+    private const string OnlyHasOtherOptionJson = """
+    {
+      "fooOption": {}
+    }
+    """;
+    // lang=json,strict
+    private const string HasOtherOptionEmptyJson = $$"""
     {
       "fooOption": {},
       "{{nameof(SampleOption)}}": {}
     }
-    """)]
-    [InlineData(/*lang=json,strict*/ $$"""
+    """;
+    // lang=json,strict
+    private const string HasOtherOptionJson = $$"""
     {
       "fooOption": {},
       "{{nameof(SampleOption)}}": {
@@ -258,7 +255,16 @@ public sealed class JsonWritableOptionsTest
           "{{nameof(SampleOption.ConnectionString)}}": "bar"
       }
     }
-    """)]
+    """;
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> does not changes other JSON section.
+    /// </summary>
+    /// <param name="fileText">Current JSON text</param>
+    [TestMethod(".Update(TOptions) does not changes other JSON section")]
+    [DataRow(OnlyHasOtherOptionJson, DisplayName = ".Update(TOptions) does not changes other JSON section")]
+    [DataRow(HasOtherOptionEmptyJson, DisplayName = ".Update(TOptions) does not changes other JSON section")]
+    [DataRow(HasOtherOptionJson, DisplayName = ".Update(TOptions) does not changes other JSON section")]
     public void Update_DoesNot_Changes_Other_Section(string fileText)
     {
         // Arrange
@@ -270,27 +276,21 @@ public sealed class JsonWritableOptionsTest
         var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub);
 
         // Act
-        sut.Update(new()
-        {
-            LastLaunchedAt = new(2020, 12, 1),
-            Interval = 5000,
-            ConnectionString = "foo",
-        }, true);
+        sut.Update(_updatedOption, true);
 
         // Assert
-        string newLine = Environment.NewLine;
         _ = tempFile.ReadAllText().Should().Contain("\"fooOption\": {},");
     }
 
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Update"/> calls <see cref="IConfigurationRoot.Reload"/>.
     /// </summary>
-    [Fact(DisplayName = ".Update(TOptions, true) calls IConfigurationRoot.Reload()")]
+    [TestMethod(".Update(TOptions, true) calls IConfigurationRoot.Reload()")]
     public void Update_Calls_Reload()
     {
         // Arrange
         using var tempFile = new TempFileProvider();
-        tempFile.AppendAllText("{}");
+        tempFile.AppendAllText(EmptyJson);
 
         var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
         var configStub = new Mock<IConfigurationRoot>();
@@ -298,33 +298,17 @@ public sealed class JsonWritableOptionsTest
         var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
 
         // Act
-        sut.Update(new()
-        {
-            LastLaunchedAt = new(2020, 12, 1),
-            Interval = 5000,
-            ConnectionString = "foo",
-        }, true);
+        sut.Update(_updatedOption, true);
 
         // Assert
-        /*lang=json,strict*/
-        const string expectedJson =
-        $$"""
-        {
-          "{{nameof(SampleOption)}}": {
-            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
-            "{{nameof(SampleOption.Interval)}}": 5000,
-            "{{nameof(SampleOption.ConnectionString)}}": "foo"
-          }
-        }
-        """;
-        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
+        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(ExpectedJson));
         configStub.Verify(static m => m.Reload(), Times.Once());
     }
 
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Update"/> creates new JSON file if not exists.
     /// </summary>
-    [Fact(DisplayName = ".Update(TOptions, true) creates new JSON file if not exists")]
+    [TestMethod(".Update(TOptions) creates new JSON file if not exists")]
     public void Update_Creates_File()
     {
         // Arrange
@@ -337,27 +321,11 @@ public sealed class JsonWritableOptionsTest
         var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub);
 
         // Act
-        sut.Update(new()
-        {
-            LastLaunchedAt = new(2020, 12, 1),
-            Interval = 5000,
-            ConnectionString = "foo",
-        });
+        sut.Update(_updatedOption);
 
         // Assert
-        /*lang=json,strict*/
-        const string expectedJson =
-        $$"""
-        {
-          "{{nameof(SampleOption)}}": {
-            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
-            "{{nameof(SampleOption.Interval)}}": 5000,
-            "{{nameof(SampleOption.ConnectionString)}}": "foo"
-          }
-        }
-        """;
         _ = File.Exists(tempFile.Path).Should().BeTrue();
-        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(expectedJson));
+        _ = tempFile.ReadAllText().Should().Be(NormalizeEndLine(ExpectedJson));
     }
 
     /// <summary>Provides temporary file for testing.</summary>
