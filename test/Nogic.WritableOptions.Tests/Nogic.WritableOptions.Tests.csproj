@@ -10,11 +10,6 @@
     <PackageReference Include="Moq" Version="4.20.70" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net48'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
-    <PackageReference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel" Version="14.0.0" />
-  </ItemGroup>
-
   <ItemGroup>
     <Using Include="FluentAssertions" />
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
