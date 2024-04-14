@@ -12,16 +12,6 @@ updates:
       timezone: Japan
     labels:
       - dependencies
-    groups:
-      test-tools:
-        patterns:
-          - coverlet.*
-          - FluentAssertions
-          - Microsoft.NET.Test.*
-          - Moq
-          - Moq.*
-          - xunit
-          - xunit.*
     commit-message:
       prefix: fix
       prefix-development: chore
