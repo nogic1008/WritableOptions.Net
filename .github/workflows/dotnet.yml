@@ -63,4 +63,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: ${{ runner.os }},${{ matrix.framework }}
-          file: "**/*.cobertura.xml"
+          exclude: ./.nuget/**
