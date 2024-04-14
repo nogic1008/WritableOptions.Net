@@ -27,7 +27,7 @@ jobs:
     with:
       update-lock-files: ${{ contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request' }}
       dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
-      lock-file-path: '**/packages.lock.json'
+      lock-file-path: "**/packages.lock.json"
     secrets:
       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
@@ -49,18 +49,19 @@ jobs:
         with:
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
           cache: true
-          cache-dependency-path: '**/packages.lock.json'
+          cache-dependency-path: "**/packages.lock.json"
 
       - name: Restore
         run: dotnet restore
       - name: Debug Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test -f ${{ matrix.framework }} --no-build -p:TestingPlatformCommandLineArguments="--coverage --coverage-output-format cobertura"
+        run: dotnet test -f ${{ matrix.framework }} --no-build -p:TestingPlatformCommandLineArguments="--coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml"
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4.3.0
         with:
+          disable_search: true
+          file: ./test/Nogic.WritableOptions.Tests/bin/Debug/${{ matrix.framework }}/TestResults/coverage.cobertura.xml
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: ${{ runner.os }},${{ matrix.framework }}
-          file: "*.cobertura.xml"
