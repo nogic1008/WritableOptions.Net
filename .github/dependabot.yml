@@ -12,6 +12,7 @@ updates:
       timezone: Japan
     labels:
       - dependencies
+    milestone: 7
     commit-message:
       prefix: fix
       prefix-development: chore
@@ -26,6 +27,19 @@ updates:
       timezone: Japan
     labels:
       - dependencies
+    milestone: 7
     commit-message:
-      prefix: ci
-      include: scope
+      prefix: ci(gh-actions)
+
+  # Development Containers (/.devcontainer/devcontainer.json)
+  - package-ecosystem: devcontainers
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '08:00'
+      timezone: Japan
+    labels:
+      - dependencies
+    milestone: 7
+    commit-message:
+      prefix: ci(devcontainer)
