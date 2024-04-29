@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- Meta Options -->
     <Authors>Nogic</Authors>
-    <Copyright>©2021-2023 Nogic</Copyright>
+    <Copyright>©2021-2024 Nogic</Copyright>
     <PackageProjectUrl>https://github.com/nogic1008/WritableOptions.Net</PackageProjectUrl>
     <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
