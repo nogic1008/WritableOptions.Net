@@ -2,6 +2,7 @@ using System.Buffers;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
@@ -14,21 +15,31 @@ namespace Nogic.WritableOptions;
 public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TOptions : class, new()
 {
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='jsonFilePath']"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?, Func<JsonSerializerOptions>?)" path="/param[@name='jsonFilePath']"/>
     /// </summary>
     private readonly string _jsonFilePath;
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='section']"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?, Func<JsonSerializerOptions>?)" path="/param[@name='section']"/>
     /// </summary>
     private readonly JsonEncodedText _section;
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='options']"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?, Func<JsonSerializerOptions>?)" path="/param[@name='options']"/>
     /// </summary>
     private readonly IOptionsMonitor<TOptions> _options;
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='configuration']"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?, Func<JsonSerializerOptions>?)" path="/param[@name='configuration']"/>
     /// </summary>
     private readonly IConfiguration? _configuration;
+    /// <summary>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?, Func<JsonSerializerOptions>?)" path="/param[@name='serializerOptions']"/>
+    /// </summary>
+    private readonly JsonSerializerOptions _serializerOptions;
+
+    private static readonly JsonSerializerOptions _defaultJsonSerializerOptions = new()
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        Converters = { new JsonStringEnumConverter() }
+    };
 
     private static readonly JsonWriterOptions _jsonWriterOptions = new()
     {
@@ -46,7 +57,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <exception cref="ArgumentNullException">
     /// Throws if <paramref name="jsonFilePath"/>, <paramref name="section"/> or <paramref name="options"/> is <see langword="null"/>.
     /// </exception>
-    public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfiguration? configuration = null)
+    public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfiguration? configuration = null, Func<JsonSerializerOptions>? serializerOptions = null)
     {
 #if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(jsonFilePath);
@@ -62,6 +73,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         _section = JsonEncodedText.Encode(section);
         _options = options;
         _configuration = configuration;
+        _serializerOptions = serializerOptions == null ? _defaultJsonSerializerOptions : serializerOptions();
 #if !NET6_0_OR_GREATER
         // Port of ArgumentNullException.ThrowIfNull
         static void ThrowIfNull(object? argument, string paramName)
@@ -123,7 +135,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 
                 writer.WriteStartObject(); // {
                 bool isWritten = false;
-                var serializedOptionsValue = JsonSerializer.SerializeToElement(changedValue);
+                var serializedOptionsValue = JsonSerializer.SerializeToElement(changedValue, _serializerOptions);
                 foreach (var element in currentJson.EnumerateObject())
                 {
                     if (!element.NameEquals(_section.EncodedUtf8Bytes))
