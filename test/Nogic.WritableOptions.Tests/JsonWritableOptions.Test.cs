@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -229,6 +230,157 @@ public sealed class JsonWritableOptionsTest
         }
         """;
         _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(expectedJson));
+        configStub.Verify(static m => m.Reload(), Times.Never());
+    }
+
+    private static readonly SampleOption _nullConnectionStringOption = new()
+    {
+        LastLaunchedAt = new(2024, 03, 11),
+        Interval = 2500,
+        ConnectionString = null,
+    };
+    // lang=json,strict
+    private const string ExpectedNullConnectionStringConfigJson = $$"""
+    {
+      "{{nameof(SampleOption)}}": {
+        "{{nameof(SampleOption.LastLaunchedAt)}}": "2024-03-11T00:00:00",
+        "{{nameof(SampleOption.Interval)}}": 2500
+      }
+    }
+    """;
+    // lang=json,strict
+    private const string ExpectedNotNullConnectionStringConfigJson = $$"""
+    {
+      "{{nameof(SampleOption)}}": {
+        "{{nameof(SampleOption.LastLaunchedAt)}}": "2024-03-11T00:00:00",
+        "{{nameof(SampleOption.Interval)}}": 2500,
+        "{{nameof(SampleOption.ConnectionString)}}": null
+      }
+    }
+    """;
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON.
+    /// </summary>
+    /// <param name="fileText">Current JSON text</param>
+    [TestMethod(".Update(TOptions) writes expected JSON")]
+    [DataRow(ExpectedNullConnectionStringConfigJson, DisplayName = ".Update(TOptions) writes expected JSON")]
+    public void Update_Writes_Nullable_Json(string fileText)
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(fileText);
+
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+        var configStub = new Mock<IConfigurationRoot>();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
+
+        // Act
+        sut.Update(_nullConnectionStringOption);
+
+        // Assert
+        var content = tempFile.ReadAllText();
+        content.Should().Be(NormalizeEndLine(ExpectedNullConnectionStringConfigJson));
+        configStub.Verify(static m => m.Reload(), Times.Never());
+    }
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON with BOM.
+    /// </summary>
+    /// <param name="fileText">Current JSON text</param>
+    [TestMethod(".Update(TOptions) writes expected JSON with BOM")]
+    [DataRow(ExpectedNullConnectionStringConfigJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
+    public void Update_Writes_Nullable_Json_WithBOM(string fileText)
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(fileText, Encoding.UTF8);
+
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+        var configStub = new Mock<IConfigurationRoot>();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
+
+        // Act
+        sut.Update(_nullConnectionStringOption);
+
+        // Assert
+        /*lang=json,strict*/
+        const string expectedJson =
+        $$"""
+        {
+          "{{nameof(SampleOption)}}": {
+            "{{nameof(SampleOption.LastLaunchedAt)}}": "2024-03-11T00:00:00",
+            "{{nameof(SampleOption.Interval)}}": 2500
+          }
+        }
+        """;
+        _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(expectedJson));
+        configStub.Verify(static m => m.Reload(), Times.Never());
+    }
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON.
+    /// </summary>
+    /// <param name="fileText">Current JSON text</param>
+    [TestMethod(".Update(TOptions) writes expected JSON with default JsonSerializerOptions")]
+    [DataRow(ExpectedNullConnectionStringConfigJson, DisplayName = ".Update(TOptions) writes expected JSON with default JsonSerializerOptions")]
+    public void Update_Writes_NonNullable_Json(string fileText)
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(fileText);
+
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+        var configStub = new Mock<IConfigurationRoot>();
+
+        static JsonSerializerOptions serialiserOptions() => new();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object, serialiserOptions);
+
+        // Act
+        sut.Update(_nullConnectionStringOption);
+
+        // Assert
+        tempFile.ReadAllText().Should().Be(NormalizeEndLine(ExpectedNotNullConnectionStringConfigJson));
+        configStub.Verify(static m => m.Reload(), Times.Never());
+    }
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON with BOM.
+    /// </summary>
+    /// <param name="fileText">Current JSON text</param>
+    [TestMethod(".Update(TOptions) writes expected JSON with default JsonSerializerOptions and BOM")]
+    [DataRow(ExpectedNullConnectionStringConfigJson, DisplayName = ".Update(TOptions) writes expected JSON with default JsonSerializerOptions and BOM")]
+    public void Update_Writes_NonNullable_Json_WithBOM(string fileText)
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(fileText, Encoding.UTF8);
+
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+        var configStub = new Mock<IConfigurationRoot>();
+
+        static JsonSerializerOptions serialiserOptions() => new();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object, serialiserOptions);
+
+        // Act
+        sut.Update(_nullConnectionStringOption);
+
+        // Assert
+        /*lang=json,strict*/
+        const string expectedJson =
+        $$"""
+        {
+          "{{nameof(SampleOption)}}": {
+            "{{nameof(SampleOption.LastLaunchedAt)}}": "2024-03-11T00:00:00",
+            "{{nameof(SampleOption.Interval)}}": 2500,
+            "{{nameof(SampleOption.ConnectionString)}}": null
+          }
+        }
+        """;
+        tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(expectedJson));
         configStub.Verify(static m => m.Reload(), Times.Never());
     }
 
