@@ -33,7 +33,13 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     private static readonly JsonWriterOptions _jsonWriterOptions = new()
     {
         Indented = true,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    };
+
+    private static readonly JsonReaderOptions _jsonReaderOptions = new()
+    {
+        CommentHandling = JsonCommentHandling.Skip,
+        AllowTrailingCommas = true,
     };
 
     /// <summary>
@@ -117,7 +123,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                     stream.Position = 0;
                 }
 
-                var reader = new Utf8JsonReader(utf8Json.Length > 0 ? utf8Json : "{}"u8);
+                var reader = new Utf8JsonReader(utf8Json.Length > 0 ? utf8Json : "{}"u8, _jsonReaderOptions);
                 var currentJson = JsonElement.ParseValue(ref reader);
                 var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
 
