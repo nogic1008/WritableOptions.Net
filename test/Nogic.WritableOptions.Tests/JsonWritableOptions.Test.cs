@@ -167,6 +167,30 @@ public sealed class JsonWritableOptionsTest
       }
     }
     """;
+    // lang=json,strict
+    private const string HasCommentJson = $$"""
+    {
+      // Line Comment
+      "{{nameof(SampleOption)}}": {
+          /*
+            Block Comment
+           */
+          "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-10-01T00:00:00",
+          "{{nameof(SampleOption.Interval)}}": 1000,
+          "{{nameof(SampleOption.ConnectionString)}}": "bar"
+      }
+    }
+    """;
+    // lang=json,strict
+    private const string TrailingCommaJson = $$"""
+    {
+      "{{nameof(SampleOption)}}": {
+          "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-10-01T00:00:00",
+          "{{nameof(SampleOption.Interval)}}": 1000,
+          "{{nameof(SampleOption.ConnectionString)}}": "bar",
+      },
+    }
+    """;
 
     /// <summary>
     /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes expected JSON.
@@ -176,6 +200,8 @@ public sealed class JsonWritableOptionsTest
     [DataRow(EmptyJson, DisplayName = ".Update(TOptions) writes expected JSON")]
     [DataRow(ClassEmptyJson, DisplayName = ".Update(TOptions) writes expected JSON")]
     [DataRow(HasConfigJson, DisplayName = ".Update(TOptions) writes expected JSON")]
+    [DataRow(HasCommentJson, DisplayName = ".Update(TOptions) writes expected JSON")]
+    [DataRow(TrailingCommaJson, DisplayName = ".Update(TOptions) writes expected JSON")]
     public void Update_Writes_Json(string fileText)
     {
         // Arrange
@@ -203,6 +229,8 @@ public sealed class JsonWritableOptionsTest
     [DataRow(EmptyJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
     [DataRow(ClassEmptyJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
     [DataRow(HasConfigJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
+    [DataRow(HasCommentJson, DisplayName = ".Update(TOptions) writes expected JSON with BOM")]
+    [DataRow(TrailingCommaJson, DisplayName = ".Update(TOptions) writes expected JSON")]
     public void Update_Writes_Json_WithBOM(string fileText)
     {
         // Arrange
@@ -218,18 +246,7 @@ public sealed class JsonWritableOptionsTest
         sut.Update(_updatedOption);
 
         // Assert
-        /*lang=json,strict*/
-        const string expectedJson =
-        $$"""
-        {
-          "{{nameof(SampleOption)}}": {
-            "{{nameof(SampleOption.LastLaunchedAt)}}": "2020-12-01T00:00:00",
-            "{{nameof(SampleOption.Interval)}}": 5000,
-            "{{nameof(SampleOption.ConnectionString)}}": "foo"
-          }
-        }
-        """;
-        _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(expectedJson));
+        _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(ExpectedJson));
         configStub.Verify(static m => m.Reload(), Times.Never());
     }
 
