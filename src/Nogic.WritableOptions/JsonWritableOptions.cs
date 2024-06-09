@@ -29,6 +29,10 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='configuration']"/>
     /// </summary>
     private readonly IConfiguration? _configuration;
+    /// <summary>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, JsonSerializerOptions, IConfiguration?)" path="/param[@name='serializerOptions']"/>
+    /// </summary>
+    private readonly JsonSerializerOptions? _serializerOptions;
 
     private static readonly JsonWriterOptions _jsonWriterOptions = new()
     {
@@ -77,6 +81,11 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         }
 #endif
     }
+
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)"/>
+    /// <param name="serializerOptions">Serializer options for write JSON</param>
+    public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, JsonSerializerOptions serializerOptions, IConfiguration? configuration = null)
+        : this(jsonFilePath, section, options, configuration) => _serializerOptions = serializerOptions;
 
     /// <inheritdoc/>
     public TOptions Value => _options.CurrentValue;
@@ -129,7 +138,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 
                 writer.WriteStartObject(); // {
                 bool isWritten = false;
-                var serializedOptionsValue = JsonSerializer.SerializeToElement(changedValue);
+                var serializedOptionsValue = JsonSerializer.SerializeToElement(changedValue, _serializerOptions);
                 foreach (var element in currentJson.EnumerateObject())
                 {
                     if (!element.NameEquals(_section.EncodedUtf8Bytes))
