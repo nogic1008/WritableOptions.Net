@@ -19,11 +19,11 @@ env:
 jobs:
   lint:
     name: Lint
-    uses: nogic1008/actions/.github/workflows/dotnet-format.yml@v1.1.0
+    uses: nogic1008/actions/.github/workflows/dotnet-format.yml@v2.0.0
 
   lock-file:
     name: Validate NuGet Lock Files
-    uses: nogic1008/actions/.github/workflows/nuget-lock-files.yml@v1.1.0
+    uses: nogic1008/actions/.github/workflows/nuget-lock-files.yml@v2.0.0
     with:
       update-lock-files: ${{ contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request' }}
       dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
