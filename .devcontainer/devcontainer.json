@@ -9,7 +9,7 @@
   "postCreateCommand": "dotnet restore",
   "remoteUser": "vscode",
   "features": {
-    "ghcr.io/devcontainers/features/dotnet:2.1.1": {
+    "ghcr.io/devcontainers/features/dotnet:2.1.2": {
       "version": "6.0"
     },
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
