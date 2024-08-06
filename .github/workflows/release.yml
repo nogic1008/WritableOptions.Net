@@ -33,7 +33,7 @@ jobs:
 
       - name: Publish to NuGet
         run: dotnet nuget push "nupkgs/*.nupkg" --source ${{ vars.NUGET_API_SOURCE }} --api-key ${{ secrets.NUGET_API_KEY }}
-      - uses: actions/upload-artifact@v4.3.3
+      - uses: actions/upload-artifact@v4.3.6
         with:
           name: packages
           path: nupkgs/
