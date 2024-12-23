@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -247,6 +249,59 @@ public sealed class JsonWritableOptionsTest
         // Assert
         _ = tempFile.ReadAllText(Encoding.UTF8).Should().Be(NormalizeEndLine(ExpectedJson));
         configStub.Verify(static m => m.Reload(), Times.Never());
+    }
+
+    private static readonly SampleOption _hasNullPropertiesOption = new()
+    {
+        LastLaunchedAt = new(2024, 03, 11),
+        Interval = 2500,
+        ConnectionString = null,
+    };
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes <see langword="null"/> properties on default.
+    /// </summary>
+    [TestMethod(".Update(TOptions) writes null properties on default")]
+    public void Update_Writes_Null_On_Default()
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+        var configStub = new Mock<IConfigurationRoot>();
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, configStub.Object);
+
+        // Act
+        sut.Update(_hasNullPropertiesOption);
+
+        // Assert
+        tempFile.ReadAllText().Should().Contain($"\"{nameof(SampleOption.ConnectionString)}\": null");
+    }
+
+    /// <summary>
+    /// <see cref="JsonWritableOptions{TOptions}.Update"/> writes <see langword="null"/> properties when <see cref="JsonSerializerOptions.DefaultIgnoreCondition"/> is <see cref="JsonIgnoreCondition.WhenWritingNull"/>.
+    /// </summary>
+    [TestMethod(".Update(TOptions) does not write null properties when JsonSerializerOptions.DefaultIgnoreCondition is WhenWritingNull")]
+    public void Update_DoesNot_Write_Null_When_Detected_On_SerializerOptions()
+    {
+        // Arrange
+        using var tempFile = new TempFileProvider();
+
+        var optionsStub = new Mock<IOptionsMonitor<SampleOption>>().Object;
+        var configStub = new Mock<IConfigurationRoot>();
+        var options = new JsonSerializerOptions()
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption), optionsStub, options, configStub.Object);
+
+        // Act
+        sut.Update(_hasNullPropertiesOption);
+
+        // Assert
+        tempFile.ReadAllText().Should().NotContain($"\"{nameof(SampleOption.ConnectionString)}\": null");
     }
 
     // lang=json,strict
