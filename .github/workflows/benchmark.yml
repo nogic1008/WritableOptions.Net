@@ -31,6 +31,7 @@ jobs:
         with:
           name: BenchmarkResults
           path: sandbox/Benchmark/BenchmarkDotNet.Artifacts/
+          include-hidden-files: true
 
       - name: Add Job Summaries
         run: |
