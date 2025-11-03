@@ -15,6 +15,9 @@ jobs:
   release:
     name: Publish to NuGet
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK
@@ -31,8 +34,14 @@ jobs:
         env:
           TAG_VERSION: ${{ github.event.release.tag_name }} # v0.0.0-abc
 
+      - name: NuGet login (OIDC)
+        uses: NuGet/login@v1
+        id: nuget_login
+        with:
+          user: ${{ vars.NUGET_USER }}
+
       - name: Publish to NuGet
-        run: dotnet nuget push "nupkgs/*.nupkg" --source ${{ vars.NUGET_API_SOURCE }} --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
       - uses: actions/upload-artifact@v4.6.2
         with:
           name: packages
