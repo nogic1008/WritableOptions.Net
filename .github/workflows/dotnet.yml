@@ -35,8 +35,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13, macos-latest]
-        framework: [net6.0, net8.0]
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - windows-latest
+          - windows-11-arm
+          - macos-latest
+          - macos-15-intel
+        framework:
+          - net6.0
+          - net8.0
         include:
           - os: windows-latest
             framework: net48
@@ -65,6 +73,6 @@ jobs:
         uses: codecov/codecov-action@v5.4.0
         with:
           disable_search: true
-          file: ./test/Nogic.WritableOptions.Tests/bin/Debug/${{ matrix.framework }}/TestResults/coverage.cobertura.xml
+          files: ./test/Nogic.WritableOptions.Tests/bin/Debug/${{ matrix.framework }}/TestResults/coverage.cobertura.xml
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: ${{ runner.os }},${{ matrix.framework }}
