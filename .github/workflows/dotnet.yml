@@ -70,7 +70,7 @@ jobs:
         run: dotnet test -f ${{ matrix.framework }} --no-build -p:TestingPlatformCommandLineArguments="--coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml"
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5.4.0
+        uses: codecov/codecov-action@v5.5.2
         with:
           disable_search: true
           files: ./test/Nogic.WritableOptions.Tests/bin/Debug/${{ matrix.framework }}/TestResults/coverage.cobertura.xml
