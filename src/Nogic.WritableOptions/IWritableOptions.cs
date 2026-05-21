@@ -13,5 +13,5 @@ public interface IWritableOptions<TOptions> : IOptionsSnapshot<TOptions>, IOptio
     /// </summary>
     /// <param name="changedValue">value that you want to update.</param>
     /// <param name="reload">Reload all configuration immediately or not.</param>
-    void Update(TOptions changedValue, bool reload = false);
+    public void Update(TOptions changedValue, bool reload = false);
 }
