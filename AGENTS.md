@@ -10,7 +10,7 @@ This file defines guidance for coding agents and contributors working in this re
 
 ## Repository Overview
 
-- Solution: `Nogic.WritableOptions.sln`
+- Solution: `Nogic.WritableOptions.slnx`
 - Main library: `src/Nogic.WritableOptions`
 - Tests: `test/Nogic.WritableOptions.Tests`
 - Sandboxes/examples: `sandbox/*`

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/Nogic.WritableOptions/Nogic.WritableOptions.csproj" />
+  <Project Path="test/Nogic.WritableOptions.Tests/Nogic.WritableOptions.Tests.csproj" />
+  <Project Path="sandbox/Benchmark/Benchmark.csproj" />
+</Solution>
