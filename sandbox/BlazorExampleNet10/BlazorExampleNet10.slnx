@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BlazorExampleNet10.csproj" />
+  <Project Path="../../src/Nogic.WritableOptions/Nogic.WritableOptions.csproj" />
+</Solution>

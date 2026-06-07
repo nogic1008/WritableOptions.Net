@@ -28,9 +28,7 @@ public static class ServiceCollectionExtension
         => services.Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
-                var environment = provider.GetService<IHostEnvironment>();
-                string jsonFilePath = environment?.ContentRootFileProvider.GetFileInfo(file).PhysicalPath
-                    ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+                string jsonFilePath = GetJsonFilePath(provider.GetService<IHostEnvironment>(), file);
 
                 var configuration = provider.GetService<IConfiguration>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
@@ -47,9 +45,7 @@ public static class ServiceCollectionExtension
         => services.Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
-                var environment = provider.GetService<IHostEnvironment>();
-                string jsonFilePath = environment?.ContentRootFileProvider.GetFileInfo(file).PhysicalPath
-                    ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+                string jsonFilePath = GetJsonFilePath(provider.GetService<IHostEnvironment>(), file);
 
                 var configuration = provider.GetService<IConfiguration>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
@@ -66,14 +62,26 @@ public static class ServiceCollectionExtension
         => services.Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
-                var environment = provider.GetService<IHostEnvironment>();
-                string jsonFilePath = environment?.ContentRootFileProvider.GetFileInfo(file).PhysicalPath
-                    ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+                string jsonFilePath = GetJsonFilePath(provider.GetService<IHostEnvironment>(), file);
 
                 var configuration = provider.GetService<IConfiguration>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
                 return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, serializerOptionsGenerator(), configuration);
             });
+
+    private static string GetJsonFilePath(IHostEnvironment? environment, string fileName)
+    {
+        try
+        {
+            return environment?.ContentRootFileProvider.GetFileInfo(fileName).PhysicalPath
+                ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+        }
+        catch (NotImplementedException)
+        {
+            // Fallback for environments that do not implement IHostEnvironment (e.g. MAUI)
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+        }
+    }
 
     /// <summary>
     /// Registers a writable configuration instance which <typeparamref name="TOptions"/> will bind against.
