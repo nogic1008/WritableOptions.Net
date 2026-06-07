@@ -16,7 +16,9 @@ jobs:
     name: Publish to NuGet
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
+      contents: read
+      id-token: write # to use OIDC
+
     steps:
       - uses: actions/checkout@v6.0.3
       - name: Setup .NET SDK
@@ -28,6 +30,12 @@ jobs:
           cache: true
           cache-dependency-path: Directory.Packages.props
 
+      - name: Login to NuGet (with OIDC)
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 #v1.2.0
+        id: nuget_login
+        with:
+          user: ${{ vars.NUGET_USER_NAME }}
+
       - name: Restore
         run: dotnet restore
       - name: Release Build & Pack
@@ -35,11 +43,10 @@ jobs:
         env:
           TAG_VERSION: ${{ github.event.release.tag_name }} # v0.0.0-abc
 
-      - name: NuGet login (OIDC)
-        uses: NuGet/login@v1
-        id: nuget_login
+      - name: Generate Attestation for packages
+        uses: actions/attest@v4.1.0
         with:
-          user: ${{ vars.NUGET_USER }}
+          subject-path: "nupkgs/*.nupkg"
 
       - name: Publish to NuGet
         run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
