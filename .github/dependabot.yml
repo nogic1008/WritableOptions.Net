@@ -3,28 +3,57 @@
 
 version: 2
 updates:
-  # NuGet (/*.csproj)
+  # NuGet (/Directory.Packages.props)
   - package-ecosystem: nuget
-    directory: '/'
+    directory: /
     schedule:
       interval: daily
-      time: '08:00'
+      time: 08:00
       timezone: Japan
+    cooldown:
+      default-days: 5
+      semver-major-days: 10
+      semver-minor-days: 5
+      semver-patch-days: 3
+    groups:
+      test-tools:
+        patterns:
+          - Polyfill
+          - TUnit
+          - TUnit.*
+      benchmark:
+        patterns:
+          - Awesome.Net.WritableOptions
+          - BenchmarkDotNet
+          - Moq
+          - Nogic.WritableOptions
+      examples:
+        patterns:
+          - ConsoleAppFramework
+          - Microsoft.Extensions.Logging.Debug
+    ignore:
+      # Ignore major updates for Microsoft.* and System.* to avoid potential breaking changes
+      - dependency-name: Microsoft.*
+        update-types:
+          - version-update:semver-major
+      - dependency-name: System.*
+        update-types:
+          - version-update:semver-major
     labels:
       - dependencies
     milestone: 7
     commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
+      prefix: chore(deps)
 
   # GitHub Actions (/.github/workflows/*.yml)
   - package-ecosystem: github-actions
-    directory: '/'
+    directory: /
     schedule:
       interval: daily
-      time: '08:00'
+      time: 08:00
       timezone: Japan
+    cooldown:
+      default-days: 5
     labels:
       - dependencies
     milestone: 7
@@ -33,11 +62,13 @@ updates:
 
   # Development Containers (/.devcontainer/devcontainer.json)
   - package-ecosystem: devcontainers
-    directory: '/'
+    directory: /
     schedule:
       interval: daily
-      time: '08:00'
+      time: 08:00
       timezone: Japan
+    cooldown:
+      default-days: 5
     labels:
       - dependencies
     milestone: 7
