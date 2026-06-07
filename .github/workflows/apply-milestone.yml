@@ -1,0 +1,14 @@
+name: Apply milestone to PRs
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  apply-milestone:
+    name: Apply milestone
+    if: github.event.pull_request.milestone == null
+    uses: ddradar/.github/.github/workflows/apply-milestone.yml@main

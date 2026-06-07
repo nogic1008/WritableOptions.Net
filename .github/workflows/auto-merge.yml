@@ -1,0 +1,16 @@
+name: Auto merge PRs on approval
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+
+jobs:
+  auto-merge:
+    name: Auto merge
+    if: github.event.review.state == 'approved'
+    uses: ddradar/.github/.github/workflows/auto-merge.yml@main
+    secrets:
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
