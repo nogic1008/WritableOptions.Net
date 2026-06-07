@@ -16,7 +16,9 @@ jobs:
     name: Publish to NuGet
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
+      contents: read
+      id-token: write # to use OIDC
+
     steps:
       - uses: actions/checkout@v6.0.3
       - name: Setup .NET SDK

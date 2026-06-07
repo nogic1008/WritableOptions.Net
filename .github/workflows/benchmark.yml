@@ -12,6 +12,9 @@ jobs:
   benchmark:
     name: Benchmark
     runs-on: windows-latest
+    permissions:
+      contents: read
+
     steps:
       - uses: actions/checkout@v6.0.3
       - name: Setup .NET SDK
