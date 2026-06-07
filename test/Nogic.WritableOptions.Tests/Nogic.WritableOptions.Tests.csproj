@@ -3,15 +3,16 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net6.0;net48</TargetFrameworks>
     <NoWarn>CA1707</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <EnableTUnitPolyfills>false</EnableTUnitPolyfills>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
-  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+    <PackageReference Include="Polyfill" Version="10.8.0" PrivateAssets="all" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polyfill" Version="10.8.0" PrivateAssets="all" />
     <PackageReference Include="TUnit" Version="1.45.29" />
     <PackageReference Include="TUnit.Mocks" Version="1.45.29" />
     <PackageReference Include="TUnit.Mocks.Assertions" Version="1.45.29" />

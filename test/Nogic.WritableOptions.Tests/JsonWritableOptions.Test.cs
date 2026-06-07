@@ -22,13 +22,6 @@ public sealed class JsonWritableOptionsTest
     };
 
     /// <summary>
-    /// Normalize EndLine(LF, CR+LF) to <see cref="Environment.NewLine"/>.
-    /// </summary>
-    /// <param name="source">Source text</param>
-    private static string NormalizeEndLine(string source)
-        => source.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
-
-    /// <summary>
     /// Constructor throws <see cref="ArgumentNullException"/> if param is <see langword="null"/>.
     /// </summary>
     /// <param name="jsonFilePath"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='jsonFilePath']" /></param>
@@ -222,7 +215,7 @@ public sealed class JsonWritableOptionsTest
         sut.Update(_updatedOption);
 
         // Assert
-        await Assert.That(tempFile.ReadAllText().ReplaceLineEndings("\n")).EqualTo(ExpectedJson);
+        await Assert.That(tempFile.ReadAllText().ReplaceLineEndings("\n")).EqualTo(ExpectedJson.ReplaceLineEndings("\n"));
         await Assert.That(configStub.Reload()).WasNeverCalled();
     }
 
@@ -252,7 +245,7 @@ public sealed class JsonWritableOptionsTest
         sut.Update(_updatedOption);
 
         // Assert
-        await Assert.That(tempFile.ReadAllText(Encoding.UTF8).ReplaceLineEndings("\n")).EqualTo(ExpectedJson);
+        await Assert.That(tempFile.ReadAllText(Encoding.UTF8).ReplaceLineEndings("\n")).EqualTo(ExpectedJson.ReplaceLineEndings("\n"));
         await Assert.That(configStub.Reload()).WasNeverCalled();
     }
 
@@ -382,7 +375,7 @@ public sealed class JsonWritableOptionsTest
         sut.Update(_updatedOption, true);
 
         // Assert
-        await Assert.That(tempFile.ReadAllText().ReplaceLineEndings("\n")).EqualTo(ExpectedJson);
+        await Assert.That(tempFile.ReadAllText().ReplaceLineEndings("\n")).EqualTo(ExpectedJson.ReplaceLineEndings("\n"));
         await Assert.That(configStub.Reload()).WasCalled(Times.Once);
     }
 
@@ -407,7 +400,7 @@ public sealed class JsonWritableOptionsTest
 
         // Assert
         await Assert.That(new FileInfo(tempFile.Path)).Exists();
-        await Assert.That(tempFile.ReadAllText().ReplaceLineEndings("\n")).EqualTo(ExpectedJson);
+        await Assert.That(tempFile.ReadAllText().ReplaceLineEndings("\n")).EqualTo(ExpectedJson.ReplaceLineEndings("\n"));
     }
 
     /// <summary>Provides temporary file for testing.</summary>
