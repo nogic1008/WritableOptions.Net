@@ -7,15 +7,15 @@
     <EnableTUnitPolyfills>false</EnableTUnitPolyfills>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
-    <PackageReference Include="Polyfill" Version="10.8.0" PrivateAssets="all" />
+  <ItemGroup>
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="TUnit.Mocks" />
+    <PackageReference Include="TUnit.Mocks.Assertions" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="TUnit" Version="1.45.29" />
-    <PackageReference Include="TUnit.Mocks" Version="1.45.29" />
-    <PackageReference Include="TUnit.Mocks.Assertions" Version="1.45.29" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" />
+    <PackageReference Include="Polyfill" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

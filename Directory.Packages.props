@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <NoWarn>$(NoWarn);NU1507</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Awesome.Net.WritableOptions" Version="3.0.0" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+    <PackageVersion Include="ConsoleAppFramework" Version="4.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+    <PackageVersion Include="Moq" Version="4.20.70" />
+    <PackageVersion Include="Nogic.WritableOptions" Version="3.0.0" />
+    <PackageVersion Include="Polyfill" Version="10.8.0" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.8" />
+    <PackageVersion Include="TUnit.Mocks.Assertions" Version="1.45.29" />
+    <PackageVersion Include="TUnit.Mocks" Version="1.45.29" />
+    <PackageVersion Include="TUnit" Version="1.45.29" />
+  </ItemGroup>
+</Project>
