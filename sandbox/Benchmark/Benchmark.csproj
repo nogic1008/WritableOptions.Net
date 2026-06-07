@@ -8,10 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Awesome.Net.WritableOptions" Version="3.0.0" />
-    <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
-    <PackageReference Include="Moq" Version="4.20.70" />
-    <PackageReference Include="Nogic.WritableOptions" Version="3.0.0" Aliases="release" />
+    <PackageReference Include="Awesome.Net.WritableOptions" />
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="Nogic.WritableOptions" Aliases="release" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" />
   </ItemGroup>
 
   <ItemGroup>
