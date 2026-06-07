@@ -32,7 +32,7 @@ public sealed class ServiceCollectionExtensionTest
 
         await Assert.That(option).IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEquivalentTo(otherOption);
+            .And.IsNotEqualTo(otherOption);
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public sealed class ServiceCollectionExtensionTest
 
         await Assert.That(option).IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEquivalentTo(otherOption);
+            .And.IsNotEqualTo(otherOption);
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public sealed class ServiceCollectionExtensionTest
 
         await Assert.That(option).IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEquivalentTo(otherOption);
+            .And.IsNotEqualTo(otherOption);
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public sealed class ServiceCollectionExtensionTest
 
         await Assert.That(option).IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEquivalentTo(otherOption);
+            .And.IsNotEqualTo(otherOption);
     }
 
     /// <summary>
@@ -138,7 +138,7 @@ public sealed class ServiceCollectionExtensionTest
 
         await Assert.That(option).IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEquivalentTo(otherOption);
+            .And.IsNotEqualTo(otherOption);
     }
 
     /// <summary>
@@ -164,6 +164,6 @@ public sealed class ServiceCollectionExtensionTest
 
         await Assert.That(option).IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEquivalentTo(otherOption);
+            .And.IsNotEqualTo(otherOption);
     }
 }

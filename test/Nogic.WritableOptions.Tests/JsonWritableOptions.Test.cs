@@ -100,7 +100,7 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         var sampleOption = GenerateOption();
         var optionsMock = IOptionsMonitor<SampleOption>.Mock();
-        _ = optionsMock.CurrentValue.Returns(sampleOption);
+        _ = optionsMock.Get(Any()).Returns(sampleOption);
 
         var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock);
 
@@ -391,7 +391,7 @@ public sealed class JsonWritableOptionsTest
     /// </summary>
     [Test]
     [DisplayName(".Update(TOptions) creates new JSON file if not exists")]
-    public async Task Update_Creates_File()
+    public async ValueTask Update_Creates_File()
     {
         // Arrange
         using var tempFile = new TempFileProvider();
