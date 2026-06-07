@@ -1,5 +1,5 @@
 {
-  "name": ".NET 10 + 8 + 6 with Mono",
+  "name": ".NET 10.0 + 8.0 with Mono",
   "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
   "customizations": {
     "vscode": {
@@ -13,8 +13,7 @@
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/dotnet:2.5.0": {
-      "version": "8.0",
-      "additionalVersions": "6.0"
+      "version": "8.0"
     },
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "mono-complete"

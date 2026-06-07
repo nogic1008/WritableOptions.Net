@@ -25,7 +25,6 @@ jobs:
           dotnet-version: |
             10.x
             8.x
-            6.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
 

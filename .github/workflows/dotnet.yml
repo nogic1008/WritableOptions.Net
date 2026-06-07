@@ -29,7 +29,6 @@ jobs:
       dotnet-version: |
         10.x
         8.x
-        6.x
       lock-file-path: "**/packages.lock.json"
     secrets:
       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -46,14 +45,11 @@ jobs:
           - macos-latest
           - macos-15-intel
         framework:
-          - net6.0
+          - net10.0
           - net8.0
         include:
           - os: windows-latest
             framework: net48
-        exclude:
-          - os: macos-latest
-            framework: net6.0
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}
     steps:
@@ -64,7 +60,6 @@ jobs:
           dotnet-version: |
             10.x
             8.x
-            6.x
           cache: true
           cache-dependency-path: "**/packages.lock.json"
 

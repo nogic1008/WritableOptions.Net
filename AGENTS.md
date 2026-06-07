@@ -14,7 +14,7 @@ This file defines guidance for coding agents and contributors working in this re
 - Main library: `src/Nogic.WritableOptions`
 - Tests: `test/Nogic.WritableOptions.Tests`
 - Sandboxes/examples: `sandbox/*`
-- Target SDKs in this repo include .NET 8 and .NET 6.
+- Target SDKs in this repo include .NET 10 and .NET 8.
 
 ## Source Of Truth For Rules
 
