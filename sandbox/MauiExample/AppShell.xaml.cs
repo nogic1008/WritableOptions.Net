@@ -1,4 +1,4 @@
-﻿namespace MauiExampleNet10;
+﻿namespace MauiExample;
 
 public partial class AppShell : Shell
 {
