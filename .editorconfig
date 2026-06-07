@@ -21,7 +21,7 @@ trim_trailing_whitespace = false
 end_of_line = crlf
 
 # .NET Source files
-[*.{cs,csx,cake,vb}]
+[*.{cs,csx,cake,vb,razor}]
 indent_size = 4
 
 dotnet_style_qualification_for_field = false:warning

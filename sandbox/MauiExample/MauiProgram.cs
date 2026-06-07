@@ -1,4 +1,5 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Nogic.WritableOptions;
 
 namespace MauiExample;
@@ -12,7 +13,11 @@ public static class MauiProgram
         // MAUI
         builder
             .UseMauiApp<App>()
-            .ConfigureFonts(fonts => fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"));
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
 
         // Configuration
         builder.Configuration.AddJsonFile("appsettings.json", true, true);
@@ -21,6 +26,10 @@ public static class MauiProgram
         builder.Services
             .ConfigureWritable<AppOption>(builder.Configuration.GetSection(nameof(AppOption)))
             .AddSingleton<MainPage>();
+
+#if DEBUG
+        builder.Logging.AddDebug();
+#endif
 
         return builder.Build();
     }

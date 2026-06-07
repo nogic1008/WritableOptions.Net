@@ -8,11 +8,11 @@ namespace Benchmark;
 public class BenchmarkConfig : ManualConfig
 {
     public BenchmarkConfig()
-        => AddJob(Job.Default.WithRuntime(CoreRuntime.Core80))
+        => AddJob(Job.Default.WithRuntime(CoreRuntime.Core10_0))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
-            .AddJob(Job.Default.WithRuntime(CoreRuntime.Core70))
+            .AddJob(Job.Default.WithRuntime(CoreRuntime.Core90))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
-            .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60))
+            .AddJob(Job.Default.WithRuntime(CoreRuntime.Core80))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
             .AddJob(Job.Default.WithRuntime(ClrRuntime.Net48))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)

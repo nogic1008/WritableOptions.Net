@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ConsoleAppExample.csproj" />
+  <Project Path="../../src/Nogic.WritableOptions/Nogic.WritableOptions.csproj" />
+</Solution>

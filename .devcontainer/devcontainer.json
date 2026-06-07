@@ -1,17 +1,19 @@
 {
-  "name": ".NET 9 + 8 + 6 with Mono",
-  "image": "mcr.microsoft.com/devcontainers/dotnet:9.0",
+  "name": ".NET 10.0 + 8.0 with Mono",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
   "customizations": {
     "vscode": {
-      "extensions": ["EditorConfig.EditorConfig"]
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "ms-dotnettools.csdevkit"
+      ]
     }
   },
   "postCreateCommand": "dotnet restore",
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/dotnet:2.5.0": {
-      "version": "6.0",
-      "additionalVersions": "8.0"
+      "version": "8.0"
     },
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "mono-complete"

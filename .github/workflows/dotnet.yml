@@ -26,7 +26,9 @@ jobs:
     uses: nogic1008/actions/.github/workflows/nuget-lock-files.yml@v2.0.0
     with:
       update-lock-files: ${{ contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request' }}
-      dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+      dotnet-version: |
+        10.x
+        8.x
       lock-file-path: "**/packages.lock.json"
     secrets:
       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -43,14 +45,11 @@ jobs:
           - macos-latest
           - macos-15-intel
         framework:
-          - net6.0
+          - net10.0
           - net8.0
         include:
           - os: windows-latest
             framework: net48
-        exclude:
-          - os: macos-latest
-            framework: net6.0
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}
     steps:
@@ -58,7 +57,9 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5.3.0
         with:
-          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          dotnet-version: |
+            10.x
+            8.x
           cache: true
           cache-dependency-path: "**/packages.lock.json"
 

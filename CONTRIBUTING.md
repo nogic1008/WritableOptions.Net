@@ -11,8 +11,7 @@ Thank you for your interest in this project. This project is open source, and an
 
 ### Requirements
 
-- .NET SDK 9.0.200 or later (to support `.slnx` format)
-- .NET 8.0 and 6.0 SDK
+- .NET 10.0 and 8.0 SDK
 
 ### Commands
 

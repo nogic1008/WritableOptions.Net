@@ -18,7 +18,7 @@ You can also run this benchmark on [GitHub Actions](https://github.com/nogic1008
 ### Command
 
 ```console
-> dotnet run -c Release -f net6.0
+> dotnet run -c Release -f net10.0
 ```
 
 ## Test Code
