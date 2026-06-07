@@ -34,6 +34,8 @@ jobs:
         run: dotnet format --verify-no-changes --verbosity detailed
 
   test:
+    name: Debug Build & Test
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -50,8 +52,10 @@ jobs:
         include:
           - os: windows-latest
             framework: net48
-    name: Debug Build & Test
-    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      id-token: write # to use OIDC
+
     steps:
       - uses: actions/checkout@v6.0.3
       - name: Setup .NET SDK
@@ -68,12 +72,13 @@ jobs:
       - name: Debug Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test -f ${{ matrix.framework }} --no-build -p:TestingPlatformCommandLineArguments="--coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml"
+        run: dotnet test -f ${{ matrix.framework }} --no-build --coverage --coverage-output-format cobertura --coverage-output cobertura.xml --results-directory ./TestResults/
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v6.0.1
+        if: ${{ !cancelled() }}
         with:
+          use_oidc: true
           disable_search: true
-          files: ./test/Nogic.WritableOptions.Tests/bin/Debug/${{ matrix.framework }}/TestResults/coverage.cobertura.xml
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: ${{ runner.os }},${{ matrix.framework }}
+          files: ./TestResults/cobertura.xml
+          flags: ${{ runner.os }},${{ runner.arch }},${{ matrix.framework }}
