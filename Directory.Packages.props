@@ -17,7 +17,7 @@
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="Nogic.WritableOptions" Version="3.0.0" />
     <PackageVersion Include="Polyfill" Version="10.8.0" />
-    <PackageVersion Include="System.Text.Json" Version="10.0.8" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.9" />
     <PackageVersion Include="TUnit" Version="1.50.0" />
     <PackageVersion Include="TUnit.Mocks" Version="1.50.0" />
     <PackageVersion Include="TUnit.Mocks.Assertions" Version="1.50.0" />
