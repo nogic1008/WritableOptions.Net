@@ -30,12 +30,16 @@ public class WritableOptionsBenchmark
     private string _jsonFilePath;
 
     [GlobalSetup]
-    public void GlobalSetup() => _option = new()
-    {
-        LastLaunchedAt = DateTime.Now,
-        StringSettings = Enumerable.Range(1, 100).Select(static (_) => Guid.NewGuid().ToString()).ToArray(),
-        IntSettings = Enumerable.Range(1, 100).ToArray()
-    };
+    public void GlobalSetup() =>
+        _option = new()
+        {
+            LastLaunchedAt = DateTime.Now,
+            StringSettings = Enumerable
+                .Range(1, 100)
+                .Select(static (_) => Guid.NewGuid().ToString())
+                .ToArray(),
+            IntSettings = Enumerable.Range(1, 100).ToArray(),
+        };
 
     [IterationSetup]
     public void ItarationSetup()
@@ -48,7 +52,9 @@ public class WritableOptionsBenchmark
         _devWritableOptions = new(_jsonFilePath, nameof(SampleOption), _options, null);
     }
 
-    [Benchmark(Description = $"{nameof(Awesome)}.{nameof(Awesome.Net)}.{nameof(Awesome.Net.WritableOptions)}")]
+    [Benchmark(
+        Description = $"{nameof(Awesome)}.{nameof(Awesome.Net)}.{nameof(Awesome.Net.WritableOptions)}"
+    )]
     public void AwesomeWritableOptions_Update()
     {
         for (int i = 0; i < UpdateLoopCount; i++)
@@ -62,7 +68,10 @@ public class WritableOptionsBenchmark
         }
     }
 
-    [Benchmark(Baseline = true, Description = $"(NuGet){nameof(release.Nogic)}.{nameof(release.Nogic.WritableOptions)}")]
+    [Benchmark(
+        Baseline = true,
+        Description = $"(NuGet){nameof(release.Nogic)}.{nameof(release.Nogic.WritableOptions)}"
+    )]
     public void ReleaseWritableOptions_Update()
     {
         for (int i = 0; i < UpdateLoopCount; i++)

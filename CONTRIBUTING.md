@@ -16,11 +16,16 @@ Thank you for your interest in this project. This project is open source, and an
 ### Commands
 
 ```bash
+# Restore .NET tools (necessary for use csharpier)
+dotnet tool restore
+
 # Restore dependencies (does not require you to run `build` or `test` command)
 dotnet restore
 
 # Check code style and format
-dotnet format
+dotnet format style
+dotnet format analyzers
+dotnet csharpier format .
 
 # Build
 dotnet build
