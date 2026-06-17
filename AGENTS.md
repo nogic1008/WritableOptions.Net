@@ -32,6 +32,7 @@ Use these commands from repository root:
 
 ```bash
 dotnet restore
+dotnet csharpier format .
 dotnet format
 dotnet build
 dotnet test
@@ -44,7 +45,11 @@ Agent expectations:
 3. Do not include unrelated refactors.
 4. Keep commits logically scoped when asked to prepare commit-ready work.
 5. After code changes, verify the editor shows no new warnings or errors caused by the change.
-6. After code changes, run both `dotnet format` and `dotnet test`.
+6. After code changes, run:
+    - `dotnet format style`
+    - `dotnet format analyzers`
+    - `dotnet csharpier format .`
+    - `dotnet test`
 
 ## Coding Rules
 
@@ -58,7 +63,10 @@ Agent expectations:
 
 - For library changes, run relevant tests in `test/Nogic.WritableOptions.Tests`.
 - For broader or cross-cutting changes, run full `dotnet test`.
-- If a change touches formatting/style-sensitive areas, run `dotnet format`.
+- If a change touches formatting/style-sensitive areas, run:
+  - `dotnet format style`
+  - `dotnet format analyzers`
+  - `dotnet csharpier format .`
 
 ## Pull Request Expectations
 
