@@ -20,22 +20,22 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions>
     private readonly string _jsonFilePath;
 
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='section']"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IConfiguration?)" path="/param[@name='section']"/>
     /// </summary>
     private readonly JsonEncodedText _section;
 
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='options']"/>
+    /// JSON file-backed internal options monitor.
     /// </summary>
-    private readonly IOptionsMonitor<TOptions> _options;
+    private readonly JsonFileOptionsMonitor<TOptions> _options;
 
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='configuration']"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IConfiguration?)" path="/param[@name='configuration']"/>
     /// </summary>
     private readonly IConfiguration? _configuration;
 
     /// <summary>
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, JsonSerializerOptions, IConfiguration?)" path="/param[@name='serializerOptions']"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, JsonSerializerOptions, IConfiguration?)" path="/param[@name='serializerOptions']"/>
     /// </summary>
     private readonly JsonSerializerOptions? _serializerOptions;
 
@@ -51,36 +51,38 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions>
         AllowTrailingCommas = true,
     };
 
+    private static readonly JsonDocumentOptions _jsonDocumentOptions = new()
+    {
+        CommentHandling = JsonCommentHandling.Skip,
+        AllowTrailingCommas = true,
+    };
+
     /// <summary>
     /// Initializes a new instance of the JsonWritableOptions class.
     /// </summary>
     /// <param name="jsonFilePath">JSON file path to read/write settings.</param>
     /// <param name="section">JSON property name to store settings.</param>
-    /// <param name="options">Instance to read <typeparamref name="TOptions"/>. Should be referenced <paramref name="jsonFilePath"/>.</param>
     /// <param name="configuration">Configuration root for reload</param>
     /// <exception cref="ArgumentNullException">
-    /// Throws if <paramref name="jsonFilePath"/>, <paramref name="section"/> or <paramref name="options"/> is <see langword="null"/>.
+    /// Throws if <paramref name="jsonFilePath"/> or <paramref name="section"/> is <see langword="null"/>.
     /// </exception>
     public JsonWritableOptions(
         string jsonFilePath,
         string section,
-        IOptionsMonitor<TOptions> options,
         IConfiguration? configuration = null
     )
     {
 #if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(jsonFilePath);
         ArgumentNullException.ThrowIfNull(section);
-        ArgumentNullException.ThrowIfNull(options);
 #else
         ThrowIfNull(jsonFilePath, nameof(jsonFilePath));
         ThrowIfNull(section, nameof(section));
-        ThrowIfNull(options, nameof(options));
 #endif
 
         _jsonFilePath = jsonFilePath;
         _section = JsonEncodedText.Encode(section);
-        _options = options;
+        _options = new JsonFileOptionsMonitor<TOptions>(_jsonFilePath, section, _serializerOptions);
         _configuration = configuration;
 #if !NET6_0_OR_GREATER
         // Port of ArgumentNullException.ThrowIfNull
@@ -92,17 +94,19 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions>
 #endif
     }
 
-    /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)"/>
+    /// <inheritdoc cref="JsonWritableOptions(string, string, IConfiguration?)"/>
     /// <param name="serializerOptions">Serializer options for write JSON</param>
     public JsonWritableOptions(
         string jsonFilePath,
         string section,
-        IOptionsMonitor<TOptions> options,
         JsonSerializerOptions serializerOptions,
         IConfiguration? configuration = null
     )
-        : this(jsonFilePath, section, options, configuration) =>
+        : this(jsonFilePath, section, configuration)
+    {
         _serializerOptions = serializerOptions;
+        _options = new JsonFileOptionsMonitor<TOptions>(_jsonFilePath, section, _serializerOptions);
+    }
 
     /// <inheritdoc/>
     public TOptions Value => _options.CurrentValue;
@@ -195,6 +199,8 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions>
                 ArrayPool<byte>.Shared.Return(buffer);
             }
         }
+
+        _options.NotifyChanged(changedValue);
 
         if (reload && _configuration is IConfigurationRoot configurationRoot)
             configurationRoot.Reload();

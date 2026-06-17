@@ -8,13 +8,13 @@ namespace Benchmark;
 public class BenchmarkConfig : ManualConfig
 {
     public BenchmarkConfig() =>
-        AddJob(Job.Default.WithRuntime(CoreRuntime.Core10_0))
+        AddJob(Job.ShortRun.WithRuntime(CoreRuntime.Core10_0))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
-            .AddJob(Job.Default.WithRuntime(CoreRuntime.Core90))
+            .AddJob(Job.ShortRun.WithRuntime(CoreRuntime.Core90))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
-            .AddJob(Job.Default.WithRuntime(CoreRuntime.Core80))
+            .AddJob(Job.ShortRun.WithRuntime(CoreRuntime.Core80))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
-            .AddJob(Job.Default.WithRuntime(ClrRuntime.Net48))
+            .AddJob(Job.ShortRun.WithRuntime(ClrRuntime.Net48))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
             .AddDiagnoser(MemoryDiagnoser.Default);
 }

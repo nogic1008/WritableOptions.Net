@@ -49,7 +49,7 @@ public class WritableOptionsBenchmark
         _options = new Mock<IOptionsMonitor<SampleOption>>().Object;
         _awesomeWritableOptions = new(_jsonFilePath, nameof(SampleOption), _options, null);
         _releaseWritableOptions = new(_jsonFilePath, nameof(SampleOption), _options, null);
-        _devWritableOptions = new(_jsonFilePath, nameof(SampleOption), _options, null);
+        _devWritableOptions = new(_jsonFilePath, nameof(SampleOption), null);
     }
 
     [Benchmark(

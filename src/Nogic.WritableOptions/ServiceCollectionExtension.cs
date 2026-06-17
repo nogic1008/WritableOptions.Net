@@ -2,7 +2,6 @@ using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace Nogic.WritableOptions;
 
@@ -37,13 +36,7 @@ public static class ServiceCollectionExtension
                 );
 
                 var configuration = provider.GetService<IConfiguration>();
-                var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(
-                    jsonFilePath,
-                    section.Key,
-                    options,
-                    configuration
-                );
+                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, configuration);
             });
 
     /// <inheritdoc cref="ConfigureWritable{TOptions}(IServiceCollection, IConfigurationSection, string)"/>
@@ -65,11 +58,9 @@ public static class ServiceCollectionExtension
                 );
 
                 var configuration = provider.GetService<IConfiguration>();
-                var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
                 return new JsonWritableOptions<TOptions>(
                     jsonFilePath,
                     section.Key,
-                    options,
                     serializerOptions,
                     configuration
                 );
@@ -94,11 +85,9 @@ public static class ServiceCollectionExtension
                 );
 
                 var configuration = provider.GetService<IConfiguration>();
-                var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
                 return new JsonWritableOptions<TOptions>(
                     jsonFilePath,
                     section.Key,
-                    options,
                     serializerOptionsGenerator(),
                     configuration
                 );
@@ -139,13 +128,7 @@ public static class ServiceCollectionExtension
             {
                 string jsonFilePath = Path.Combine(directoryPath, file);
                 var configuration = provider.GetService<IConfigurationRoot>();
-                var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(
-                    jsonFilePath,
-                    section.Key,
-                    options,
-                    configuration
-                );
+                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, configuration);
             });
 
     /// <inheritdoc cref="ConfigureWritableWithExplicitPath{TOptions}(IServiceCollection, IConfigurationSection, string, string)"/>
@@ -164,11 +147,9 @@ public static class ServiceCollectionExtension
             {
                 string jsonFilePath = Path.Combine(directoryPath, file);
                 var configuration = provider.GetService<IConfigurationRoot>();
-                var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
                 return new JsonWritableOptions<TOptions>(
                     jsonFilePath,
                     section.Key,
-                    options,
                     serializerOptions,
                     configuration
                 );
@@ -190,11 +171,9 @@ public static class ServiceCollectionExtension
             {
                 string jsonFilePath = Path.Combine(directoryPath, file);
                 var configuration = provider.GetService<IConfigurationRoot>();
-                var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
                 return new JsonWritableOptions<TOptions>(
                     jsonFilePath,
                     section.Key,
-                    options,
                     serializerOptionsGenerator(),
                     configuration
                 );

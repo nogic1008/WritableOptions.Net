@@ -11,142 +11,121 @@ namespace Nogic.WritableOptions.Tests;
 /// </summary>
 public sealed class JsonWritableOptionsTest
 {
-    /// <summary>Used in <see cref="GenerateOption"/></summary>
-    private static readonly Random _random = new();
-
-    /// <summary>Generates <see cref="SampleOption"/> randomly for test.</summary>
-    private static SampleOption GenerateOption() =>
-        new()
-        {
-            LastLaunchedAt = DateTime.Now,
-            Interval = _random.Next(),
-            ConnectionString = new Guid().ToString(),
-        };
-
     /// <summary>
     /// Constructor throws <see cref="ArgumentNullException"/> if param is <see langword="null"/>.
     /// </summary>
     /// <param name="jsonFilePath"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='jsonFilePath']" /></param>
     /// <param name="section"><inheritdoc cref="JsonWritableOptions{TOptions}.JsonWritableOptions" path="/param[@name='section']" /></param>
-    /// <param name="options">set options as <see langword="null"/> or not</param>
     /// <param name="paramName">Expected <see cref="ArgumentNullException"/> param name</param>
     [Test]
     [DisplayName(
-        $"{nameof(JsonWritableOptions<>)}.ctor($jsonFilePath, $section, $options) throws {nameof(ArgumentNullException)}($paramName)"
+        $"{nameof(JsonWritableOptions<>)}.ctor($jsonFilePath, $section) throws {nameof(ArgumentNullException)}($paramName)"
     )]
-    [Arguments(null, "", "not null", "jsonFilePath")]
-    [Arguments("", null, "not null", "section")]
-    [Arguments("", "", null, "options")]
+    [Arguments(null, "", "jsonFilePath")]
+    [Arguments("", null, "section")]
     public async Task Constructor_Throws_ArgumentNullException(
         string? jsonFilePath,
         string? section,
-        string? options,
         string paramName
-    )
-    {
-        // Arrange
-        var optionsMonitor = options is null ? null : IOptionsMonitor<SampleOption>.Mock();
-
+    ) =>
         // Act - Assert
         await Assert
-            .That(() =>
-                new JsonWritableOptions<SampleOption>(jsonFilePath!, section!, optionsMonitor!)
-            )
+            .That(() => new JsonWritableOptions<SampleOption>(jsonFilePath!, section!))
             .Throws<ArgumentNullException>()
             .WithParameterName(paramName);
-    }
 
-    #region IOptionsMonitor<TOptions>
+    #region Internal Options Monitor
     /// <summary>
-    /// <see cref="JsonWritableOptions{TOptions}.Value"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
+    /// <see cref="JsonWritableOptions{TOptions}.Value"/> returns TOptions from target JSON file section.
     /// </summary>
     [Test]
-    [DisplayName(
-        $".{nameof(JsonWritableOptions<>.Value)} returns TOptions via {nameof(IOptionsMonitor<>)}<TOptions>"
-    )]
+    [DisplayName($".{nameof(JsonWritableOptions<>.Value)} returns TOptions from JSON section")]
     public async Task Value_Returns_T()
     {
         // Arrange
-        var sampleOption = GenerateOption();
-        var optionsMock = IOptionsMonitor<SampleOption>.Mock();
-        _ = optionsMock.CurrentValue.Returns(sampleOption);
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(HasConfigJson);
 
-        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock);
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption));
 
         // Act - Assert
-        await Assert.That(sut.Value).EqualTo(sampleOption);
-        await Assert.That(optionsMock.CurrentValue).WasCalled(Times.Once);
+        await Assert.That(sut.Value.LastLaunchedAt).EqualTo(new DateTime(2020, 10, 1));
+        await Assert.That(sut.Value.Interval).EqualTo(1000);
+        await Assert.That(sut.Value.ConnectionString).EqualTo("bar");
     }
 
     /// <summary>
-    /// <see cref="JsonWritableOptions{TOptions}.CurrentValue"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
+    /// <see cref="JsonWritableOptions{TOptions}.CurrentValue"/> returns TOptions from target JSON file section.
     /// </summary>
     [Test]
     [DisplayName(
-        $".{nameof(JsonWritableOptions<>.CurrentValue)} returns TOptions via {nameof(IOptionsMonitor<>)}<TOptions>"
+        $".{nameof(JsonWritableOptions<>.CurrentValue)} returns TOptions from JSON section"
     )]
     public async Task CurrentValue_Returns_T()
     {
         // Arrange
-        var sampleOption = GenerateOption();
-        var optionsMock = IOptionsMonitor<SampleOption>.Mock();
-        _ = optionsMock.CurrentValue.Returns(sampleOption);
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(HasConfigJson);
 
-        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock);
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption));
 
         // Act - Assert
-        await Assert.That(sut.CurrentValue).EqualTo(sampleOption);
-        await Assert.That(optionsMock.CurrentValue).WasCalled(Times.Once);
+        await Assert.That(sut.CurrentValue.LastLaunchedAt).EqualTo(new DateTime(2020, 10, 1));
+        await Assert.That(sut.CurrentValue.Interval).EqualTo(1000);
+        await Assert.That(sut.CurrentValue.ConnectionString).EqualTo("bar");
     }
 
     /// <summary>
-    /// <see cref="JsonWritableOptions{TOptions}.Get"/> returns TOptions via <see cref="IOptionsMonitor{TOptions}"/>.
+    /// <see cref="JsonWritableOptions{TOptions}.Get"/> returns TOptions from target JSON file section.
     /// </summary>
     [Test]
     [DisplayName(
-        $".{nameof(JsonWritableOptions<>.Get)}(string?) returns TOptions via {nameof(IOptionsMonitor<>)}<TOptions>"
+        $".{nameof(JsonWritableOptions<>.Get)}(string?) returns TOptions from JSON section"
     )]
     public async Task Get_Returns_T()
     {
         // Arrange
-        var sampleOption = GenerateOption();
-        var optionsMock = IOptionsMonitor<SampleOption>.Mock();
-        _ = optionsMock.Get(Any()).Returns(sampleOption);
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(HasConfigJson);
 
-        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock);
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption));
 
         // Act - Assert
-        await Assert.That(sut.Get("Foo")).EqualTo(sampleOption);
-        await Assert.That(sut.Get("Bar")).EqualTo(sampleOption);
-        await Assert.That(optionsMock.Get(Any())).WasCalled(Times.Exactly(2));
-        await Assert.That(optionsMock.Get("Foo")).WasCalled(Times.Once);
-        await Assert.That(optionsMock.Get("Bar")).WasCalled(Times.Once);
+        await Assert.That(sut.Get("Foo").Interval).EqualTo(1000);
+        await Assert.That(sut.Get("Bar").ConnectionString).EqualTo("bar");
     }
 
     /// <summary>
-    /// <see cref="JsonWritableOptions{TOptions}.OnChange"/> returns <see cref="IDisposable"/> via <see cref="IOptionsMonitor{TOptions}"/>.
+    /// <see cref="JsonWritableOptions{TOptions}.OnChange"/> notifies listeners after <see cref="JsonWritableOptions{TOptions}.Update"/>.
     /// </summary>
     [Test]
-    [DisplayName(
-        $".{nameof(JsonWritableOptions<>.OnChange)}(Action) returns {nameof(IDisposable)} via {nameof(IOptionsMonitor<>)}<TOptions>"
-    )]
-    public async Task OnChange_Called_IOptionsMonitor_OnChange()
+    [DisplayName($".{nameof(JsonWritableOptions<>.OnChange)}(Action) is called after Update")]
+    public async Task OnChange_Called_After_Update()
     {
         // Arrange
-        var sampleOption = GenerateOption();
-        var optionsMock = IOptionsMonitor<SampleOption>.Mock();
-        var action = static (SampleOption option, string? section) =>
-            Console.WriteLine($"{nameof(SampleOption)}:{section} changed to {option}");
+        using var tempFile = new TempFileProvider();
+        tempFile.AppendAllText(EmptyJson);
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption));
+        SampleOption? actual = null;
+        string? actualName = null;
 
-        var sut = new JsonWritableOptions<SampleOption>("", "", optionsMock);
+        _ = sut.OnChange(
+            (option, name) =>
+            {
+                actual = option;
+                actualName = name;
+            }
+        );
 
         // Act
-        _ = sut.OnChange(action);
+        sut.Update(_updatedOption);
 
         // Assert
-        await Assert.That(optionsMock.OnChange(action)).WasCalled(Times.Once);
+        await Assert.That(actual).IsNotNull();
+        await Assert.That(actual!.Interval).EqualTo(_updatedOption.Interval);
+        await Assert.That(actualName).EqualTo(Options.DefaultName);
     }
-    #endregion IOptionsMonitor<TOptions>
+    #endregion Internal Options Monitor
 
     private static readonly SampleOption _updatedOption = new()
     {
@@ -231,13 +210,11 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText(fileText);
 
-        var optionsStub = IOptionsMonitor<SampleOption>.Mock();
         var configStub = IConfigurationRoot.Mock();
 
         var sut = new JsonWritableOptions<SampleOption>(
             tempFile.Path,
             nameof(SampleOption),
-            optionsStub,
             configStub.Object
         );
 
@@ -268,13 +245,11 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText(fileText, Encoding.UTF8);
 
-        var optionsStub = IOptionsMonitor<SampleOption>.Mock();
         var configStub = IConfigurationRoot.Mock();
 
         var sut = new JsonWritableOptions<SampleOption>(
             tempFile.Path,
             nameof(SampleOption),
-            optionsStub,
             configStub.Object
         );
 
@@ -305,13 +280,11 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         using var tempFile = new TempFileProvider();
 
-        var optionsStub = IOptionsMonitor<SampleOption>.Mock();
         var configStub = IConfigurationRoot.Mock();
 
         var sut = new JsonWritableOptions<SampleOption>(
             tempFile.Path,
             nameof(SampleOption),
-            optionsStub,
             configStub.Object
         );
 
@@ -336,7 +309,6 @@ public sealed class JsonWritableOptionsTest
         // Arrange
         using var tempFile = new TempFileProvider();
 
-        var optionsStub = IOptionsMonitor<SampleOption>.Mock();
         var configStub = IConfigurationRoot.Mock();
         var options = new JsonSerializerOptions()
         {
@@ -346,7 +318,6 @@ public sealed class JsonWritableOptionsTest
         var sut = new JsonWritableOptions<SampleOption>(
             tempFile.Path,
             nameof(SampleOption),
-            optionsStub,
             options,
             configStub.Object
         );
@@ -402,13 +373,7 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText(fileText);
 
-        var optionsStub = IOptionsMonitor<SampleOption>.Mock();
-
-        var sut = new JsonWritableOptions<SampleOption>(
-            tempFile.Path,
-            nameof(SampleOption),
-            optionsStub
-        );
+        var sut = new JsonWritableOptions<SampleOption>(tempFile.Path, nameof(SampleOption));
 
         // Act
         sut.Update(_updatedOption, true);
@@ -428,13 +393,11 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         tempFile.AppendAllText(EmptyJson);
 
-        var optionsStub = IOptionsMonitor<SampleOption>.Mock();
         var configStub = IConfigurationRoot.Mock();
 
         var sut = new JsonWritableOptions<SampleOption>(
             tempFile.Path,
             nameof(SampleOption),
-            optionsStub,
             configStub.Object
         );
 
@@ -459,13 +422,11 @@ public sealed class JsonWritableOptionsTest
         using var tempFile = new TempFileProvider();
         File.Delete(tempFile.Path);
 
-        var optionsStub = IOptionsMonitor<SampleOption>.Mock();
         var configStub = IConfigurationRoot.Mock();
 
         var sut = new JsonWritableOptions<SampleOption>(
             tempFile.Path,
             nameof(SampleOption),
-            optionsStub,
             configStub.Object
         );
 
