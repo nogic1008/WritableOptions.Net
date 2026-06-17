@@ -23,8 +23,10 @@ public static class MauiProgram
         builder.Configuration.AddJsonFile("appsettings.json", true, true);
 
         // DI
-        builder.Services
-            .ConfigureWritable<AppOption>(builder.Configuration.GetSection(nameof(AppOption)))
+        builder
+            .Services.ConfigureWritable<AppOption>(
+                builder.Configuration.GetSection(nameof(AppOption))
+            )
             .AddSingleton<MainPage>();
 
 #if DEBUG

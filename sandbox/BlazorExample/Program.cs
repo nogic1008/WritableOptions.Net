@@ -4,9 +4,10 @@ using Nogic.WritableOptions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-builder.Services.ConfigureWritable<AppOption>(builder.Configuration.GetSection(builder.Environment.ApplicationName));
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.ConfigureWritable<AppOption>(
+    builder.Configuration.GetSection(builder.Environment.ApplicationName)
+);
 
 var app = builder.Build();
 
@@ -23,7 +24,6 @@ app.UseHttpsRedirection();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();

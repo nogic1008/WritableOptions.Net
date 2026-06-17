@@ -11,24 +11,29 @@ namespace Nogic.WritableOptions;
 /// Read and write <typeparamref name="TOptions"/> in JSON file.
 /// </summary>
 /// <typeparam name="TOptions">Options type.</typeparam>
-public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TOptions : class, new()
+public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions>
+    where TOptions : class, new()
 {
     /// <summary>
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='jsonFilePath']"/>
     /// </summary>
     private readonly string _jsonFilePath;
+
     /// <summary>
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='section']"/>
     /// </summary>
     private readonly JsonEncodedText _section;
+
     /// <summary>
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='options']"/>
     /// </summary>
     private readonly IOptionsMonitor<TOptions> _options;
+
     /// <summary>
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='configuration']"/>
     /// </summary>
     private readonly IConfiguration? _configuration;
+
     /// <summary>
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, JsonSerializerOptions, IConfiguration?)" path="/param[@name='serializerOptions']"/>
     /// </summary>
@@ -56,7 +61,12 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <exception cref="ArgumentNullException">
     /// Throws if <paramref name="jsonFilePath"/>, <paramref name="section"/> or <paramref name="options"/> is <see langword="null"/>.
     /// </exception>
-    public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, IConfiguration? configuration = null)
+    public JsonWritableOptions(
+        string jsonFilePath,
+        string section,
+        IOptionsMonitor<TOptions> options,
+        IConfiguration? configuration = null
+    )
     {
 #if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(jsonFilePath);
@@ -84,8 +94,15 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
 
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)"/>
     /// <param name="serializerOptions">Serializer options for write JSON</param>
-    public JsonWritableOptions(string jsonFilePath, string section, IOptionsMonitor<TOptions> options, JsonSerializerOptions serializerOptions, IConfiguration? configuration = null)
-        : this(jsonFilePath, section, options, configuration) => _serializerOptions = serializerOptions;
+    public JsonWritableOptions(
+        string jsonFilePath,
+        string section,
+        IOptionsMonitor<TOptions> options,
+        JsonSerializerOptions serializerOptions,
+        IConfiguration? configuration = null
+    )
+        : this(jsonFilePath, section, options, configuration) =>
+        _serializerOptions = serializerOptions;
 
     /// <inheritdoc/>
     public TOptions Value => _options.CurrentValue;
@@ -102,7 +119,14 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <inheritdoc/>
     public void Update(TOptions changedValue, bool reload = false)
     {
-        using (var stream = new FileStream(_jsonFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+        using (
+            var stream = new FileStream(
+                _jsonFilePath,
+                FileMode.OpenOrCreate,
+                FileAccess.ReadWrite,
+                FileShare.None
+            )
+        )
         {
             byte[] buffer = ArrayPool<byte>.Shared.Rent((int)stream.Length);
             try
@@ -132,13 +156,19 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                     stream.Position = 0;
                 }
 
-                var reader = new Utf8JsonReader(utf8Json.Length > 0 ? utf8Json : "{}"u8, _jsonReaderOptions);
+                var reader = new Utf8JsonReader(
+                    utf8Json.Length > 0 ? utf8Json : "{}"u8,
+                    _jsonReaderOptions
+                );
                 var currentJson = JsonElement.ParseValue(ref reader);
                 var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
 
                 writer.WriteStartObject(); // {
                 bool isWritten = false;
-                var serializedOptionsValue = JsonSerializer.SerializeToElement(changedValue, _serializerOptions);
+                var serializedOptionsValue = JsonSerializer.SerializeToElement(
+                    changedValue,
+                    _serializerOptions
+                );
                 foreach (var element in currentJson.EnumerateObject())
                 {
                     if (!element.NameEquals(_section.EncodedUtf8Bytes))

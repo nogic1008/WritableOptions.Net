@@ -24,15 +24,26 @@ public static class ServiceCollectionExtension
     public static IServiceCollection ConfigureWritable<TOptions>(
         this IServiceCollection services,
         IConfigurationSection section,
-        string file = DefaultFileName) where TOptions : class, new()
-        => services.Configure<TOptions>(section)
+        string file = DefaultFileName
+    )
+        where TOptions : class, new() =>
+        services
+            .Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
-                string jsonFilePath = GetJsonFilePath(provider.GetService<IHostEnvironment>(), file);
+                string jsonFilePath = GetJsonFilePath(
+                    provider.GetService<IHostEnvironment>(),
+                    file
+                );
 
                 var configuration = provider.GetService<IConfiguration>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, configuration);
+                return new JsonWritableOptions<TOptions>(
+                    jsonFilePath,
+                    section.Key,
+                    options,
+                    configuration
+                );
             });
 
     /// <inheritdoc cref="ConfigureWritable{TOptions}(IServiceCollection, IConfigurationSection, string)"/>
@@ -41,15 +52,27 @@ public static class ServiceCollectionExtension
         this IServiceCollection services,
         IConfigurationSection section,
         JsonSerializerOptions serializerOptions,
-        string file = DefaultFileName) where TOptions : class, new()
-        => services.Configure<TOptions>(section)
+        string file = DefaultFileName
+    )
+        where TOptions : class, new() =>
+        services
+            .Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
-                string jsonFilePath = GetJsonFilePath(provider.GetService<IHostEnvironment>(), file);
+                string jsonFilePath = GetJsonFilePath(
+                    provider.GetService<IHostEnvironment>(),
+                    file
+                );
 
                 var configuration = provider.GetService<IConfiguration>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, serializerOptions, configuration);
+                return new JsonWritableOptions<TOptions>(
+                    jsonFilePath,
+                    section.Key,
+                    options,
+                    serializerOptions,
+                    configuration
+                );
             });
 
     /// <inheritdoc cref="ConfigureWritable{TOptions}(IServiceCollection, IConfigurationSection, string)"/>
@@ -58,15 +81,27 @@ public static class ServiceCollectionExtension
         this IServiceCollection services,
         IConfigurationSection section,
         Func<JsonSerializerOptions> serializerOptionsGenerator,
-        string file = DefaultFileName) where TOptions : class, new()
-        => services.Configure<TOptions>(section)
+        string file = DefaultFileName
+    )
+        where TOptions : class, new() =>
+        services
+            .Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
-                string jsonFilePath = GetJsonFilePath(provider.GetService<IHostEnvironment>(), file);
+                string jsonFilePath = GetJsonFilePath(
+                    provider.GetService<IHostEnvironment>(),
+                    file
+                );
 
                 var configuration = provider.GetService<IConfiguration>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, serializerOptionsGenerator(), configuration);
+                return new JsonWritableOptions<TOptions>(
+                    jsonFilePath,
+                    section.Key,
+                    options,
+                    serializerOptionsGenerator(),
+                    configuration
+                );
             });
 
     private static string GetJsonFilePath(IHostEnvironment? environment, string fileName)
@@ -95,14 +130,22 @@ public static class ServiceCollectionExtension
         this IServiceCollection services,
         IConfigurationSection section,
         string directoryPath,
-        string file = DefaultFileName) where TOptions : class, new()
-        => services.Configure<TOptions>(section)
+        string file = DefaultFileName
+    )
+        where TOptions : class, new() =>
+        services
+            .Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
                 string jsonFilePath = Path.Combine(directoryPath, file);
                 var configuration = provider.GetService<IConfigurationRoot>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, configuration);
+                return new JsonWritableOptions<TOptions>(
+                    jsonFilePath,
+                    section.Key,
+                    options,
+                    configuration
+                );
             });
 
     /// <inheritdoc cref="ConfigureWritableWithExplicitPath{TOptions}(IServiceCollection, IConfigurationSection, string, string)"/>
@@ -112,14 +155,23 @@ public static class ServiceCollectionExtension
         IConfigurationSection section,
         string directoryPath,
         JsonSerializerOptions serializerOptions,
-        string file = DefaultFileName) where TOptions : class, new()
-        => services.Configure<TOptions>(section)
+        string file = DefaultFileName
+    )
+        where TOptions : class, new() =>
+        services
+            .Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
                 string jsonFilePath = Path.Combine(directoryPath, file);
                 var configuration = provider.GetService<IConfigurationRoot>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, serializerOptions, configuration);
+                return new JsonWritableOptions<TOptions>(
+                    jsonFilePath,
+                    section.Key,
+                    options,
+                    serializerOptions,
+                    configuration
+                );
             });
 
     /// <inheritdoc cref="ConfigureWritableWithExplicitPath{TOptions}(IServiceCollection, IConfigurationSection, string, string)"/>
@@ -129,13 +181,22 @@ public static class ServiceCollectionExtension
         IConfigurationSection section,
         string directoryPath,
         Func<JsonSerializerOptions> serializerOptionsGenerator,
-        string file = DefaultFileName) where TOptions : class, new()
-        => services.Configure<TOptions>(section)
+        string file = DefaultFileName
+    )
+        where TOptions : class, new() =>
+        services
+            .Configure<TOptions>(section)
             .AddTransient<IWritableOptions<TOptions>>(provider =>
             {
                 string jsonFilePath = Path.Combine(directoryPath, file);
                 var configuration = provider.GetService<IConfigurationRoot>();
                 var options = provider.GetRequiredService<IOptionsMonitor<TOptions>>();
-                return new JsonWritableOptions<TOptions>(jsonFilePath, section.Key, options, serializerOptionsGenerator(), configuration);
+                return new JsonWritableOptions<TOptions>(
+                    jsonFilePath,
+                    section.Key,
+                    options,
+                    serializerOptionsGenerator(),
+                    configuration
+                );
             });
 }

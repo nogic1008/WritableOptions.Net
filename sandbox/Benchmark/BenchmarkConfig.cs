@@ -7,8 +7,8 @@ namespace Benchmark;
 
 public class BenchmarkConfig : ManualConfig
 {
-    public BenchmarkConfig()
-        => AddJob(Job.Default.WithRuntime(CoreRuntime.Core10_0))
+    public BenchmarkConfig() =>
+        AddJob(Job.Default.WithRuntime(CoreRuntime.Core10_0))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
             .AddJob(Job.Default.WithRuntime(CoreRuntime.Core90))
             .WithOptions(ConfigOptions.DisableOptimizationsValidator)
