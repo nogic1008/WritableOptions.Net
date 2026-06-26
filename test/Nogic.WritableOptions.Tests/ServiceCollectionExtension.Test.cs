@@ -34,7 +34,7 @@ public sealed class ServiceCollectionExtensionTest
             .That(option)
             .IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEqualTo(otherOption);
+            .And.IsNotSameReferenceAs(otherOption);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public sealed class ServiceCollectionExtensionTest
             .That(option)
             .IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEqualTo(otherOption);
+            .And.IsNotSameReferenceAs(otherOption);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public sealed class ServiceCollectionExtensionTest
             .That(option)
             .IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEqualTo(otherOption);
+            .And.IsNotSameReferenceAs(otherOption);
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public sealed class ServiceCollectionExtensionTest
             .That(option)
             .IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEqualTo(otherOption);
+            .And.IsNotSameReferenceAs(otherOption);
     }
 
     /// <summary>
@@ -158,7 +158,7 @@ public sealed class ServiceCollectionExtensionTest
             .That(option)
             .IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEqualTo(otherOption);
+            .And.IsNotSameReferenceAs(otherOption);
     }
 
     /// <summary>
@@ -190,6 +190,6 @@ public sealed class ServiceCollectionExtensionTest
             .That(option)
             .IsNotNull()
             .And.IsAssignableTo<JsonWritableOptions<SampleOption>>()
-            .And.IsNotEqualTo(otherOption);
+            .And.IsNotSameReferenceAs(otherOption);
     }
 }
