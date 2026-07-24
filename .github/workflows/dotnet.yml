@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v5.4.0
+        uses: actions/setup-dotnet@v6.0.0
       - name: Restore .NET tools
         run: dotnet tool restore
 
@@ -64,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.4.0
+        uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: |
             10.x
