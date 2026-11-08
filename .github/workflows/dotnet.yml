@@ -71,6 +71,7 @@ jobs:
             8.x
           cache: true
           cache-dependency-path: Directory.Packages.props
+          workloads: maui-android
 
       - name: Restore
         run: dotnet restore
