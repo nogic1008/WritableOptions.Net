@@ -16,10 +16,10 @@
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.13" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="Nogic.WritableOptions" Version="4.0.1" />
-    <PackageVersion Include="Polyfill" Version="10.8.0" />
+    <PackageVersion Include="Polyfill" Version="11.4.5" />
     <PackageVersion Include="System.Text.Json" Version="10.0.12" />
-    <PackageVersion Include="TUnit" Version="1.76.45" />
-    <PackageVersion Include="TUnit.Mocks" Version="1.76.45" />
-    <PackageVersion Include="TUnit.Mocks.Assertions" Version="1.76.45" />
+    <PackageVersion Include="TUnit" Version="1.80.0" />
+    <PackageVersion Include="TUnit.Mocks" Version="1.80.0" />
+    <PackageVersion Include="TUnit.Mocks.Assertions" Version="1.80.0" />
   </ItemGroup>
 </Project>
